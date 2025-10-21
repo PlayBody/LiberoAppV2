@@ -9,8 +9,11 @@ import '../../../common/globals.dart' as globals;
 class ConnectQuestionConfirm extends StatefulWidget {
   final String title;
   final String question;
-  const ConnectQuestionConfirm(
-      {required this.title, required this.question, super.key});
+  const ConnectQuestionConfirm({
+    required this.title,
+    required this.question,
+    super.key,
+  });
 
   @override
   _ConnectQuestionConfirm createState() => _ConnectQuestionConfirm();
@@ -34,11 +37,13 @@ class _ConnectQuestionConfirm extends State<ConnectQuestionConfirm> {
     if (!conf) return;
 
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiSaveQuestionUrl, {
-      'user_id': globals.userId,
-      'title': widget.title,
-      'question': widget.question,
-    }).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiSaveQuestionUrl, {
+          'user_id': globals.userId,
+          'title': widget.title,
+          'question': widget.question,
+        })
+        .then((value) => results = value);
 
     if (results['isSave']) {
     } else {
@@ -57,17 +62,18 @@ class _ConnectQuestionConfirm extends State<ConnectQuestionConfirm> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(height: 30),
-                _getLabelTitle(),
-                _getTitleContent(),
-                _getLabelQuestion(),
-                _getQuestionContent(),
-              ],
-            )),
-            _getQuestionButton()
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(height: 30),
+                  _getLabelTitle(),
+                  _getTitleContent(),
+                  _getLabelQuestion(),
+                  _getQuestionContent(),
+                ],
+              ),
+            ),
+            _getQuestionButton(),
           ],
         ),
       ),
@@ -80,17 +86,19 @@ class _ConnectQuestionConfirm extends State<ConnectQuestionConfirm> {
 
   Widget _getLabelTitle() {
     return Container(
-        padding: EdgeInsets.only(left: 30, right: 30),
-        margin: EdgeInsets.symmetric(vertical: 16),
-        child: Text('タイトル', style: txtlblStyle));
+      padding: EdgeInsets.only(left: 30, right: 30),
+      margin: EdgeInsets.symmetric(vertical: 16),
+      child: Text('タイトル', style: txtlblStyle),
+    );
   }
 
   Widget _getLabelQuestion() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16),
       padding: EdgeInsets.only(top: 16, left: 30, right: 30),
-      decoration:
-          BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey)),
+      ),
       child: Text('お問い合わせ内容', style: txtlblStyle),
     );
   }
@@ -118,7 +126,9 @@ class _ConnectQuestionConfirm extends State<ConnectQuestionConfirm> {
           saveQuestion();
         },
         style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+          padding: EdgeInsets.all(8),
+          textStyle: TextStyle(fontSize: 16),
+        ),
         child: Text('送信する'),
       ),
     );

@@ -41,61 +41,77 @@ class _ConnectSetting extends State<ConnectSetting> {
   Widget build(BuildContext context) {
     globals.connectHeaerTitle = '設定';
     return MainForm(
-        title: '設定',
-        render: FutureBuilder<List>(
-          future: loadData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return _getMainBodyContent();
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return Center(child: CircularProgressIndicator());
-          },
-        ));
+      title: '設定',
+      render: FutureBuilder<List>(
+        future: loadData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _getMainBodyContent();
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          // By default, show a loading spinner.
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
   }
 
   Widget _getMainBodyContent() {
     return SingleChildScrollView(
-        child: Container(
-      child: Column(
-        children: [
-          _getSettingContentRow(
-            'プロフィール',
-            Icon(Icons.keyboard_arrow_right),
-            () => Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return ConnectRegister(isProfile: true);
-            })),
-          ),
-          _getSettingContentRow('メッセージ通知',
-              _getSwitchControl(user!.isPushMesseage, 'message'), null),
-          _getSettingContentRow(
+      child: Container(
+        child: Column(
+          children: [
+            _getSettingContentRow(
+              'プロフィール',
+              Icon(Icons.keyboard_arrow_right),
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) {
+                    return ConnectRegister(isProfile: true);
+                  },
+                ),
+              ),
+            ),
+            _getSettingContentRow(
+              'メッセージ通知',
+              _getSwitchControl(user!.isPushMesseage, 'message'),
+              null,
+            ),
+            _getSettingContentRow(
               '予約申込通知',
               _getSwitchControl(user!.isPushReserveRequest, 'reserve_request'),
-              null),
-          _getSettingContentRow(
+              null,
+            ),
+            _getSettingContentRow(
               '予約承認通知',
               _getSwitchControl(user!.isPushReserveApply, 'reserve_apply'),
-              null),
-        ],
+              null,
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Widget _getSettingContentRow(label, trailingContent, onTap) {
     return Container(
-        decoration: BoxDecoration(
-            border: Border(
-          bottom:
-              BorderSide(color: Color.fromARGB(255, 230, 230, 230), width: 1),
-        )),
-        child: ListTile(
-            trailing: trailingContent,
-            contentPadding:
-                EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
-            title: Text(label),
-            onTap: onTap));
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Color.fromARGB(255, 230, 230, 230),
+            width: 1,
+          ),
+        ),
+      ),
+      child: ListTile(
+        trailing: trailingContent,
+        contentPadding: EdgeInsets.only(left: 20, right: 10, top: 5, bottom: 5),
+        title: Text(label),
+        onTap: onTap,
+      ),
+    );
   }
 
   Widget _getSwitchControl(value, key) {

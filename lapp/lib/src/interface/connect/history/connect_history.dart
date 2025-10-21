@@ -38,7 +38,7 @@ class _ConnectHistory extends State<ConnectHistory> {
     await ClCommon().clearBadge(context, {
       'receiver_type': '2',
       'receiver_id': globals.userId,
-      'notification_type': '23'
+      'notification_type': '23',
     });
     setState(() {});
     return [];
@@ -48,18 +48,28 @@ class _ConnectHistory extends State<ConnectHistory> {
     OrganModel? organ = await ClOrgan().loadOrganInfo(context, item.orderId);
     if (organ == null) return;
     globals.connectReserveMenuList = [];
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ReserveMultiUser(
-        organId: organ.organId,
-        isNoReserveType: constCheckinReserveRiRa,
-      );
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ReserveMultiUser(
+            organId: organ.organId,
+            isNoReserveType: constCheckinReserveRiRa,
+          );
+        },
+      ),
+    );
   }
 
   Future<void> pushReview(OrderModel item) async {
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ConnectMenuReview(orderId: item.orderId);
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ConnectMenuReview(orderId: item.orderId);
+        },
+      ),
+    );
   }
 
   Future<void> cancelReserve(String reserveId) async {
@@ -103,34 +113,43 @@ class _ConnectHistory extends State<ConnectHistory> {
 
   Widget _getHistoryItem(OrderModel item) {
     return GestureDetector(
-        onTap: item.status == ORDER_STATUS_TABLE_COMPLETE
-            ? () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return ConnectHistoryView(orderId: item.orderId);
-                }));
-              }
-            : null,
-        child: Container(
-          margin: EdgeInsets.symmetric(vertical: 8),
-          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            children: [
-              if (item.status == ORDER_STATUS_RESERVE_REQUEST)
-                Container(
-                    margin: EdgeInsets.symmetric(vertical: 4),
-                    child: Text('リクエスト中、予約はまだ確定していません',
-                        style: TextStyle(fontSize: 14, color: Colors.blue))),
-              _getItemHeader(item),
-              SizedBox(height: 12),
-              _getItemContent(item),
-              _getItemBottom(item),
-            ],
-          ),
-        ));
+      onTap: item.status == ORDER_STATUS_TABLE_COMPLETE
+          ? () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) {
+                    return ConnectHistoryView(orderId: item.orderId);
+                  },
+                ),
+              );
+            }
+          : null,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Column(
+          children: [
+            if (item.status == ORDER_STATUS_RESERVE_REQUEST)
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 4),
+                child: Text(
+                  'リクエスト中、予約はまだ確定していません',
+                  style: TextStyle(fontSize: 14, color: Colors.blue),
+                ),
+              ),
+            _getItemHeader(item),
+            SizedBox(height: 12),
+            _getItemContent(item),
+            _getItemBottom(item),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _getItemHeader(OrderModel item) {
@@ -143,10 +162,7 @@ class _ConnectHistory extends State<ConnectHistory> {
         if (item.status == ORDER_STATUS_RESERVE_APPLY) Text('【予約確定しました。】'),
         if (item.status == ORDER_STATUS_TABLE_START) Text('【入店中です。】'),
         if (item.status == ORDER_STATUS_TABLE_COMPLETE)
-          Text(
-            '【ありがとうございました】',
-            style: TextStyle(color: Colors.grey),
-          ),
+          Text('【ありがとうございました】', style: TextStyle(color: Colors.grey)),
         Expanded(child: Container()),
         // Container(child: Text('￥' + Funcs().currencyFormat(item.sumAmount))),
       ],
@@ -194,7 +210,8 @@ class _ConnectHistory extends State<ConnectHistory> {
                 ),
               ),
             ),
-          if (item.status == ORDER_STATUS_RESERVE_APPLY || item.status == ORDER_STATUS_TABLE_START)
+          if (item.status == ORDER_STATUS_RESERVE_APPLY ||
+              item.status == ORDER_STATUS_TABLE_START)
             Container(
               padding: EdgeInsets.only(top: 12),
               alignment: Alignment.center,
@@ -221,7 +238,7 @@ class _ConnectHistory extends State<ConnectHistory> {
                 alignment: Alignment.topRight,
                 width: 70,
                 child: Text('￥${Funcs().currencyFormat(e.menuPrice)}'),
-              )
+              ),
             ],
           ),
         ),
@@ -231,7 +248,7 @@ class _ConnectHistory extends State<ConnectHistory> {
           padding: EdgeInsets.only(top: 12),
           alignment: Alignment.topLeft,
           child: Text('${'【' + item.staffName}】'),
-        )
+        ),
     ];
   }
 
@@ -240,30 +257,33 @@ class _ConnectHistory extends State<ConnectHistory> {
       children: [
         Expanded(
           child: Text(
-            DateFormat('yyyy-MM-dd(${weekAry[DateTime.parse(item.fromTime).weekday - 1]}) HH:mm')
-                .format(DateTime.parse(item.fromTime)),
+            DateFormat(
+              'yyyy-MM-dd(${weekAry[DateTime.parse(item.fromTime).weekday - 1]}) HH:mm',
+            ).format(DateTime.parse(item.fromTime)),
             style: txtContentStyle,
           ),
         ),
         ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.indigo,
-              textStyle: TextStyle(fontSize: 12),
-            ),
-            onPressed: item.status == ORDER_STATUS_TABLE_COMPLETE
-                ? () => pushReserv(item)
-                : null,
-            child: Text('再注文')),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.indigo,
+            textStyle: TextStyle(fontSize: 12),
+          ),
+          onPressed: item.status == ORDER_STATUS_TABLE_COMPLETE
+              ? () => pushReserv(item)
+              : null,
+          child: Text('再注文'),
+        ),
         SizedBox(width: 4),
         ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.green,
-              textStyle: TextStyle(fontSize: 12),
-            ),
-            onPressed: item.status == ORDER_STATUS_TABLE_COMPLETE
-                ? () => pushReview(item)
-                : null,
-            child: Text('評価する'))
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            textStyle: TextStyle(fontSize: 12),
+          ),
+          onPressed: item.status == ORDER_STATUS_TABLE_COMPLETE
+              ? () => pushReview(item)
+              : null,
+          child: Text('評価する'),
+        ),
       ],
     );
   }

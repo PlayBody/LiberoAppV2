@@ -52,8 +52,10 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
   Future<List> loadReserveData() async {
     order = await ClReserve().loadReserveInfo(context, widget.orderId);
 
-    CompanyModel company =
-        await ClCompany().loadCompanyInfo(context, APPCOMANYID);
+    CompanyModel company = await ClCompany().loadCompanyInfo(
+      context,
+      APPCOMANYID,
+    );
     receiptNumber = company.companyReceiptNumber;
     if (order != null) {
       organ = await ClOrgan().loadOrganInfo(context, order!.organId);
@@ -67,13 +69,15 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
 
     if (order != null) {
       orderId = order!.orderId;
-      reserveDate =
-          DateFormat('yyyy年M月d日').format(DateTime.parse(order!.createTime));
+      reserveDate = DateFormat(
+        'yyyy年M月d日',
+      ).format(DateTime.parse(order!.createTime));
 
       int yobi = DateTime.parse(order!.createTime).weekday;
       reserveDate += "(${weekAry[yobi - 1]}曜日)";
-      reserveTime =
-          DateFormat('HH:mm:ss').format(DateTime.parse(order!.createTime));
+      reserveTime = DateFormat(
+        'HH:mm:ss',
+      ).format(DateTime.parse(order!.createTime));
       sumAmount = order!.amount.toString();
       couponAmount = order!.couponAmount;
     }
@@ -143,65 +147,82 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-                padding: EdgeInsets.symmetric(horizontal: 40),
-                child: SingleChildScrollView(
-                    child: Column(
+              padding: EdgeInsets.symmetric(horizontal: 40),
+              child: SingleChildScrollView(
+                child: Column(
                   // crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(height: 30),
                     Container(
-                        decoration: BoxDecoration(
-                            border: Border(
-                                bottom:
-                                    BorderSide(width: 1, color: Colors.grey))),
-                        alignment: Alignment.center,
-                        child: Text(organName, style: textStyle1)),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(width: 1, color: Colors.grey),
+                        ),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(organName, style: textStyle1),
+                    ),
                     SizedBox(height: 24),
                     Container(
-                        alignment: Alignment.center,
-                        child: Text('領    収    証',
-                            style: TextStyle(
-                                fontSize: 32, fontWeight: FontWeight.bold))),
+                      alignment: Alignment.center,
+                      child: Text(
+                        '領    収    証',
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 32),
                     Container(
-                        margin: EdgeInsets.symmetric(vertical: 4),
-                        alignment: Alignment.center,
-                        child: Row(
-                          children: [
-                            Expanded(
-                                child: Container(
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                width: 1, color: Colors.grey))),
-                                    child: Text(
-                                        updateUserName == ''
-                                            ? userName
-                                            : updateUserName,
-                                        style: textStyle1))),
-                            if (updateUserName == '')
-                              IconButton(
-                                  onPressed: () => titleChangeDialog(userName),
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: Colors.blue,
-                                  )),
-                            Container(child: Text('様', style: textStyle1)),
-                          ],
-                        )),
-                    Container(
-                        margin: EdgeInsets.symmetric(vertical: 4),
-                        alignment: Alignment.center,
-                        child: Container(
-                            alignment: Alignment.centerRight,
-                            decoration: BoxDecoration(
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      alignment: Alignment.center,
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
                                 border: Border(
-                                    bottom: BorderSide(
-                                        width: 1, color: Colors.grey))),
-                            child: Text(
-                                '￥${Funcs().currencyFormat(amount.toString())}ー',
-                                style: textStyle1))),
+                                  bottom: BorderSide(
+                                    width: 1,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                updateUserName == ''
+                                    ? userName
+                                    : updateUserName,
+                                style: textStyle1,
+                              ),
+                            ),
+                          ),
+                          if (updateUserName == '')
+                            IconButton(
+                              onPressed: () => titleChangeDialog(userName),
+                              icon: Icon(Icons.edit, color: Colors.blue),
+                            ),
+                          Container(child: Text('様', style: textStyle1)),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(vertical: 4),
+                      alignment: Alignment.center,
+                      child: Container(
+                        alignment: Alignment.centerRight,
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1, color: Colors.grey),
+                          ),
+                        ),
+                        child: Text(
+                          '￥${Funcs().currencyFormat(amount.toString())}ー',
+                          style: textStyle1,
+                        ),
+                      ),
+                    ),
                     _getNoramlText('上記                        として領収致しました。'),
                     SizedBox(height: 30),
                     _getNoramlText('★保管上のお願い\n財布等で保管頂く場合、印刷面を内側に折って保管願います。'),
@@ -212,44 +233,59 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
                     _getNoramlText('登録番号：$receiptNumber'),
                     SizedBox(height: 24),
                     Container(
-                        child: Row(children: [
-                      SizedBox(width: 12),
-                      Text(reserveDate, style: contentTextStyle),
-                      Expanded(child: Container()),
-                      Text(reserveTime, style: contentTextStyle)
-                    ])),
+                      child: Row(
+                        children: [
+                          SizedBox(width: 12),
+                          Text(reserveDate, style: contentTextStyle),
+                          Expanded(child: Container()),
+                          Text(reserveTime, style: contentTextStyle),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 24),
                     Container(
-                        alignment: Alignment.topLeft,
-                        child: Text('※は軽減税率対象商品', style: contentTextStyle)),
+                      alignment: Alignment.topLeft,
+                      child: Text('※は軽減税率対象商品', style: contentTextStyle),
+                    ),
                     SizedBox(height: 12),
                     if (order != null)
                       ...order!.menus.map(
-                          (e) => _getMenuContent(e.menuTitle, e.menuPrice)),
+                        (e) => _getMenuContent(e.menuTitle, e.menuPrice),
+                      ),
                     if (int.parse(couponAmount) > 0)
                       _getMenuContent('割引', couponAmount.toString()),
                     Container(height: 1, color: Colors.grey.withOpacity(0.4)),
                     _getMenuContent(
-                        '内、消費税         (￥${Funcs().currencyFormat(subAmount.toString())})',
-                        (subAmount ~/ 11).toString()),
+                      '内、消費税         (￥${Funcs().currencyFormat(subAmount.toString())})',
+                      (subAmount ~/ 11).toString(),
+                    ),
                     Container(height: 1, color: Colors.grey.withOpacity(0.4)),
                     _getMenuContent(
-                        '合計 ${order!.menus.length}点',
-                        amount.toString()),
+                      '合計 ${order!.menus.length}点',
+                      amount.toString(),
+                    ),
                     SizedBox(height: 20),
                     Container(
-                        child: Row(children: [
-                      Text('扱：', style: contentTextStyle),
-                      Expanded(child: Container()),
-                      Text('No.00001', style: contentTextStyle)
-                    ])),
+                      child: Row(
+                        children: [
+                          Text('扱：', style: contentTextStyle),
+                          Expanded(child: Container()),
+                          Text('No.00001', style: contentTextStyle),
+                        ],
+                      ),
+                    ),
                     SizedBox(height: 60),
                     Container(
-                        child: ElevatedButton(
-                            child: Text('メールで送る'), onPressed: () {})),
+                      child: ElevatedButton(
+                        child: Text('メールで送る'),
+                        onPressed: () {},
+                      ),
+                    ),
                     SizedBox(height: 30),
                   ],
-                )));
+                ),
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -261,14 +297,19 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
   }
 
   Widget _getNoramlText(txt) => Container(
-      alignment: Alignment.topLeft, child: Text(txt, style: contentTextStyle));
+    alignment: Alignment.topLeft,
+    child: Text(txt, style: contentTextStyle),
+  );
 
   Widget _getMenuContent(title, price) => Container(
-      padding: EdgeInsets.only(bottom: 2),
-      child: Row(children: [
+    padding: EdgeInsets.only(bottom: 2),
+    child: Row(
+      children: [
         SizedBox(width: 12),
         Text(title, style: contentTextStyle),
         Expanded(child: Container()),
-        Text('￥${Funcs().currencyFormat(price)}', style: contentTextStyle)
-      ]));
+        Text('￥${Funcs().currencyFormat(price)}', style: contentTextStyle),
+      ],
+    ),
+  );
 }

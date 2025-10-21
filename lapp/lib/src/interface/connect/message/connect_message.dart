@@ -71,7 +71,9 @@ class _ConnectMessage extends State<ConnectMessage> {
     });
 
     IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port_connect');
+      _port.sendPort,
+      'downloader_send_port_connect',
+    );
     _port.listen((dynamic data) {
       loadDownLoadTask();
     });
@@ -85,9 +87,13 @@ class _ConnectMessage extends State<ConnectMessage> {
   }
 
   static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
-    final SendPort? send =
-        IsolateNameServer.lookupPortByName('downloader_send_port_connect');
+    String id,
+    DownloadTaskStatus status,
+    int progress,
+  ) {
+    final SendPort? send = IsolateNameServer.lookupPortByName(
+      'downloader_send_port_connect',
+    );
     send!.send([id, status, progress]);
   }
 
@@ -96,8 +102,11 @@ class _ConnectMessage extends State<ConnectMessage> {
     globals.progressPercent = 0;
     organs = await ClOrgan().loadOrganList(context, APPCOMANYID);
 
-    messages =
-        await ClMessage().loadMessageList(context, globals.userId, APPCOMANYID);
+    messages = await ClMessage().loadMessageList(
+      context,
+      globals.userId,
+      APPCOMANYID,
+    );
     selOrganId = '';
     contentController.clear();
     filePath = '';
@@ -120,15 +129,16 @@ class _ConnectMessage extends State<ConnectMessage> {
     setState(() {});
 
     bool isSend = await sendMessageControl(
-        context,
-        globals.userId,
-        APPCOMANYID,
-        selOrganId,
-        contentController.text,
-        attachType,
-        fileName,
-        filePath,
-        videoPath);
+      context,
+      globals.userId,
+      APPCOMANYID,
+      selOrganId,
+      contentController.text,
+      attachType,
+      fileName,
+      filePath,
+      videoPath,
+    );
 
     if (isSend) {
       messages = await loadMessageData();
@@ -174,12 +184,14 @@ class _ConnectMessage extends State<ConnectMessage> {
 
   void pushPreviewAttach(String fileType, String fileUrl) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return DialogAttachPreview(
-              previewType: fileType,
-              attachUrl: '$apiBase/assets/messages/$fileUrl');
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return DialogAttachPreview(
+          previewType: fileType,
+          attachUrl: '$apiBase/assets/messages/$fileUrl',
+        );
+      },
+    );
   }
 
   Future<void> downloadFile(fileUrl, String fileName) async {
@@ -208,36 +220,36 @@ class _ConnectMessage extends State<ConnectMessage> {
         future: loadData,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(children: <Widget>[
-              _getChatListContent(),
-              SizedBox(height: 12),
-              Container(height: 1, color: Colors.grey.withOpacity(0.5)),
-              SizedBox(height: 8),
-              _getReceiveOrganContent(),
-              SizedBox(height: 8),
-              ChatAttachContent(
-                attachType: attachType,
-                filePath: filePath,
-                tapFunc: () => clearAttachment(),
-              ),
-              ChatInputContent(controller: contentController),
-              ChatInputButtons(
-                tapPhotoFunc: () => selectPhoto(),
-                tapVideoFunc: () => selectVideo(),
-                tapSendFunc: () => sendMessage(),
-                isSending: isSending,
-                isUploading: globals.isUpload,
-                progressPercent: globals.progressPercent.toString(),
-              ),
-            ]);
+            return Column(
+              children: <Widget>[
+                _getChatListContent(),
+                SizedBox(height: 12),
+                Container(height: 1, color: Colors.grey.withOpacity(0.5)),
+                SizedBox(height: 8),
+                _getReceiveOrganContent(),
+                SizedBox(height: 8),
+                ChatAttachContent(
+                  attachType: attachType,
+                  filePath: filePath,
+                  tapFunc: () => clearAttachment(),
+                ),
+                ChatInputContent(controller: contentController),
+                ChatInputButtons(
+                  tapPhotoFunc: () => selectPhoto(),
+                  tapVideoFunc: () => selectVideo(),
+                  tapSendFunc: () => sendMessage(),
+                  isSending: isSending,
+                  isUploading: globals.isUpload,
+                  progressPercent: globals.progressPercent.toString(),
+                ),
+              ],
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
 
           // By default, show a loading spinner.
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -250,19 +262,25 @@ class _ConnectMessage extends State<ConnectMessage> {
         Text('店名'),
         SizedBox(width: 12),
         Flexible(
-            flex: 1,
-            child: DropDownModelSelect(
-                contentPadding: EdgeInsets.fromLTRB(8, 6, 0, 6),
-                value: selOrganId,
-                tapFunc: (v) {
-                  selOrganId = v.toString();
-                  setState(() {});
-                },
-                items: [
-                  DropdownMenuItem(value: '', child: Text('指定なし')),
-                  ...organs.map((e) => DropdownMenuItem(
-                      value: e.organId, child: Text(e.organName)))
-                ])),
+          flex: 1,
+          child: DropDownModelSelect(
+            contentPadding: EdgeInsets.fromLTRB(8, 6, 0, 6),
+            value: selOrganId,
+            tapFunc: (v) {
+              selOrganId = v.toString();
+              setState(() {});
+            },
+            items: [
+              DropdownMenuItem(value: '', child: Text('指定なし')),
+              ...organs.map(
+                (e) => DropdownMenuItem(
+                  value: e.organId,
+                  child: Text(e.organName),
+                ),
+              ),
+            ],
+          ),
+        ),
         SizedBox(width: 20),
       ],
     );
@@ -287,55 +305,74 @@ class _ConnectMessage extends State<ConnectMessage> {
                     Row(
                       children: [
                         Container(
-                            margin: EdgeInsets.only(bottom: 4),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3),
-                              color: Colors.red,
-                            ),
-                            child: Row(children: [
+                          margin: EdgeInsets.only(bottom: 4),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 2,
+                            horizontal: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            color: Colors.red,
+                          ),
+                          child: Row(
+                            children: [
                               Text('from'),
                               SizedBox(width: 4),
-                              Text('${e.staffName}さん',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold))
-                            ]))
+                              Text(
+                                '${e.staffName}さん',
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   if (e.organName != '')
                     Row(
                       children: [
                         Container(
-                            margin: EdgeInsets.only(bottom: 4),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 2, horizontal: 4),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(3),
-                              color: Color(0xff00856a),
-                            ),
-                            child: Row(children: [
+                          margin: EdgeInsets.only(bottom: 4),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 2,
+                            horizontal: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(3),
+                            color: Color(0xff00856a),
+                          ),
+                          child: Row(
+                            children: [
                               Icon(Icons.send, size: 18, color: Colors.white),
                               SizedBox(width: 4),
-                              Text(e.organName,
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold))
-                            ]))
+                              Text(
+                                e.organName,
+                                style: TextStyle(
+                                  fontSize: 13,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   if (e.fileType != '') _getChatAttachContent(e),
                   if (e.content != '')
                     ChatListContent(
-                        content: e.content, type: e.type, readflag: e.readflag),
+                      content: e.content,
+                      type: e.type,
+                      readflag: e.readflag,
+                    ),
                   ChatListDate(date: e.createDate),
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -343,77 +380,99 @@ class _ConnectMessage extends State<ConnectMessage> {
 
   Widget _getChatAttachContent(attach) {
     TaskInfo? _task = findAttachTask(attach);
-    DownloadTaskStatus? _status =
-        (_task == null) ? DownloadTaskStatus.undefined : _task.status;
+    DownloadTaskStatus? _status = (_task == null)
+        ? DownloadTaskStatus.undefined
+        : _task.status;
     if (_status == null) _status = DownloadTaskStatus.undefined;
     return Container(
-        // height: 130,
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GestureDetector(
-          child: Container(
+      // height: 130,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            child: Container(
               width: 170,
               height: 120,
               child: Image.network(
-                  '$apiBase/assets/messages/' + attach.fileUrl)),
-          onTap: () => attach.fileType == '2'
-              ? pushPreviewAttach(attach.fileType,
-                  attach.videoUrl == null ? '' : attach.videoUrl!)
-              : pushPreviewAttach(attach.fileType, attach.fileUrl),
-        ),
-        Container(
+                '$apiBase/assets/messages/' + attach.fileUrl,
+              ),
+            ),
+            onTap: () => attach.fileType == '2'
+                ? pushPreviewAttach(
+                    attach.fileType,
+                    attach.videoUrl == null ? '' : attach.videoUrl!,
+                  )
+                : pushPreviewAttach(attach.fileType, attach.fileUrl),
+          ),
+          Container(
             child: Row(
-          children: [
-            TextButton(
-                onPressed: () => attach.fileType == '2'
-                    ? pushPreviewAttach(attach.fileType,
-                        attach.videoUrl == null ? '' : attach.videoUrl!)
-                    : pushPreviewAttach(attach.fileType, attach.fileUrl),
-                child: Text(attach.fileName.length > 18
-                    ? (attach.fileName.substring(0, 14) +
-                        '...' +
-                        attach.fileName.substring(attach.fileName.length - 4))
-                    : attach.fileName)),
-            Row(
               children: [
-                if (_status == DownloadTaskStatus.running)
-                  Container(
-                      width: 22,
-                      height: 22,
-                      child: CircularProgressIndicator()),
-                SizedBox(width: 6),
-                if (_status == DownloadTaskStatus.undefined)
-                  UserBtnCircleIcon(
-                      tapFunc: () {
-                        requestDownload(
+                TextButton(
+                  onPressed: () => attach.fileType == '2'
+                      ? pushPreviewAttach(
+                          attach.fileType,
+                          attach.videoUrl == null ? '' : attach.videoUrl!,
+                        )
+                      : pushPreviewAttach(attach.fileType, attach.fileUrl),
+                  child: Text(
+                    attach.fileName.length > 18
+                        ? (attach.fileName.substring(0, 14) +
+                              '...' +
+                              attach.fileName.substring(
+                                attach.fileName.length - 4,
+                              ))
+                        : attach.fileName,
+                  ),
+                ),
+                Row(
+                  children: [
+                    if (_status == DownloadTaskStatus.running)
+                      Container(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(),
+                      ),
+                    SizedBox(width: 6),
+                    if (_status == DownloadTaskStatus.undefined)
+                      UserBtnCircleIcon(
+                        tapFunc: () {
+                          requestDownload(
                             attach.fileType == '2'
                                 ? attach.videoUrl!
                                 : attach.fileUrl!,
-                            attach.fileName);
-                      },
-                      icon: Icons.download),
-                if (_status == DownloadTaskStatus.running)
-                  UserBtnCircleIcon(
-                      tapFunc: () => _pauseDownload(_task!), icon: Icons.pause),
-                if (_status == DownloadTaskStatus.paused)
-                  UserBtnCircleIcon(
-                      tapFunc: () => _resumeDownload(_task!),
-                      icon: Icons.restore),
-                if (_status == DownloadTaskStatus.failed)
-                  UserBtnCircleIcon(
-                      tapFunc: () => _retryDownload(_task!),
-                      icon: Icons.refresh),
-                if (_status != DownloadTaskStatus.undefined)
-                  UserBtnCircleIcon(
-                      tapFunc: () => _cancelDownload(_task!),
-                      icon: Icons.close),
+                            attach.fileName,
+                          );
+                        },
+                        icon: Icons.download,
+                      ),
+                    if (_status == DownloadTaskStatus.running)
+                      UserBtnCircleIcon(
+                        tapFunc: () => _pauseDownload(_task!),
+                        icon: Icons.pause,
+                      ),
+                    if (_status == DownloadTaskStatus.paused)
+                      UserBtnCircleIcon(
+                        tapFunc: () => _resumeDownload(_task!),
+                        icon: Icons.restore,
+                      ),
+                    if (_status == DownloadTaskStatus.failed)
+                      UserBtnCircleIcon(
+                        tapFunc: () => _retryDownload(_task!),
+                        icon: Icons.refresh,
+                      ),
+                    if (_status != DownloadTaskStatus.undefined)
+                      UserBtnCircleIcon(
+                        tapFunc: () => _cancelDownload(_task!),
+                        icon: Icons.close,
+                      ),
+                  ],
+                ),
               ],
             ),
-          ],
-        )),
-      ],
-    ));
+          ),
+        ],
+      ),
+    );
   }
 
   void requestDownload(String link, String fileName) async {
@@ -421,7 +480,8 @@ class _ConnectMessage extends State<ConnectMessage> {
     String uriLink = '$apiBase/assets/messages/$link';
     if (Platform.isAndroid) {
       savePath = (await ExternalPath.getExternalStoragePublicDirectory(
-          ExternalPath.DIRECTORY_DOWNLOAD));
+        ExternalPath.DIRECTORY_DOWNLOAD,
+      ));
     } else {
       savePath = (await getApplicationDocumentsDirectory()).absolute.path;
     }
@@ -439,7 +499,8 @@ class _ConnectMessage extends State<ConnectMessage> {
     int i = 0;
     while (File(filePath).existsSync()) {
       i++;
-      saveFileName = '${fileName.substring(0, fileName.length - ext.length)}[$i]${fileName.substring(fileName.length - ext.length)}';
+      saveFileName =
+          '${fileName.substring(0, fileName.length - ext.length)}[$i]${fileName.substring(fileName.length - ext.length)}';
       filePath = '$savePath/$saveFileName';
     }
 
@@ -523,49 +584,65 @@ class _ConnectMessage extends State<ConnectMessage> {
     loadDownLoadTask();
   }
 
-  Future<bool> sendMessageControl(context, userId, companyId, organId, content,
-      attachType, fileName, filePath, videoPath) async {
+  Future<bool> sendMessageControl(
+    context,
+    userId,
+    companyId,
+    organId,
+    content,
+    attachType,
+    fileName,
+    filePath,
+    videoPath,
+  ) async {
     String attachFileUrl = '';
     String attachVideoFile = '';
     if (attachType != '') {
-      attachFileUrl = 'msg_attach_file_${DateTime.now()
-              .toString()
-              .replaceAll(':', '')
-              .replaceAll('-', '')
-              .replaceAll('.', '')
-              .replaceAll(' ', '')}.jpg';
+      attachFileUrl =
+          'msg_attach_file_${DateTime.now().toString().replaceAll(':', '').replaceAll('-', '').replaceAll('.', '').replaceAll(' ', '')}.jpg';
       await Webservice().callHttpMultiPart(
-          apiUploadMessageAttachFileUrl, filePath, attachFileUrl);
+        apiUploadMessageAttachFileUrl,
+        filePath,
+        attachFileUrl,
+      );
 
       if (attachType == '2') {
-        attachVideoFile = 'msg_video_file_${DateTime.now()
-                .toString()
-                .replaceAll(':', '')
-                .replaceAll('-', '')
-                .replaceAll('.', '')
-                .replaceAll(' ', '')}.mp4';
-        await callHttpMultiPartWithProgressOwn(context, 'upload',
-            apiUploadMessageAttachFileUrl, File(videoPath), attachVideoFile);
+        attachVideoFile =
+            'msg_video_file_${DateTime.now().toString().replaceAll(':', '').replaceAll('-', '').replaceAll('.', '').replaceAll(' ', '')}.mp4';
+        await callHttpMultiPartWithProgressOwn(
+          context,
+          'upload',
+          apiUploadMessageAttachFileUrl,
+          File(videoPath),
+          attachVideoFile,
+        );
       }
     }
     String apiURL = '$apiBase/apimessages/sendUserMessage';
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiURL, {
-      'company_id': APPCOMANYID,
-      'user_id': userId,
-      'organ_id': organId,
-      'content': content,
-      'file_type': attachType,
-      'file_name': fileName,
-      'file_url': attachFileUrl,
-      'video_url': attachVideoFile,
-    }).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiURL, {
+          'company_id': APPCOMANYID,
+          'user_id': userId,
+          'organ_id': organId,
+          'content': content,
+          'file_type': attachType,
+          'file_name': fileName,
+          'file_url': attachFileUrl,
+          'video_url': attachVideoFile,
+        })
+        .then((value) => results = value);
 
     return results['isSend'];
   }
 
   Future<String> callHttpMultiPartWithProgressOwn(
-      context, String type, String url, File assetFile, saveName) async {
+    context,
+    String type,
+    String url,
+    File assetFile,
+    saveName,
+  ) async {
     // var stream = http.ByteStream(DelegatingStream.typed(assetFile.openRead()));
 
     final stream = assetFile.openRead();
@@ -591,8 +668,9 @@ class _ConnectMessage extends State<ConnectMessage> {
       ),
     );
     var request = http.MultipartRequest("POST", Uri.parse(url));
-    request.files
-        .add(http.MultipartFile(type, stream2, length, filename: saveName));
+    request.files.add(
+      http.MultipartFile(type, stream2, length, filename: saveName),
+    );
 
     var response = await request.send();
 

@@ -34,23 +34,30 @@ class _ConnectSale extends State<ConnectSale> {
   Widget build(BuildContext context) {
     globals.connectHeaerTitle = '通販';
     return MainForm(
-        title: '通販',
-        render: FutureBuilder<List>(
-          future: loadData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Container(
-                  // padding: EdgeInsets.only(left: 10, right: 10),
-                  child: WebViewWidget(
+      title: '通販',
+      render: FutureBuilder<List>(
+        future: loadData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              // padding: EdgeInsets.only(left: 10, right: 10),
+              child: WebViewWidget(
                 controller: _controller,
-              ));
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return Center(child: CircularProgressIndicator());
-          },
-        ));
+                gestureRecognizers: <Factory<OneSequenceGestureRecognizer>>{
+                  Factory<EagerGestureRecognizer>(
+                    () => EagerGestureRecognizer(),
+                  ),
+                },
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          // By default, show a loading spinner.
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
   }
 
   Future<List> loadSiteData() async {

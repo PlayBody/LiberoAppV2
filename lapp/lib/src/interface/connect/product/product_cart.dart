@@ -64,23 +64,39 @@ class _ProductCart extends State<ProductCart> {
 
   void pushProduct() {
     Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ProductList();
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ProductList();
+        },
+      ),
+    );
   }
 
   Future<void> doCart() async {
-    bool? isPay = await Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return CardSelect(payAmount: totalAmount);
-    }));
+    bool? isPay = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return CardSelect(payAmount: totalAmount);
+        },
+      ),
+    );
     if (isPay == null) return;
     if (isPay) {
       ClCart().updateCart(context);
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/Home', (Route<dynamic> route) => false);
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return OrderComplete();
-      }));
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil('/Home', (Route<dynamic> route) => false);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return OrderComplete();
+          },
+        ),
+      );
     } else {
       Dialogs().infoDialog(context, '購入に失敗しました。');
     }
@@ -95,48 +111,51 @@ class _ProductCart extends State<ProductCart> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    SizedBox(height: 16),
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  SizedBox(height: 16),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      ticketCarts.length < 1
+                          ? 'カートに商品はありません。'
+                          : ('小計 ￥' + cartInfo['amount']),
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                  if (ticketCarts.length < 1)
+                    ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: 200),
+                      child: ElevatedButton(
+                        child: Text('商品購入'),
+                        onPressed: () => pushProduct(),
+                      ),
+                    ),
+                  if (ticketCarts.length > 0)
+                    ConstrainedBox(
+                      constraints: BoxConstraints(minWidth: 200),
+                      child: ElevatedButton(
+                        child: Text('購入に進む'),
+                        onPressed: () => doCart(),
+                      ),
+                    ),
+                  if (ticketCarts.length > 0)
                     Container(
-                        padding: EdgeInsets.symmetric(vertical: 12),
-                        child: Text(
-                          ticketCarts.length < 1
-                              ? 'カートに商品はありません。'
-                              : ('小計 ￥' + cartInfo['amount']),
-                          style: TextStyle(fontSize: 24),
-                        )),
-                    if (ticketCarts.length < 1)
-                      ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: 200),
-                          child: ElevatedButton(
-                            child: Text('商品購入'),
-                            onPressed: () => pushProduct(),
-                          )),
-                    if (ticketCarts.length > 0)
-                      ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: 200),
-                          child: ElevatedButton(
-                            child: Text('購入に進む'),
-                            onPressed: () => doCart(),
-                          )),
-                    if (ticketCarts.length > 0)
-                      Container(
-                        margin: EdgeInsets.only(top: 12),
-                        height: 2,
-                        color: Colors.grey.withOpacity(0.5),
-                      ),
-                    Expanded(
-                        child: SingleChildScrollView(
+                      margin: EdgeInsets.only(top: 12),
+                      height: 2,
+                      color: Colors.grey.withOpacity(0.5),
+                    ),
+                  Expanded(
+                    child: SingleChildScrollView(
                       child: Column(
-                        children: [
-                          ...ticketCarts.map((e) => _getCartItem(e)),
-                        ],
+                        children: [...ticketCarts.map((e) => _getCartItem(e))],
                       ),
-                    )),
-                  ],
-                ));
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -164,19 +183,23 @@ class _ProductCart extends State<ProductCart> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-              child: Text(
-            item.title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          )),
+            child: Text(
+              item.title,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
           SizedBox(height: 6),
           Row(
             children: [
               Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    border: Border.all(
-                        color: Colors.grey.withOpacity(0.4), width: 1),
-                    borderRadius: BorderRadius.circular(4)),
+                  border: Border.all(
+                    color: Colors.grey.withOpacity(0.4),
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                ),
                 width: 120,
                 height: 80,
                 child: item.image == null
@@ -185,36 +208,47 @@ class _ProductCart extends State<ProductCart> {
               ),
               SizedBox(width: 15),
               Flexible(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(item.detail,
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 6),
-                  Text(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.detail,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
                       '小計  ￥${int.parse(item.price) * item.cartCount!}',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                ],
-              ))
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
           Row(
             children: [
               IncreaseButton(
-                  tapFunc: () => increaseQuantity(false, item),
-                  icon: Icons.remove),
+                tapFunc: () => increaseQuantity(false, item),
+                icon: Icons.remove,
+              ),
               IncreaseView(value: item.cartCount!),
               IncreaseButton(
-                  tapFunc: () => increaseQuantity(true, item), icon: Icons.add),
+                tapFunc: () => increaseQuantity(true, item),
+                icon: Icons.add,
+              ),
               Expanded(child: Container()),
               Container(
                 child: ElevatedButton(
                   child: Text('削除'),
                   onPressed: () => deleteDetail(item),
                 ),
-              )
+              ),
             ],
           ),
         ],

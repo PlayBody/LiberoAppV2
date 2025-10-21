@@ -11,8 +11,11 @@ import '../../../common/globals.dart' as globals;
 class ReserveMultiUser extends StatefulWidget {
   final String organId;
   final String isNoReserveType;
-  const ReserveMultiUser(
-      {required this.organId, required this.isNoReserveType, super.key});
+  const ReserveMultiUser({
+    required this.organId,
+    required this.isNoReserveType,
+    super.key,
+  });
 
   @override
   _ReserveMultiUser createState() => _ReserveMultiUser();
@@ -56,19 +59,29 @@ class _ReserveMultiUser extends State<ReserveMultiUser> {
     if (userCount > 3) globals.reserveMultiUsers.add(txtUser4Controller.text);
 
     if (userCount > 1) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return ReserveDateFirst(
-          organId: widget.organId,
-          isNoReserveType: widget.isNoReserveType,
-        );
-      }));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return ReserveDateFirst(
+              organId: widget.organId,
+              isNoReserveType: widget.isNoReserveType,
+            );
+          },
+        ),
+      );
     } else {
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return ReserveMenus(
-          organId: widget.organId,
-          isNoReserveType: widget.isNoReserveType,
-        );
-      }));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return ReserveMenus(
+              organId: widget.organId,
+              isNoReserveType: widget.isNoReserveType,
+            );
+          },
+        ),
+      );
     }
   }
 
@@ -87,7 +100,7 @@ class _ReserveMultiUser extends State<ReserveMultiUser> {
       child: Column(
         children: <Widget>[
           Expanded(child: SingleChildScrollView(child: _getMainColumn())),
-          PrimaryButton(label: '次へ', tapFunc: () => pushReserveMenu())
+          PrimaryButton(label: '次へ', tapFunc: () => pushReserveMenu()),
         ],
       ),
     );
@@ -102,57 +115,80 @@ class _ReserveMultiUser extends State<ReserveMultiUser> {
             TextLabel(label: '来店予定人数'),
             SizedBox(width: 16),
             Flexible(
-                child: DropDownNumberSelect(
-                    value: userCount.toString(),
-                    max: 4,
-                    tapFunc: (v) {
-                      userCount = int.parse(v);
-                      setState(() {});
-                    }))
+              child: DropDownNumberSelect(
+                value: userCount.toString(),
+                max: 4,
+                tapFunc: (v) {
+                  userCount = int.parse(v);
+                  setState(() {});
+                },
+              ),
+            ),
           ],
         ),
         SizedBox(height: 24),
         Container(
-            alignment: Alignment.centerLeft,
-            child: Text(errMsg, style: TextStyle(color: Colors.red))),
+          alignment: Alignment.centerLeft,
+          child: Text(errMsg, style: TextStyle(color: Colors.red)),
+        ),
         if (userCount > 1)
           Container(
-              margin: EdgeInsets.symmetric(vertical: 4),
-              child: Row(children: [
+            margin: EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
                 TextLabel(label: 'ご来店者様のご氏名(2人目)'),
                 SizedBox(width: 16),
-                Flexible(child: TextInputNormal(controller: txtUser2Controller))
-              ])),
+                Flexible(
+                  child: TextInputNormal(controller: txtUser2Controller),
+                ),
+              ],
+            ),
+          ),
         if (userCount > 2)
           Container(
-              margin: EdgeInsets.symmetric(vertical: 4),
-              child: Row(children: [
+            margin: EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
                 TextLabel(label: 'ご来店者様のご氏名(3人目)'),
                 SizedBox(width: 16),
-                Flexible(child: TextInputNormal(controller: txtUser3Controller))
-              ])),
+                Flexible(
+                  child: TextInputNormal(controller: txtUser3Controller),
+                ),
+              ],
+            ),
+          ),
         if (userCount > 3)
           Container(
-              margin: EdgeInsets.symmetric(vertical: 4),
-              child: Row(children: [
+            margin: EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
                 TextLabel(label: 'ご来店者様のご氏名(4人目)'),
                 SizedBox(width: 16),
-                Flexible(child: TextInputNormal(controller: txtUser4Controller))
-              ])),
+                Flexible(
+                  child: TextInputNormal(controller: txtUser4Controller),
+                ),
+              ],
+            ),
+          ),
         if (userCount > 2)
           Container(
-              margin: EdgeInsets.symmetric(vertical: 16),
-              child: Row(children: [
+            margin: EdgeInsets.symmetric(vertical: 16),
+            child: Row(
+              children: [
                 TextLabel(label: 'ご予約時間(分)'),
                 SizedBox(width: 16),
                 Flexible(
-                    child: DropDownNumberSelect(
-                        value: sumTime,
-                        min: 10,
-                        max: 200,
-                        diff: 5,
-                        tapFunc: (v) => sumTime = v))
-              ])),
+                  child: DropDownNumberSelect(
+                    value: sumTime,
+                    min: 10,
+                    max: 200,
+                    diff: 5,
+                    tapFunc: (v) => sumTime = v,
+                  ),
+                ),
+              ],
+            ),
+          ),
       ],
     );
   }

@@ -60,14 +60,17 @@ class _ConnectLogin extends State<ConnectLogin> {
     UserModel? user = await ClUser().getUserModel(context, {
       'company_id': APPCOMANYID,
       'user_email': txtMailController.text,
-      'user_password': txtPassController.text
+      'user_password': txtPassController.text,
     });
 
     if (user != null) {
       globals.userId = user.userId;
       globals.userName = user.userFirstName + ' ' + user.userLastName;
-      await ClUser()
-          .updateDeviceToken(context, user.userId, globals.connectDeviceToken);
+      await ClUser().updateDeviceToken(
+        context,
+        user.userId,
+        globals.connectDeviceToken,
+      );
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('is_libero_login_id', user.userId);
@@ -81,23 +84,24 @@ class _ConnectLogin extends State<ConnectLogin> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async => true,
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
+      onWillPop: () async => true,
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
             image: AssetImage('images/shop_login_back.jpg'),
             fit: BoxFit.cover,
-          )),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: FutureBuilder<List>(
-              future: loadData,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Container(
-                    padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
-                    child: SingleChildScrollView(
-                        child: Column(
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: FutureBuilder<List>(
+            future: loadData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Container(
+                  padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
+                  child: SingleChildScrollView(
+                    child: Column(
                       children: [
                         SizedBox(height: 60),
                         _getShopTitle(),
@@ -115,8 +119,9 @@ class _ConnectLogin extends State<ConnectLogin> {
                         TextButton(
                           child: Text(
                             'パスワードを忘れましたか？', // Forgot your Password?
-                            style:
-                                TextStyle(color: Colors.black.withOpacity(0.5)),
+                            style: TextStyle(
+                              color: Colors.black.withOpacity(0.5),
+                            ),
                           ),
                           onPressed: () =>
                               Navigator.pushNamed(context, '/Reset'),
@@ -124,8 +129,9 @@ class _ConnectLogin extends State<ConnectLogin> {
                         TextButton(
                           child: Text(
                             '新規会員登録画面へ',
-                            style:
-                                TextStyle(color: Colors.black.withOpacity(0.5)),
+                            style: TextStyle(
+                              color: Colors.black.withOpacity(0.5),
+                            ),
                           ),
                           onPressed: () =>
                               Navigator.pushNamed(context, '/Register'),
@@ -133,24 +139,27 @@ class _ConnectLogin extends State<ConnectLogin> {
                         TextButton(
                           child: Text(
                             'ホーム画面へ',
-                            style:
-                                TextStyle(color: Colors.black.withOpacity(0.5)),
+                            style: TextStyle(
+                              color: Colors.black.withOpacity(0.5),
+                            ),
                           ),
                           onPressed: () =>
                               Navigator.pushNamed(context, '/Home'),
-                        )
+                        ),
                       ],
-                    )),
-                  );
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
+                    ),
+                  ),
+                );
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
 
-                return Center(child: CircularProgressIndicator());
-              },
-            ),
+              return Center(child: CircularProgressIndicator());
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _getShopTitle() {
@@ -173,9 +182,10 @@ class _ConnectLogin extends State<ConnectLogin> {
   Widget _getEmailInput() {
     return Container(
       child: TextInputNormal(
-          controller: txtMailController,
-          inputType: TextInputType.emailAddress,
-          errorText: errMail),
+        controller: txtMailController,
+        inputType: TextInputType.emailAddress,
+        errorText: errMail,
+      ),
     );
   }
 

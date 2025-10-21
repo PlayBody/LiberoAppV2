@@ -52,8 +52,10 @@ class _PasswordReset extends State<PasswordReset> {
     if (!isCheck) return;
 
     Dialogs().loaderDialogNormal(context);
-    bool isSend =
-        await ClUser().sendResetEmail(context, txtMailController.text);
+    bool isSend = await ClUser().sendResetEmail(
+      context,
+      txtMailController.text,
+    );
 
     Navigator.pop(context);
 
@@ -69,83 +71,91 @@ class _PasswordReset extends State<PasswordReset> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async => true,
-        child: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('images/shop_login_back.jpg'),
-                  fit: BoxFit.cover)),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: FutureBuilder<List>(
-              future: loadData,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (iscomplete)
-                    return _completeContent();
-                  else
-                    return _sendContent();
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-
-                return Center(child: CircularProgressIndicator());
-              },
-            ),
+      onWillPop: () async => true,
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('images/shop_login_back.jpg'),
+            fit: BoxFit.cover,
           ),
-        ));
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: FutureBuilder<List>(
+            future: loadData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                if (iscomplete)
+                  return _completeContent();
+                else
+                  return _sendContent();
+              } else if (snapshot.hasError) {
+                return Text("${snapshot.error}");
+              }
+
+              return Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _sendContent() {
     return Container(
       padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
       child: SingleChildScrollView(
-          child: Column(
-        children: [
-          SizedBox(height: 60),
-          _getShopTitle(),
-          SizedBox(height: 80),
-          _getContentTitle('メールアドレス'),
-          SizedBox(height: 4),
-          _getEmailInput(),
-          SizedBox(height: 64),
-          _getButton(),
-          SizedBox(height: 24),
-          TextButton(
-            child: Text('ログイン画面に',
-                style: TextStyle(color: Colors.black.withOpacity(0.5))),
-            onPressed: () => Navigator.pop(context),
-          )
-        ],
-      )),
-    );
-  }
-
-  Widget _completeContent() {
-    return Container(
-        padding: EdgeInsets.only(left: 20),
         child: Column(
           children: [
             SizedBox(height: 60),
             _getShopTitle(),
             SizedBox(height: 80),
-            _getContentTitle('パスワードがメールで送信されました。'),
-            SizedBox(height: 80),
-            TextButton(
-                child: Text(
-                  '再送信する',
-                  style: TextStyle(color: Colors.black.withOpacity(0.5)),
-                ),
-                onPressed: () => sendMail()),
+            _getContentTitle('メールアドレス'),
+            SizedBox(height: 4),
+            _getEmailInput(),
+            SizedBox(height: 64),
+            _getButton(),
+            SizedBox(height: 24),
             TextButton(
               child: Text(
                 'ログイン画面に',
                 style: TextStyle(color: Colors.black.withOpacity(0.5)),
               ),
               onPressed: () => Navigator.pop(context),
-            )
+            ),
           ],
-        ));
+        ),
+      ),
+    );
+  }
+
+  Widget _completeContent() {
+    return Container(
+      padding: EdgeInsets.only(left: 20),
+      child: Column(
+        children: [
+          SizedBox(height: 60),
+          _getShopTitle(),
+          SizedBox(height: 80),
+          _getContentTitle('パスワードがメールで送信されました。'),
+          SizedBox(height: 80),
+          TextButton(
+            child: Text(
+              '再送信する',
+              style: TextStyle(color: Colors.black.withOpacity(0.5)),
+            ),
+            onPressed: () => sendMail(),
+          ),
+          TextButton(
+            child: Text(
+              'ログイン画面に',
+              style: TextStyle(color: Colors.black.withOpacity(0.5)),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _getShopTitle() {
@@ -168,9 +178,10 @@ class _PasswordReset extends State<PasswordReset> {
   Widget _getEmailInput() {
     return Container(
       child: TextInputNormal(
-          controller: txtMailController,
-          inputType: TextInputType.emailAddress,
-          errorText: errMail),
+        controller: txtMailController,
+        inputType: TextInputType.emailAddress,
+        errorText: errMail,
+      ),
     );
   }
 

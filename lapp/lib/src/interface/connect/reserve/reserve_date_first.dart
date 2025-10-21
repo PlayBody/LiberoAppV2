@@ -16,11 +16,12 @@ class ReserveDateFirst extends StatefulWidget {
   final String organId;
   final String isNoReserveType;
   final String? staffId;
-  const ReserveDateFirst(
-      {required this.organId,
-      required this.isNoReserveType,
-      this.staffId,
-      super.key});
+  const ReserveDateFirst({
+    required this.organId,
+    required this.isNoReserveType,
+    this.staffId,
+    super.key,
+  });
 
   @override
   _ReserveDateFirst createState() => _ReserveDateFirst();
@@ -51,39 +52,56 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
   DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
 
   Future<List> loadInitData() async {
-    viewFromDate = DateFormat('yyyy-MM-dd').format(getDate(
-        selectedDate.subtract(Duration(days: selectedDate.weekday - 1))));
-    toFromDate = DateFormat('yyyy-MM-dd').format(selectedDate
-        .add(Duration(days: DateTime.daysPerWeek - selectedDate.weekday)));
+    viewFromDate = DateFormat('yyyy-MM-dd').format(
+      getDate(selectedDate.subtract(Duration(days: selectedDate.weekday - 1))),
+    );
+    toFromDate = DateFormat('yyyy-MM-dd').format(
+      selectedDate.add(
+        Duration(days: DateTime.daysPerWeek - selectedDate.weekday),
+      ),
+    );
 
-    _fromDate = DateFormat('yyyy-MM-dd 00:00:00').format(getDate(
-        selectedDate.subtract(Duration(days: selectedDate.weekday - 1))));
-    _toDate = DateFormat('yyyy-MM-dd 23:59:59').format(selectedDate
-        .add(Duration(days: DateTime.daysPerWeek - selectedDate.weekday)));
+    _fromDate = DateFormat('yyyy-MM-dd 00:00:00').format(
+      getDate(selectedDate.subtract(Duration(days: selectedDate.weekday - 1))),
+    );
+    _toDate = DateFormat('yyyy-MM-dd 23:59:59').format(
+      selectedDate.add(
+        Duration(days: DateTime.daysPerWeek - selectedDate.weekday),
+      ),
+    );
 
-    var organTime =
-        await ClOrgan().loadOrganBussinessTime(context, widget.organId);
+    var organTime = await ClOrgan().loadOrganBussinessTime(
+      context,
+      widget.organId,
+    );
     if (organTime['from_time'] != null) organFromTime = organTime['from_time'];
     if (organTime['to_time'] != null) organToTime = organTime['to_time'];
 
     regions = await ClReserve().loadReserveTimeStatus(
-        context,
-        widget.organId,
-        globals.selStaffType.toString(),
-        widget.staffId ?? '',
-        viewFromDate,
-        toFromDate,
-        false);
+      context,
+      widget.organId,
+      globals.selStaffType.toString(),
+      widget.staffId ?? '',
+      viewFromDate,
+      toFromDate,
+      false,
+    );
 
     // await ClReserve().loadReserveConditions(context, widget.organId,
     // widget.staffId, _fromDate, _toDate, widget.isNoReserveType, '60');
-    sfCalanderHeight = 30 *
+    sfCalanderHeight =
+        30 *
             (int.parse(organToTime.split(':')[0]) -
                 int.parse(organFromTime.split(':')[0])) +
         70;
 
     List<ReserveModel> reserves = await ClReserve().loadUserReserveList(
-        context, globals.userId, widget.organId, _fromDate, _toDate);
+      context,
+      globals.userId,
+      widget.organId,
+      _fromDate,
+      _toDate,
+    );
     appointments = [];
     reserves.forEach((element) {
       var _color = Colors.yellow;
@@ -97,14 +115,16 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
         _subject = '拒否';
       }
 
-      appointments.add(Appointment(
-        startTime: DateTime.parse(element.reserveTime),
-        endTime: DateTime.parse(element.reserveExitTime),
-        color: _color,
-        subject: _subject,
-        startTimeZone: '',
-        endTimeZone: '',
-      ));
+      appointments.add(
+        Appointment(
+          startTime: DateTime.parse(element.reserveTime),
+          endTime: DateTime.parse(element.reserveExitTime),
+          color: _color,
+          subject: _subject,
+          startTimeZone: '',
+          endTimeZone: '',
+        ),
+      );
     });
 
     setState(() {});
@@ -112,8 +132,9 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
   }
 
   Future<void> changeViewCalander(_date) async {
-    String _cFromDate = DateFormat('yyyy-MM-dd')
-        .format(getDate(_date.subtract(Duration(days: _date.weekday))));
+    String _cFromDate = DateFormat(
+      'yyyy-MM-dd',
+    ).format(getDate(_date.subtract(Duration(days: _date.weekday))));
     if (_cFromDate == _fromDate) return;
     selectedDate = _date;
     await loadInitData();
@@ -122,18 +143,24 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
   Future<void> setReserveTime(CalendarTapDetails _cell) async {
     if (_cell.date == null) return;
 
-    String? selText =
-        regions.firstWhere((element) => element.startTime == _cell.date).text;
+    String? selText = regions
+        .firstWhere((element) => element.startTime == _cell.date)
+        .text;
     if (selText == null || selText == '' || selText == 'x') return;
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ReserveDateSecond(
-        organId: widget.organId,
-        isNoReserveType: widget.isNoReserveType,
-        staffId: widget.staffId,
-        selTime: _cell.date!,
-      );
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ReserveDateSecond(
+            organId: widget.organId,
+            isNoReserveType: widget.isNoReserveType,
+            staffId: widget.staffId,
+            selTime: _cell.date!,
+          );
+        },
+      ),
+    );
 
     setState(() {});
   }
@@ -147,18 +174,21 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-                child: SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                  _getComments(),
-                  widget.isNoReserveType == constCheckinReserveRiRa
-                      ? _getReserveRiraComment()
-                      : _getReserveShiftComment(),
-                  _getDateView(),
-                  SizedBox(height: 8),
-                  _getCalandarContent()
-                ])));
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _getComments(),
+                    widget.isNoReserveType == constCheckinReserveRiRa
+                        ? _getReserveRiraComment()
+                        : _getReserveShiftComment(),
+                    _getDateView(),
+                    SizedBox(height: 8),
+                    _getCalandarContent(),
+                  ],
+                ),
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -172,15 +202,17 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
 
   Widget _getComments() {
     return Container(
-        padding: EdgeInsets.only(left: 30, top: 20),
-        child: LeftSectionTitleText(label: '予約日と時間帯を選んでください'));
+      padding: EdgeInsets.only(left: 30, top: 20),
+      child: LeftSectionTitleText(label: '予約日と時間帯を選んでください'),
+    );
   }
 
   Widget _getDateView() {
     return Container(
       padding: EdgeInsets.only(left: 40),
       child: LeftSectionTitleText(
-          label: DateFormat('y年M月').format(DateTime.parse(_fromDate))),
+        label: DateFormat('y年M月').format(DateTime.parse(_fromDate)),
+      ),
     );
   }
 
@@ -194,36 +226,36 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
             children: [
               Text('◎', style: TextStyle(color: Colors.red)),
               SizedBox(width: 4),
-              Text('指名スタッフの予約可能時間', style: commentStyle)
+              Text('指名スタッフの予約可能時間', style: commentStyle),
             ],
           ),
           Row(
             children: [
               Text('〇', style: TextStyle(color: Colors.red)),
               SizedBox(width: 4),
-              Text('指名スタッフ以外で予約できる時間（青は男、赤は女）', style: commentStyle)
+              Text('指名スタッフ以外で予約できる時間（青は男、赤は女）', style: commentStyle),
             ],
           ),
           Row(
             children: [
               Text('□', style: TextStyle(color: Colors.green)),
               SizedBox(width: 4),
-              Text('指名スタッフへのリクエスト予約。', style: commentStyle)
+              Text('指名スタッフへのリクエスト予約。', style: commentStyle),
             ],
           ),
           Row(
             children: [
               SizedBox(width: 20),
-              Text('（指名スタッフの承認後に予約確定となります。）', style: commentStyle)
+              Text('（指名スタッフの承認後に予約確定となります。）', style: commentStyle),
             ],
           ),
           Row(
             children: [
               Text(' X', style: TextStyle(color: Colors.grey)),
               SizedBox(width: 4),
-              Text('予約できません。', style: commentStyle)
+              Text('予約できません。', style: commentStyle),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -239,16 +271,16 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
             children: [
               Text('〇', style: TextStyle(color: Colors.red)),
               SizedBox(width: 4),
-              Text('空きがあります。', style: commentStyle)
+              Text('空きがあります。', style: commentStyle),
             ],
           ),
           Row(
             children: [
               Text(' X', style: TextStyle(color: Colors.grey)),
               SizedBox(width: 4),
-              Text('空きがありません。', style: commentStyle)
+              Text('空きがありません。', style: commentStyle),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -267,20 +299,23 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
               todayHighlightColor: Colors.black,
               cellBorderColor: Color(0xffcccccc),
               timeSlotViewSettings: TimeSlotViewSettings(
-                  dayFormat: '(E)',
-                  timeInterval: Duration(hours: 1),
-                  timeIntervalHeight: -1,
-                  timeFormat: 'H:mm',
-                  startHour: double.parse(organFromTime.split(':')[0]),
-                  endHour: double.parse(organToTime.split(':')[0]) +
-                      (int.parse(organToTime.split(':')[1]) > 0 ? 1 : 0),
-                  timeTextStyle: TextStyle(fontSize: 15, color: Colors.grey)),
+                dayFormat: '(E)',
+                timeInterval: Duration(hours: 1),
+                timeIntervalHeight: -1,
+                timeFormat: 'H:mm',
+                startHour: double.parse(organFromTime.split(':')[0]),
+                endHour:
+                    double.parse(organToTime.split(':')[0]) +
+                    (int.parse(organToTime.split(':')[1]) > 0 ? 1 : 0),
+                timeTextStyle: TextStyle(fontSize: 15, color: Colors.grey),
+              ),
               specialRegions: regions,
               dataSource: _AppointmentDataSource(appointments),
               appointmentTextStyle: TextStyle(
-                  fontSize: 10,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold),
+                fontSize: 10,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
               timeRegionBuilder:
                   (BuildContext context, TimeRegionDetails timeRegionDetails) =>
                       timeRegionBuilder(timeRegionDetails),
@@ -289,15 +324,19 @@ class _ReserveDateFirst extends State<ReserveDateFirst> {
             ),
           ),
           Positioned(
-              top: 55,
-              left: 6,
-              child: Container(
-                child: Text(organFromTime.substring(0, 5),
-                    style: TextStyle(
-                        fontSize: 14.5,
-                        color: Colors.grey,
-                        letterSpacing: 0.5)),
-              )),
+            top: 55,
+            left: 6,
+            child: Container(
+              child: Text(
+                organFromTime.substring(0, 5),
+                style: TextStyle(
+                  fontSize: 14.5,
+                  color: Colors.grey,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

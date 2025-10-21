@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "cloud.connect.shangrila"
+    namespace = "cloud.connect.libero"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 

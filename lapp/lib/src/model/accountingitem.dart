@@ -3,8 +3,11 @@ class AccountingItem {
   final bool check;
   final String position;
 
-  const AccountingItem(
-      {required this.title, required this.check, required this.position});
+  const AccountingItem({
+    required this.title,
+    required this.check,
+    required this.position,
+  });
 
   factory AccountingItem.fromJson(Map<String, dynamic> json) {
     return AccountingItem(

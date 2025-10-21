@@ -65,13 +65,14 @@ class _ProductList extends State<ProductList> {
     dynamic cartinfo = await ClCart().getCartSum(context);
 
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return DialogAddCart(
-              showString: '${'カートの小計（' +
-                  cartinfo['count']}点の商品） ￥' +
-                  cartinfo['amount']);
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return DialogAddCart(
+          showString:
+              '${'カートの小計（' + cartinfo['count']}点の商品） ￥' + cartinfo['amount'],
+        );
+      },
+    );
     loadInitData();
   }
 
@@ -86,9 +87,7 @@ class _ProductList extends State<ProductList> {
             return Container(
               child: SingleChildScrollView(
                 child: Column(
-                  children: [
-                    ...tickets.map((e) => _getProductContent(e)),
-                  ],
+                  children: [...tickets.map((e) => _getProductContent(e))],
                 ),
               ),
             );
@@ -107,79 +106,95 @@ class _ProductList extends State<ProductList> {
 
   Widget _getProductContent(TicketModel item) {
     return GestureDetector(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return ProductDetail(ticketId: item.id);
-          }));
-        },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey)],
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) {
+              return ProductDetail(ticketId: item.id);
+            },
           ),
-          margin: EdgeInsets.only(left: 16, right: 16, top: 16),
-          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                  child: Text(item.title, style: TextStyle(fontSize: 16))),
-              SizedBox(height: 6),
-              Row(
-                children: [
-                  Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.grey.withOpacity(0.4), width: 1),
-                        borderRadius: BorderRadius.circular(4)),
-                    width: 120,
-                    height: 80,
-                    child: item.image == null
-                        ? Text('設定なし')
-                        : Image.network(ticketImageUrl + item.image!),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey)],
+        ),
+        margin: EdgeInsets.only(left: 16, right: 16, top: 16),
+        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(child: Text(item.title, style: TextStyle(fontSize: 16))),
+            SizedBox(height: 6),
+            Row(
+              children: [
+                Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.withOpacity(0.4),
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(4),
                   ),
-                  SizedBox(width: 15),
-                  Flexible(
-                      child: Column(
+                  width: 120,
+                  height: 80,
+                  child: item.image == null
+                      ? Text('設定なし')
+                      : Image.network(ticketImageUrl + item.image!),
+                ),
+                SizedBox(width: 15),
+                Flexible(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                          child: Text(item.detail,
-                              style: TextStyle(
-                                fontSize: 14,
-                                // fontWeight: FontWeight.bold,
-                              ))),
+                        child: Text(
+                          item.detail,
+                          style: TextStyle(
+                            fontSize: 14,
+                            // fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                       SizedBox(height: 6),
                       Text(
-                          '小計  ￥${int.parse(item.price) * item.cartCount!}',
-                          style: TextStyle(fontSize: 22)),
+                        '小計  ￥${int.parse(item.price) * item.cartCount!}',
+                        style: TextStyle(fontSize: 22),
+                      ),
                     ],
-                  ))
-                ],
-              ),
-              Row(
-                children: [
-                  IncreaseButton(
-                      tapFunc: () => increaseQuantity(false, item),
-                      icon: Icons.remove),
-                  IncreaseView(
-                      value: item.cartCount == null ? 1 : item.cartCount!),
-                  IncreaseButton(
-                      tapFunc: () => increaseQuantity(true, item),
-                      icon: Icons.add),
-                  Expanded(child: Container()),
-                  Container(
-                    child: ElevatedButton(
-                      child: Text('カートに入れる'),
-                      onPressed: () => addCart(item),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          ),
-        ));
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                IncreaseButton(
+                  tapFunc: () => increaseQuantity(false, item),
+                  icon: Icons.remove,
+                ),
+                IncreaseView(
+                  value: item.cartCount == null ? 1 : item.cartCount!,
+                ),
+                IncreaseButton(
+                  tapFunc: () => increaseQuantity(true, item),
+                  icon: Icons.add,
+                ),
+                Expanded(child: Container()),
+                Container(
+                  child: ElevatedButton(
+                    child: Text('カートに入れる'),
+                    onPressed: () => addCart(item),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

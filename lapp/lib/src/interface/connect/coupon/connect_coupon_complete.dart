@@ -25,8 +25,9 @@ class _ConnectCouponComplete extends State<ConnectCouponComplete> {
 
   Future<List> loadMenuData() async {
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiLoadCouponListUrl,
-        {'user_id': globals.userId}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiLoadCouponListUrl, {'user_id': globals.userId})
+        .then((value) => results = value);
     coupons = [];
     if (results['isLoad']) {
       for (var item in results['coupons']) {
@@ -39,9 +40,14 @@ class _ConnectCouponComplete extends State<ConnectCouponComplete> {
   }
 
   Future<void> userCoupon() async {
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ConnectCouponComplete();
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ConnectCouponComplete();
+        },
+      ),
+    );
   }
 
   var txtTitleStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
@@ -67,14 +73,13 @@ class _ConnectCouponComplete extends State<ConnectCouponComplete> {
                   Container(
                     margin: EdgeInsets.symmetric(vertical: 24),
                     child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text('スタンプ一覧へ')),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('スタンプ一覧へ'),
+                    ),
                   ),
-                  Container(
-                    child: Text('', style: txtContentStyle),
-                  ),
+                  Container(child: Text('', style: txtContentStyle)),
                 ],
               ),
             );

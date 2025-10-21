@@ -54,18 +54,17 @@ class _ConnectOrganList extends State<ConnectOrganList> {
     }
 
     Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+      desiredAccuracy: LocationAccuracy.high,
+    );
     LatLng initialPosition = LatLng(position.latitude, position.longitude);
 
-    initCameraPosition = CameraPosition(
-      target: initialPosition,
-      zoom: 15,
-    );
+    initCameraPosition = CameraPosition(target: initialPosition, zoom: 15);
     setState(() {});
 
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiLoadOrganListUrl,
-        {'company_id': APPCOMANYID}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiLoadOrganListUrl, {'company_id': APPCOMANYID})
+        .then((value) => results = value);
     organs = [];
     if (results['isLoad']) {
       for (var item in results['organs']) {
@@ -75,21 +74,29 @@ class _ConnectOrganList extends State<ConnectOrganList> {
             double.tryParse(item['lon']) == null) {
           item['distance'] = '';
         } else {
-          LatLng latlong =
-              new LatLng(double.parse(item['lat']), double.parse(item['lon']));
+          LatLng latlong = new LatLng(
+            double.parse(item['lat']),
+            double.parse(item['lon']),
+          );
           item['distance'] = clacDistance(initialPosition, latlong);
-          _markers.add(Marker(
+          _markers.add(
+            Marker(
               markerId: MarkerId("a"),
               draggable: true,
               position: latlong,
               icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueRed),
+                BitmapDescriptor.hueRed,
+              ),
               onDragEnd: (_currentlatLng) {
                 latlong = _currentlatLng;
-              }));
+              },
+            ),
+          );
         }
-        item['is_open'] =
-            await ClOrgan().isOpenOrgan(context, item['organ_id']);
+        item['is_open'] = await ClOrgan().isOpenOrgan(
+          context,
+          item['organ_id'],
+        );
         organs.add(OrganModel.fromJson(item));
       }
     }
@@ -106,7 +113,8 @@ class _ConnectOrganList extends State<ConnectOrganList> {
     var si = (pos2.latitude - pos1.latitude) * pi / 180;
     var ra = (pos2.longitude - pos1.longitude) * pi / 180;
 
-    var a = sin(si / 2) * sin(si / 2) +
+    var a =
+        sin(si / 2) * sin(si / 2) +
         cos(fLat1) * cos(fLat2) * sin(ra / 2) * sin(ra / 2);
     var c = 2 * atan2(sqrt(a), sqrt(1 - a));
 
@@ -143,9 +151,7 @@ class _ConnectOrganList extends State<ConnectOrganList> {
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
-                        children: [
-                          ...organs.map((e) => _getOrganItem(e)),
-                        ],
+                        children: [...organs.map((e) => _getOrganItem(e))],
                       ),
                     ),
                   ),
@@ -174,9 +180,7 @@ class _ConnectOrganList extends State<ConnectOrganList> {
           prefixIcon: Icon(Icons.search),
           hintText: '店舗を検索',
           border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.grey,
-            ),
+            borderSide: BorderSide(color: Colors.grey),
           ),
         ),
       ),
@@ -236,49 +240,65 @@ class _ConnectOrganList extends State<ConnectOrganList> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-              padding: EdgeInsets.only(top: 4),
-              child: Row(children: [
-                Text(
-                  item.isOpen ? '営業中' : '',
-                  style: TextStyle(fontSize: 12),
-                ),
+            padding: EdgeInsets.only(top: 4),
+            child: Row(
+              children: [
+                Text(item.isOpen ? '営業中' : '', style: TextStyle(fontSize: 12)),
                 Expanded(child: Container()),
                 Text(
-                    (item.distance == null ||
-                            item.distance == '' ||
-                            !item.distance_status)
-                        ? ''
-                        : ('${item.distance!}m'),
-                    style: TextStyle(fontSize: 16))
-              ])),
+                  (item.distance == null ||
+                          item.distance == '' ||
+                          !item.distance_status)
+                      ? ''
+                      : ('${item.distance!}m'),
+                  style: TextStyle(fontSize: 16),
+                ),
+              ],
+            ),
+          ),
           Container(
-              child: Text(item.organName,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+            child: Text(
+              item.organName,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
           Container(
-              child: Text(item.organAddress!, style: TextStyle(fontSize: 12))),
+            child: Text(item.organAddress!, style: TextStyle(fontSize: 12)),
+          ),
           Container(
-            child: Row(children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
+            child: Row(
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
                     padding: EdgeInsets.all(6),
-                    visualDensity: VisualDensity(vertical: -2)),
-                child: Text('電話問い合わせ', style: TextStyle(fontSize: 12)),
-                onPressed: () {
-                  callDialog(
-                      context, item.organPhone == null ? '' : item.organPhone!);
-                },
-              ),
-              Expanded(child: Container()),
-              TextButton(
+                    visualDensity: VisualDensity(vertical: -2),
+                  ),
+                  child: Text('電話問い合わせ', style: TextStyle(fontSize: 12)),
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return ConnectOrganView(organId: item.organId);
-                    }));
+                    callDialog(
+                      context,
+                      item.organPhone == null ? '' : item.organPhone!,
+                    );
                   },
-                  child: Text('詳細', style: TextStyle(fontSize: 14)))
-            ]),
-          )
+                ),
+                Expanded(child: Container()),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return ConnectOrganView(organId: item.organId);
+                        },
+                      ),
+                    );
+                  },
+                  child: Text('詳細', style: TextStyle(fontSize: 14)),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -293,36 +313,44 @@ class _ConnectOrganList extends State<ConnectOrganList> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                  alignment: Alignment.center,
-                  child: Text('電話問い合わせ',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold))),
+                alignment: Alignment.center,
+                child: Text(
+                  '電話問い合わせ',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
+              ),
               SizedBox(height: 24),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.only(top: 12, bottom: 12),
-                    backgroundColor: Colors.orange),
+                  padding: EdgeInsets.only(top: 12, bottom: 12),
+                  backgroundColor: Colors.orange,
+                ),
                 child: Container(
-                    child: Row(children: [
-                  Container(
-                      padding: EdgeInsets.only(left: 30),
-                      alignment: Alignment.center,
-                      width: 60,
-                      child: Icon(Icons.phone, color: Colors.white, size: 42)),
-                  Expanded(
-                      flex: 2,
-                      child: Column(
-                        children: [
-                          Text('お問い合わせ', style: TextStyle(fontSize: 18)),
-                          SizedBox(height: 8),
-                          Text(phone, style: TextStyle(fontSize: 22))
-                        ],
-                      ))
-                ])),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 30),
+                        alignment: Alignment.center,
+                        width: 60,
+                        child: Icon(Icons.phone, color: Colors.white, size: 42),
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: Column(
+                          children: [
+                            Text('お問い合わせ', style: TextStyle(fontSize: 18)),
+                            SizedBox(height: 8),
+                            Text(phone, style: TextStyle(fontSize: 22)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 onPressed: () {
                   launchUrl(Uri.parse("tel://$phone"));
                 },
-              )
+              ),
             ],
           ),
         ),

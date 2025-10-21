@@ -38,22 +38,27 @@ class _ConnectMenuReview extends State<ConnectMenuReview> {
   }
 
   Future<List> loadMenuData() async {
-    OrderModel? order =
-        await ClReserve().loadReserveInfo(context, widget.orderId);
+    OrderModel? order = await ClReserve().loadReserveInfo(
+      context,
+      widget.orderId,
+    );
     if (order != null) {
       organName = order.organName;
       if (order.menus.length > 0) {
         menuName = order.menus.first.menuTitle;
-        menuId =
-            order.menus.first.menuId == null ? '' : order.menus.first.menuId!;
+        menuId = order.menus.first.menuId == null
+            ? ''
+            : order.menus.first.menuId!;
       }
       if (order.menus.length > 1) menuName = menuName + ' ＋ その他 ';
 
       Map<dynamic, dynamic> resultsReview = {};
-      await Webservice().loadHttp(context, apiLoadMenuReviewUrl, {
-        'user_id': globals.userId,
-        'menu_id': menuId
-      }).then((value) => resultsReview = value);
+      await Webservice()
+          .loadHttp(context, apiLoadMenuReviewUrl, {
+            'user_id': globals.userId,
+            'menu_id': menuId,
+          })
+          .then((value) => resultsReview = value);
       if (resultsReview['isLoad']) {
         servieMark = int.parse(resultsReview['review']['service_review']);
         priceMark = int.parse(resultsReview['review']['price_review']);
@@ -93,13 +98,15 @@ class _ConnectMenuReview extends State<ConnectMenuReview> {
     if (!conf) return;
 
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiSaveMenuReviewUrl, {
-      'user_id': globals.userId,
-      'menu_id': menuId,
-      'service_mark': servieMark.toString(),
-      'price_mark': priceMark.toString(),
-      'content': contentController.text
-    }).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiSaveMenuReviewUrl, {
+          'user_id': globals.userId,
+          'menu_id': menuId,
+          'service_mark': servieMark.toString(),
+          'price_mark': priceMark.toString(),
+          'content': contentController.text,
+        })
+        .then((value) => results = value);
 
     if (results['isSave']) {
       Navigator.pop(context);
@@ -118,12 +125,12 @@ class _ConnectMenuReview extends State<ConnectMenuReview> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-                padding: EdgeInsets.all(30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Expanded(
-                        child: SingleChildScrollView(
+              padding: EdgeInsets.all(30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
                       child: Column(
                         children: [
                           _getTitle(),
@@ -137,20 +144,23 @@ class _ConnectMenuReview extends State<ConnectMenuReview> {
                           _getErrorContent(errPrice),
                           SizedBox(height: 16),
                           _getCommentTitle(),
-                          _getCommentContent()
+                          _getCommentContent(),
                         ],
                       ),
-                    )),
-                    Container(
-                      padding: EdgeInsets.only(top: 12),
-                      child: ElevatedButton(
-                          child: Text('匿名で送信'),
-                          onPressed: () {
-                            saveReview();
-                          }),
-                    )
-                  ],
-                ));
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 12),
+                    child: ElevatedButton(
+                      child: Text('匿名で送信'),
+                      onPressed: () {
+                        saveReview();
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -167,13 +177,9 @@ class _ConnectMenuReview extends State<ConnectMenuReview> {
   Widget _getTitle() {
     return Row(
       children: [
-        Container(
-          child: Text(organName, style: txtTitleStyle),
-        ),
+        Container(child: Text(organName, style: txtTitleStyle)),
         Expanded(child: Container()),
-        Container(
-          child: Text(menuName),
-        )
+        Container(child: Text(menuName)),
       ],
     );
   }
@@ -197,8 +203,9 @@ class _ConnectMenuReview extends State<ConnectMenuReview> {
   Widget _getErrorContent(String? err) {
     if (err == null) return Container();
     return Container(
-        alignment: Alignment.topLeft,
-        child: Text(err, style: TextStyle(color: Colors.red)));
+      alignment: Alignment.topLeft,
+      child: Text(err, style: TextStyle(color: Colors.red)),
+    );
   }
 
   Widget _getCommentTitle() {
@@ -215,126 +222,140 @@ class _ConnectMenuReview extends State<ConnectMenuReview> {
         controller: contentController,
         maxLines: 5,
         decoration: InputDecoration(
-            errorText: errContent,
-            border:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.grey))),
+          errorText: errContent,
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey),
+          ),
+        ),
       ),
     );
   }
 
   Widget _getServiceStar() {
     return Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
-        child: Row(
-          children: [
-            GestureDetector(
-                child: servieMark >= 1
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    servieMark = 1;
-                  });
-                }),
-            SizedBox(width: 24),
-            GestureDetector(
-                child: servieMark >= 2
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    servieMark = 2;
-                  });
-                }),
-            SizedBox(width: 24),
-            GestureDetector(
-                child: servieMark >= 3
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    servieMark = 3;
-                  });
-                }),
-            SizedBox(width: 24),
-            GestureDetector(
-                child: servieMark >= 4
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    servieMark = 4;
-                  });
-                }),
-            SizedBox(width: 24),
-            GestureDetector(
-                child: servieMark >= 5
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    servieMark = 5;
-                  });
-                }),
-          ],
-        ));
+      padding: EdgeInsets.only(left: 10, right: 10),
+      child: Row(
+        children: [
+          GestureDetector(
+            child: servieMark >= 1
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                servieMark = 1;
+              });
+            },
+          ),
+          SizedBox(width: 24),
+          GestureDetector(
+            child: servieMark >= 2
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                servieMark = 2;
+              });
+            },
+          ),
+          SizedBox(width: 24),
+          GestureDetector(
+            child: servieMark >= 3
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                servieMark = 3;
+              });
+            },
+          ),
+          SizedBox(width: 24),
+          GestureDetector(
+            child: servieMark >= 4
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                servieMark = 4;
+              });
+            },
+          ),
+          SizedBox(width: 24),
+          GestureDetector(
+            child: servieMark >= 5
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                servieMark = 5;
+              });
+            },
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _getPriceStar() {
     return Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
-        child: Row(
-          children: [
-            GestureDetector(
-                child: priceMark >= 1
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    priceMark = 1;
-                  });
-                }),
-            SizedBox(width: 24),
-            GestureDetector(
-                child: priceMark >= 2
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    priceMark = 2;
-                  });
-                }),
-            SizedBox(width: 24),
-            GestureDetector(
-                child: priceMark >= 3
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    priceMark = 3;
-                  });
-                }),
-            SizedBox(width: 24),
-            GestureDetector(
-                child: priceMark >= 4
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    priceMark = 4;
-                  });
-                }),
-            SizedBox(width: 24),
-            GestureDetector(
-                child: priceMark >= 5
-                    ? Icon(Icons.star, color: Colors.yellow, size: 32)
-                    : Icon(Icons.star_border_outlined, size: 32),
-                onTap: () {
-                  setState(() {
-                    priceMark = 5;
-                  });
-                }),
-          ],
-        ));
+      padding: EdgeInsets.only(left: 10, right: 10),
+      child: Row(
+        children: [
+          GestureDetector(
+            child: priceMark >= 1
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                priceMark = 1;
+              });
+            },
+          ),
+          SizedBox(width: 24),
+          GestureDetector(
+            child: priceMark >= 2
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                priceMark = 2;
+              });
+            },
+          ),
+          SizedBox(width: 24),
+          GestureDetector(
+            child: priceMark >= 3
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                priceMark = 3;
+              });
+            },
+          ),
+          SizedBox(width: 24),
+          GestureDetector(
+            child: priceMark >= 4
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                priceMark = 4;
+              });
+            },
+          ),
+          SizedBox(width: 24),
+          GestureDetector(
+            child: priceMark >= 5
+                ? Icon(Icons.star, color: Colors.yellow, size: 32)
+                : Icon(Icons.star_border_outlined, size: 32),
+            onTap: () {
+              setState(() {
+                priceMark = 5;
+              });
+            },
+          ),
+        ],
+      ),
+    );
   }
 }

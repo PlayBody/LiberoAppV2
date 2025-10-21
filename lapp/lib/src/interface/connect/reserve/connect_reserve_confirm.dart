@@ -29,14 +29,15 @@ class ConnectReserveConfirm extends StatefulWidget {
   final int reserveStatus;
   final String isNoReserveType;
   final String? shiftFrameId;
-  const ConnectReserveConfirm(
-      {required this.reserveOrganId,
-      this.reserveStaffId,
-      required this.reserveStartTime,
-      required this.reserveStatus,
-      required this.isNoReserveType,
-      this.shiftFrameId,
-      super.key});
+  const ConnectReserveConfirm({
+    required this.reserveOrganId,
+    this.reserveStaffId,
+    required this.reserveStartTime,
+    required this.reserveStatus,
+    required this.isNoReserveType,
+    this.shiftFrameId,
+    super.key,
+  });
 
   @override
   _ConnectReserveConfirm createState() => _ConnectReserveConfirm();
@@ -51,7 +52,7 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
   int couposAmount = 0;
   int sumTicketAmount = 0;
   String useCouponId = '';
-  String payMethod = '1';
+  String payMethod = '2'; //店頭決済- In-store payment
   bool payStatus = false;
   var codeController = TextEditingController();
   List<TicketModel> tickets = [];
@@ -100,7 +101,7 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
       'user_id': globals.userId,
       'use_flag': '1',
       'use_date': DateFormat('yyyy-MM-dd').format(DateTime.now()),
-      'use_organ': widget.reserveOrganId
+      'use_organ': widget.reserveOrganId,
     });
 
     if (widget.isNoReserveType == constCheckinReserveRiRa) {
@@ -109,15 +110,18 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
       reserveEndTime = reserveFromTime.add(Duration(minutes: sumMenuTime));
     } else {
       var countFrom = await ClOrgan().getShiftCountFromTime(
-          context,
-          widget.reserveOrganId,
-          DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.reserveStartTime));
+        context,
+        widget.reserveOrganId,
+        DateFormat('yyyy-MM-dd HH:mm:ss').format(widget.reserveStartTime),
+      );
       reserveFromTime = DateTime.parse(countFrom['from_time']);
       reserveEndTime = DateTime.parse(countFrom['to_time']);
     }
 
-    OrganModel? organ =
-        await ClOrgan().loadOrganInfo(context, widget.reserveOrganId);
+    OrganModel? organ = await ClOrgan().loadOrganInfo(
+      context,
+      widget.reserveOrganId,
+    );
 
     if (organ != null) reserveOrganName = organ.organName;
 
@@ -141,10 +145,11 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
       }
       if (_selCoupon.discountRate != null) {
         // ignore: division_optimization
-        couposAmount += ((sumAmount.toDouble() *
-                    int.parse(_selCoupon.discountRate!).toDouble()) /
-                100)
-            .toInt();
+        couposAmount +=
+            ((sumAmount.toDouble() *
+                        int.parse(_selCoupon.discountRate!).toDouble()) /
+                    100)
+                .toInt();
       }
     });
 
@@ -204,7 +209,7 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
       if (e.cartCount != null && e.cartCount! > 0) {
         ticketdata[e.ticketId] = {
           'ticket_id': e.ticketId,
-          'use_count': e.cartCount
+          'use_count': e.cartCount,
         };
       }
     });
@@ -216,16 +221,23 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
         .then((v) => results = v);
     if (results['is_result']) {
       useCouponIds.forEach((element) {
-        Webservice().loadHttp(context, '$apiBase/apicoupons/useUserCoupon',
-            {'user_coupon_id': element});
+        Webservice().loadHttp(context, '$apiBase/apicoupons/useUserCoupon', {
+          'user_coupon_id': element,
+        });
       });
 
       globals.connectReserveMenuList = [];
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/Home', (Route<dynamic> route) => false);
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return ConnectHistory();
-      }));
+      Navigator.of(
+        context,
+      ).pushNamedAndRemoveUntil('/Home', (Route<dynamic> route) => false);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return ConnectHistory();
+          },
+        ),
+      );
     } else {
       Navigator.pop(context);
       Dialogs().infoDialog(context, '操作が失敗しました。');
@@ -233,9 +245,14 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
   }
 
   Future<void> doPay() async {
-    bool? isPay = await Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return CardSelect(payAmount: sumAmount.toString());
-    }));
+    bool? isPay = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return CardSelect(payAmount: sumAmount.toString());
+        },
+      ),
+    );
     if (isPay == null) return;
     if (isPay) {
       saveReserveData();
@@ -253,20 +270,22 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-                padding: EdgeInsets.only(top: 40, left: 40, right: 30),
-                child: Column(children: [
+              padding: EdgeInsets.only(top: 40, left: 40, right: 30),
+              child: Column(
+                children: [
                   Expanded(
-                      child: SingleChildScrollView(child: _getMainColumn())),
-                  _getReserveConfirmButton()
-                ]));
+                    child: SingleChildScrollView(child: _getMainColumn()),
+                  ),
+                  _getReserveConfirmButton(),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
 
           // By default, show a loading spinner.
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -280,17 +299,17 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
       children: [
         _getReserveOrgan(),
         SizedBox(height: 20),
-        _getPayMethod(),
-        SizedBox(height: 20),
-        _getReserveMenus(),
-        SizedBox(height: 20),
+        // _getPayMethod(),
+        // SizedBox(height: 20),
+        // _getReserveMenus(),
+        // SizedBox(height: 20),
         _getReserveTime(),
         SizedBox(height: 20),
-        _getCouponUse(),
-        SizedBox(height: 12),
-        _getTicketUse(),
-        SizedBox(height: 30),
-        _getAmountSum()
+        // _getCouponUse(),
+        // SizedBox(height: 12),
+        // _getTicketUse(),
+        // SizedBox(height: 30),
+        // _getAmountSum(),
       ],
     );
   }
@@ -299,12 +318,8 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
     return Container(
       child: Row(
         children: [
-          Container(
-            child: Text('予約店舗：', style: txtHeaderStyle),
-          ),
-          Expanded(
-            child: Text(reserveOrganName, style: txtHeaderStyle),
-          )
+          Container(child: Text('予約店舗：', style: txtHeaderStyle)),
+          Expanded(child: Text(reserveOrganName, style: txtHeaderStyle)),
         ],
       ),
     );
@@ -312,60 +327,86 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
 
   Widget _getPayMethod() {
     return Container(
-        child: DropDownModelSelect(
-            value: payMethod,
-            items: [
-              if (widget.reserveStatus == 1 && globals.reserveUserCnt == 1)
-                DropdownMenuItem(value: '1', child: Text('クレジット決済')),
-              DropdownMenuItem(value: '2', child: Text('店頭で決済'))
-            ],
-            tapFunc: (v) {
-              payMethod = v;
-              setState(() {});
-            }));
+      child: DropDownModelSelect(
+        value: payMethod,
+        items: [
+          DropdownMenuItem(value: '2', child: Text('店頭で決済')),
+          if (widget.reserveStatus == 1 && globals.reserveUserCnt == 1)
+            DropdownMenuItem(value: '1', child: Text('クレジット決済')),
+        ],
+        tapFunc: (v) {
+          payMethod = v;
+          setState(() {});
+        },
+      ),
+    );
   }
 
   Widget _getReserveMenus() {
     return Container(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        margin: EdgeInsets.symmetric(vertical: 12),
-        child: Text(
-          '予約メニュー',
-          style: txtHeaderStyle,
-        ),
-      ),
-      Container(
-          child: Column(children: [
-        ...globals.connectReserveMenuList.map((e) => Container(
-            margin: EdgeInsets.symmetric(vertical: 4),
-            child: Row(children: [
-              Expanded(child: Text(e.menuTitle, style: txtContentStyle)),
-              Container(
-                  child: Text('${Funcs().currencyFormat(e.menuPrice)}円',
-                      style: txtContentStyle)),
-            ]))),
-        Container(
-            margin: EdgeInsets.symmetric(vertical: 4),
-            child: Row(children: [
-              Expanded(child: Text('指名料', style: txtContentStyle)),
-              Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 12),
+            child: Text('予約メニュー', style: txtHeaderStyle),
+          ),
+          Container(
+            child: Column(
+              children: [
+                ...globals.connectReserveMenuList.map(
+                  (e) => Container(
+                    margin: EdgeInsets.symmetric(vertical: 4),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(e.menuTitle, style: txtContentStyle),
+                        ),
+                        Container(
+                          child: Text(
+                            '${Funcs().currencyFormat(e.menuPrice)}円',
+                            style: txtContentStyle,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(vertical: 4),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text('指名料', style: txtContentStyle)),
+                      Container(
+                        child: Text(
+                          '${Funcs().currencyFormat((selAmount * 1.1).toInt().toString())}円',
+                          style: txtContentStyle,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(height: 1, color: Colors.grey),
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              children: [
+                Expanded(child: Text('合計金額', style: txtContentStyle)),
+                Container(
                   child: Text(
-                      '${Funcs().currencyFormat(
-                              (selAmount * 1.1).toInt().toString())}円',
-                      style: txtContentStyle)),
-            ]))
-      ])),
-      Container(height: 1, color: Colors.grey),
-      Container(
-          margin: EdgeInsets.symmetric(vertical: 8),
-          child: Row(children: [
-            Expanded(child: Text('合計金額', style: txtContentStyle)),
-            Container(
-                child: Text('${Funcs().currencyFormat(sumAmount.toString())}円',
-                    style: txtContentStyle))
-          ]))
-    ]));
+                    '${Funcs().currencyFormat(sumAmount.toString())}円',
+                    style: txtContentStyle,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _getReserveTime() {
@@ -378,10 +419,12 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
             child: Text('予約日時', style: txtHeaderStyle),
           ),
           Container(
-              margin: EdgeInsets.symmetric(vertical: 8),
-              child: Text(
-                  '${DateFormat('yyyy/MM/dd HH:mm').format(reserveFromTime)} ~ ${DateFormat('HH:mm').format(reserveEndTime)}',
-                  style: txtContentStyle))
+            margin: EdgeInsets.symmetric(vertical: 8),
+            child: Text(
+              '${DateFormat('yyyy/MM/dd HH:mm').format(reserveFromTime)} ~ ${DateFormat('HH:mm').format(reserveEndTime)}',
+              style: txtContentStyle,
+            ),
+          ),
         ],
       ),
     );
@@ -389,111 +432,140 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
 
   Widget _getCouponUse() {
     return Container(
-        child: Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          margin: EdgeInsets.symmetric(vertical: 12),
-          child: Text('クーポン使用', style: txtHeaderStyle),
-        ),
-        if (coupons.length < 1) Container(child: Text('使用可能なクーポンはありません。')),
-        ...coupons.map((e) => Container(
-                child: Row(children: [
-              Container(
-                alignment: Alignment.center,
-                width: 30,
-                child: useCouponIds.contains(e.id)
-                    ? Icon(Icons.check, color: Colors.green)
-                    : null,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 12),
+            child: Text('クーポン使用', style: txtHeaderStyle),
+          ),
+          if (coupons.length < 1) Container(child: Text('使用可能なクーポンはありません。')),
+          ...coupons.map(
+            (e) => Container(
+              child: Row(
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: 30,
+                    child: useCouponIds.contains(e.id)
+                        ? Icon(Icons.check, color: Colors.green)
+                        : null,
+                  ),
+                  Container(width: 120, child: Text(e.couponName)),
+                  if (!useCouponIds.contains(e.id))
+                    ColorButton(
+                      tapFunc: () => loadCoupon(e.id, 'add'),
+                      label: '使用',
+                      color: Color(0xffcb4612),
+                      fcolor: Colors.white,
+                    ),
+                  if (useCouponIds.contains(e.id))
+                    ColorButton(
+                      tapFunc: () => loadCoupon(e.id, 'remove'),
+                      label: 'キャンセル',
+                      color: Colors.grey,
+                      fcolor: Colors.white,
+                    ),
+                ],
               ),
-              Container(width: 120, child: Text(e.couponName)),
-              if (!useCouponIds.contains(e.id))
-                ColorButton(
-                    tapFunc: () => loadCoupon(e.id, 'add'),
-                    label: '使用',
-                    color: Color(0xffcb4612),
-                    fcolor: Colors.white),
-              if (useCouponIds.contains(e.id))
-                ColorButton(
-                    tapFunc: () => loadCoupon(e.id, 'remove'),
-                    label: 'キャンセル',
-                    color: Colors.grey,
-                    fcolor: Colors.white)
-            ])))
-        // Container(
-        //     child: Row(children: [
-        //   Flexible(
-        //       child: TextInputNormal(
-        //           controller: codeController, contentPadding: 10)),
-        //   ElevatedButton(onPressed: () => loadCoupon(), child: Text('適用'))
-        // ])),
-      ],
-    ));
+            ),
+          ),
+          // Container(
+          //     child: Row(children: [
+          //   Flexible(
+          //       child: TextInputNormal(
+          //           controller: codeController, contentPadding: 10)),
+          //   ElevatedButton(onPressed: () => loadCoupon(), child: Text('適用'))
+          // ])),
+        ],
+      ),
+    );
   }
 
   Widget _getTicketUse() {
     return Container(
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        margin: EdgeInsets.symmetric(vertical: 12),
-        child: Text('チケット使用', style: txtHeaderStyle),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: EdgeInsets.symmetric(vertical: 12),
+            child: Text('チケット使用', style: txtHeaderStyle),
+          ),
+          if (tickets.length < 1)
+            Container(
+              child: Text(
+                '使用するチケットかありません。',
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ...tickets.map((e) => _getTicketRow(e)),
+        ],
       ),
-      if (tickets.length < 1)
-        Container(
-            child:
-                Text('使用するチケットかありません。', style: TextStyle(color: Colors.red))),
-      ...tickets.map((e) => _getTicketRow(e))
-    ]));
+    );
   }
 
   Widget _getTicketRow(e) => Container(
-      margin: EdgeInsets.symmetric(vertical: 6),
-      child: Row(children: [
+    margin: EdgeInsets.symmetric(vertical: 6),
+    child: Row(
+      children: [
         Container(width: 120, child: Text(e.title)),
         Flexible(
-            child: DropDownNumberSelect(
-                max: e.userCnt,
-                min: 0,
-                value: e.cartCount.toString(),
-                tapFunc: (v) {
-                  e.cartCount = int.parse(v);
-                  print(sumTicketAmount);
-                  setState(() {});
-                }))
-      ]));
+          child: DropDownNumberSelect(
+            max: e.userCnt,
+            min: 0,
+            value: e.cartCount.toString(),
+            tapFunc: (v) {
+              e.cartCount = int.parse(v);
+              print(sumTicketAmount);
+              setState(() {});
+            },
+          ),
+        ),
+      ],
+    ),
+  );
 
   Widget _getAmountSum() {
     sumTicketAmount = 0;
     if (tickets.length > 0)
       tickets.forEach((element) {
-        sumTicketAmount = sumTicketAmount +
+        sumTicketAmount =
+            sumTicketAmount +
             (int.parse(element.disamount)) *
                 (element.cartCount == null ? 0 : element.cartCount!);
       });
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        child: Row(children: [
+      margin: EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
           Expanded(child: Text('クーポン適用後金額', style: txtHeaderStyle)),
           Container(
-              child: Text(
-                  '${Funcs().currencyFormat(
-                          (sumAmount - couposAmount - sumTicketAmount)
-                              .toString())}円',
-                  style: txtHeaderStyle))
-        ]));
+            child: Text(
+              '${Funcs().currencyFormat((sumAmount - couposAmount - sumTicketAmount).toString())}円',
+              style: txtHeaderStyle,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _getReserveConfirmButton() {
     return ConstrainedBox(
-        constraints: BoxConstraints.tightFor(width: 250),
-        child: Container(
-            margin: EdgeInsets.symmetric(vertical: 12),
-            child: ElevatedButton(
-              onPressed: () => saveReserve(),
-              style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.all(8),
-                  textStyle: TextStyle(fontSize: 16)),
-              child: Text('確定'),
-            )));
+      constraints: BoxConstraints.tightFor(width: 250),
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 12),
+        child: ElevatedButton(
+          onPressed: () => saveReserve(),
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.all(8),
+            textStyle: TextStyle(fontSize: 16),
+            backgroundColor: Colors.redAccent,
+            foregroundColor: Colors.white,
+          ),
+          child: Text('確定'),
+        ),
+      ),
+    );
   }
 }

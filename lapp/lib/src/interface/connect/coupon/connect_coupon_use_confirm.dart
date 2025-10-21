@@ -35,8 +35,9 @@ class _ConnectCouponUseConfirm extends State<ConnectCouponUseConfirm> {
 
   Future<List> loadCouponData() async {
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiLoadCouponInfoUrl,
-        {'coupon_id': widget.couponId}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiLoadCouponInfoUrl, {'coupon_id': widget.couponId})
+        .then((value) => results = value);
 
     if (results['isLoad']) {
       var coupon = results['coupon'];
@@ -50,9 +51,14 @@ class _ConnectCouponUseConfirm extends State<ConnectCouponUseConfirm> {
 
   Future<void> userCoupon() async {
     Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ConnectCouponComplete();
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ConnectCouponComplete();
+        },
+      ),
+    );
   }
 
   var txtTitleStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
@@ -84,16 +90,18 @@ class _ConnectCouponUseConfirm extends State<ConnectCouponUseConfirm> {
                       children: [
                         Expanded(child: Container()),
                         ElevatedButton(
-                            onPressed: () {
-                              // userCoupon();
-                            },
-                            child: Text('はい')),
+                          onPressed: () {
+                            // userCoupon();
+                          },
+                          child: Text('はい'),
+                        ),
                         SizedBox(width: 40),
                         ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('いいえ')),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('いいえ'),
+                        ),
                         Expanded(child: Container()),
                       ],
                     ),
@@ -113,62 +121,81 @@ class _ConnectCouponUseConfirm extends State<ConnectCouponUseConfirm> {
 
   Widget _getCouponItem() {
     return Container(
-        margin: new EdgeInsets.symmetric(vertical: 12.0),
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(color: Colors.grey)),
-        child: Column(
-          children: [
-            Container(
-                child: Row(
+      margin: new EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(color: Colors.grey),
+      ),
+      child: Column(
+        children: [
+          Container(
+            child: Row(
               children: [
                 Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
                         padding: EdgeInsets.only(bottom: 5),
                         child: Text(
                           couponName,
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        )),
-                    Container(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
+                        child: Text('有効期限: ${useDate.replaceAll('-', '/')}'),
+                      ),
+                      Container(
                         child: Text(
-                      '有効期限: ${useDate.replaceAll('-', '/')}',
-                    )),
-                    Container(
-                        child: Text(
-                      condition == '1' ? '他クーポン併用不可' : '他クーポンと併用化',
-                    )),
-                    Container(child: Text(comment)),
-                  ],
-                )),
+                          condition == '1' ? '他クーポン併用不可' : '他クーポンと併用化',
+                        ),
+                      ),
+                      Container(child: Text(comment)),
+                    ],
+                  ),
+                ),
                 Container(
                   width: 130,
                   alignment: Alignment.center,
-                  child: Column(children: [
-                    if (discountAmount != '')
-                      Text(
-                        '${Funcs().currencyFormat(discountAmount)}円 OFF',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    if (discountRate != '')
-                      Text('$discountRate％OFF',
+                  child: Column(
+                    children: [
+                      if (discountAmount != '')
+                        Text(
+                          '${Funcs().currencyFormat(discountAmount)}円 OFF',
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                    if (discountRate != '' && upperAmount != '')
-                      Text('上限${Funcs().currencyFormat(upperAmount)}円',
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      if (discountRate != '')
+                        Text(
+                          '$discountRate％OFF',
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                  ]),
-                )
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      if (discountRate != '' && upperAmount != '')
+                        Text(
+                          '上限${Funcs().currencyFormat(upperAmount)}円',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ],
-            )),
-          ],
-        ));
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

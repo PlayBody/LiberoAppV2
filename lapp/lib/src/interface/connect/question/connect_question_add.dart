@@ -40,10 +40,17 @@ class _ConnectQuestionAdd extends State<ConnectQuestionAdd> {
 
     if (!isFormCheck) return;
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ConnectQuestionConfirm(
-          title: titleController.text, question: questionController.text);
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ConnectQuestionConfirm(
+            title: titleController.text,
+            question: questionController.text,
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -55,17 +62,19 @@ class _ConnectQuestionAdd extends State<ConnectQuestionAdd> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-                child: SingleChildScrollView(
-                    child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _getLabelTitle(),
-                _getInputTitle(),
-                _getLabelContent(),
-                _getInputContent(),
-              ],
-            ))),
-            _getQuestionButton()
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _getLabelTitle(),
+                    _getInputTitle(),
+                    _getLabelContent(),
+                    _getInputContent(),
+                  ],
+                ),
+              ),
+            ),
+            _getQuestionButton(),
           ],
         ),
       ),
@@ -77,17 +86,19 @@ class _ConnectQuestionAdd extends State<ConnectQuestionAdd> {
 
   Widget _getLabelTitle() {
     return Container(
-        padding: EdgeInsets.only(left: 30, right: 30),
-        margin: EdgeInsets.symmetric(vertical: 16),
-        child: Text('タイトル', style: txtlblStyle));
+      padding: EdgeInsets.only(left: 30, right: 30),
+      margin: EdgeInsets.symmetric(vertical: 16),
+      child: Text('タイトル', style: txtlblStyle),
+    );
   }
 
   Widget _getLabelContent() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16),
       padding: EdgeInsets.only(top: 16, left: 30, right: 30),
-      decoration:
-          BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: Colors.grey)),
+      ),
       child: Text('お問い合わせ内容', style: txtlblStyle),
     );
   }
@@ -133,7 +144,9 @@ class _ConnectQuestionAdd extends State<ConnectQuestionAdd> {
           pushConfirm();
         },
         style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+          padding: EdgeInsets.all(8),
+          textStyle: TextStyle(fontSize: 16),
+        ),
         child: Text('確認画面へ'),
       ),
     );

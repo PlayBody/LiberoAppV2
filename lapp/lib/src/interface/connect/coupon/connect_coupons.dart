@@ -44,8 +44,11 @@ class _ConnectCoupons extends State<ConnectCoupons> {
       return;
     }
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiUpdateUserCouponUseFlagUrl,
-        {'user_coupon_id': userCouponId}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiUpdateUserCouponUseFlagUrl, {
+          'user_coupon_id': userCouponId,
+        })
+        .then((value) => results = value);
     if (results['isLoad']) {
       final updateResult = results['updateResult'];
       if (updateResult) {
@@ -57,18 +60,23 @@ class _ConnectCoupons extends State<ConnectCoupons> {
   }
 
   Future<List> loadCouponData() async {
-    prevCnt = await ClCompany()
-        .loadPrevStampCount(context, APPCOMANYID, globals.userRank!.level);
+    prevCnt = await ClCompany().loadPrevStampCount(
+      context,
+      APPCOMANYID,
+      globals.userRank!.level,
+    );
 
     // ranks = await ClCoupon().loadRanks(context, '5');
-    stampCount =
-        globals.userRank == null ? 5 : int.parse(globals.userRank!.maxStamp);
+    stampCount = globals.userRank == null
+        ? 5
+        : int.parse(globals.userRank!.maxStamp);
 
     stamps = await ClCoupon().loadUserStamps(context, globals.userId);
 
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiLoadUserCouponsUrl,
-        {'user_id': globals.userId}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiLoadUserCouponsUrl, {'user_id': globals.userId})
+        .then((value) => results = value);
     coupons = [];
     if (results['isLoad']) {
       for (var item in results['coupons']) {
@@ -106,17 +114,18 @@ class _ConnectCoupons extends State<ConnectCoupons> {
                     // _getCardUserButton(),
                     // SizedBox(height: 25),
                     Expanded(
-                        child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Header3Text(label: '使用可能なクーポン一覧'),
-                          _getCouponContent(),
-                          SizedBox(height: 40),
-                          Header3Text(label: 'スタンプ特典'),
-                          _getBenefitContent()
-                        ],
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Header3Text(label: '使用可能なクーポン一覧'),
+                            _getCouponContent(),
+                            SizedBox(height: 40),
+                            Header3Text(label: 'スタンプ特典'),
+                            _getBenefitContent(),
+                          ],
+                        ),
                       ),
-                    ))
+                    ),
                   ],
                 ),
               ),
@@ -139,98 +148,113 @@ class _ConnectCoupons extends State<ConnectCoupons> {
     List<int> slideItems = [];
     for (int i = 1; i <= slideCnt; i++) slideItems.add(i);
     return Container(
-        color: Color(0Xff749b88),
-        child: Column(children: [
+      color: Color(0Xff749b88),
+      child: Column(
+        children: [
           CarouselSlider(
             options: CarouselOptions(
-                viewportFraction: 1,
-                height: 240,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _current = index;
-                  });
-                }),
+              viewportFraction: 1,
+              height: 240,
+              onPageChanged: (index, reason) {
+                setState(() {
+                  _current = index;
+                });
+              },
+            ),
             items: slideItems.map((ii) {
               return Builder(
                 builder: (BuildContext context) {
                   return Container(
                     padding: EdgeInsets.only(top: 8),
                     child: GridView.count(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        padding: EdgeInsets.all(30),
-                        crossAxisCount: 5,
-                        crossAxisSpacing: 18,
-                        mainAxisSpacing: 18,
-                        childAspectRatio: 0.7,
-                        children: [
-                          for (int i = 10 * (ii - 1) + 1; i <= 10 * ii; i++)
-                            if (i <= stampCount)
-                              Column(
-                                children: [
-                                  Container(
-                                    child: Text(
-                                      i <= stamps.length
-                                          ? stamps[i - 1].createDate
-                                          : '',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(30),
+                      crossAxisCount: 5,
+                      crossAxisSpacing: 18,
+                      mainAxisSpacing: 18,
+                      childAspectRatio: 0.7,
+                      children: [
+                        for (int i = 10 * (ii - 1) + 1; i <= 10 * ii; i++)
+                          if (i <= stampCount)
+                            Column(
+                              children: [
+                                Container(
+                                  child: Text(
+                                    i <= stamps.length
+                                        ? stamps[i - 1].createDate
+                                        : '',
+                                    style: TextStyle(color: Colors.white),
                                   ),
-                                  Container(
-                                    height: 50,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      image: (i <= stamps.length)
-                                          ? DecorationImage(
-                                              image: NetworkImage(
-                                                apiRenderPrintLogo +
-                                                    stamps[i - 1].organId,
-                                              ),
-                                              fit: BoxFit.fill)
-                                          : null,
-                                      color: ((i <= stamps.length &&
-                                                  stamps[i - 1]
-                                                          .useflag
-                                                          .toString() ==
-                                                      '1') ||
-                                              i > stamps.length)
-                                          ? Colors.transparent
-                                          : Color(0xff464646),
-                                      border:
-                                          Border.all(color: Color(0xFFf3f3f3)),
-                                      borderRadius: BorderRadius.circular(60),
+                                ),
+                                Container(
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    image: (i <= stamps.length)
+                                        ? DecorationImage(
+                                            image: NetworkImage(
+                                              apiRenderPrintLogo +
+                                                  stamps[i - 1].organId,
+                                            ),
+                                            fit: BoxFit.fill,
+                                          )
+                                        : null,
+                                    color:
+                                        ((i <= stamps.length &&
+                                                stamps[i - 1].useflag
+                                                        .toString() ==
+                                                    '1') ||
+                                            i > stamps.length)
+                                        ? Colors.transparent
+                                        : Color(0xff464646),
+                                    border: Border.all(
+                                      color: Color(0xFFf3f3f3),
                                     ),
-                                    child: i <= stamps.length
-                                        ? null
-
-                                        // Icon(Icons.card_giftcard_outlined,
-                                        //     color: Colors.white, size: 32)
-                                        : Text((i + prevCnt).toString(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 24)),
-                                  )
-                                ],
-                              )
-                        ]),
+                                    borderRadius: BorderRadius.circular(60),
+                                  ),
+                                  child: i <= stamps.length
+                                      ? null
+                                      // Icon(Icons.card_giftcard_outlined,
+                                      //     color: Colors.white, size: 32)
+                                      : Text(
+                                          (i + prevCnt).toString(),
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 24,
+                                          ),
+                                        ),
+                                ),
+                              ],
+                            ),
+                      ],
+                    ),
                   );
                 },
               );
             }).toList(),
           ),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            ...slideItems.map((e) => Container(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ...slideItems.map(
+                (e) => Container(
                   width: 12.0,
                   height: 12.0,
                   margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 4.0),
                   decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: (_current + 1) == e
-                          ? Color.fromRGBO(0, 0, 0, 0.6)
-                          : Color.fromRGBO(0, 0, 0, 0.2)),
-                ))
-          ]),
-        ]));
+                    shape: BoxShape.circle,
+                    color: (_current + 1) == e
+                        ? Color.fromRGBO(0, 0, 0, 0.6)
+                        : Color.fromRGBO(0, 0, 0, 0.2),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   // Widget _getCardUserButton() {
@@ -249,121 +273,137 @@ class _ConnectCoupons extends State<ConnectCoupons> {
 
   Widget _getCouponContent() {
     return Container(
-        padding: EdgeInsets.only(left: 30, right: 30),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ...coupons.map((e) => _getCouponItem(e)),
-            ],
-          ),
-        ));
+      padding: EdgeInsets.only(left: 30, right: 30),
+      child: SingleChildScrollView(
+        child: Column(children: [...coupons.map((e) => _getCouponItem(e))]),
+      ),
+    );
   }
 
   Widget _getBenefitContent() {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 24),
       padding: EdgeInsets.only(left: 30, right: 30),
-      child: Text(
-        '',
-        style: txtContentStyle,
-      ),
+      child: Text('', style: txtContentStyle),
     );
   }
 
   Widget _getCouponItem(coupon) {
     return Container(
-        margin: new EdgeInsets.symmetric(vertical: 12.0),
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(6),
-            border: Border.all(
-                color: coupon.isUserUseFlag ? Colors.grey : Colors.blueGrey)),
-        child: Column(
-          children: [
-            Container(
-                child: Row(
+      margin: new EdgeInsets.symmetric(vertical: 12.0),
+      padding: EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(6),
+        border: Border.all(
+          color: coupon.isUserUseFlag ? Colors.grey : Colors.blueGrey,
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            child: Row(
               children: [
                 Expanded(
-                    child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
                         padding: EdgeInsets.only(bottom: 5),
                         child: Text(
                           coupon.couponName,
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        )),
-                    Container(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Container(
                         child: Text(
-                      '有効期限: ' + coupon.useDate.replaceAll('-', '/'),
-                    )),
-                    Container(
+                          '有効期限: ' + coupon.useDate.replaceAll('-', '/'),
+                        ),
+                      ),
+                      Container(
                         child: Text(
-                      coupon.condition == '1' ? '他クーポン併用不可' : '他クーポンと併用化',
-                    )),
-                  ],
-                )),
+                          coupon.condition == '1' ? '他クーポン併用不可' : '他クーポンと併用化',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 Container(
                   width: 130,
                   alignment: Alignment.center,
-                  child: Column(children: [
-                    if (coupon.discountAmount != null)
-                      Text(
-                        '${Funcs().currencyFormat(coupon.discountAmount!)}円 OFF',
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    if (coupon.discountRate != null)
-                      Text(coupon.discountRate! + '％OFF',
+                  child: Column(
+                    children: [
+                      if (coupon.discountAmount != null)
+                        Text(
+                          '${Funcs().currencyFormat(coupon.discountAmount!)}円 OFF',
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                    if (coupon.discountRate != null &&
-                        coupon.upperAmount != null)
-                      Text(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      if (coupon.discountRate != null)
+                        Text(
+                          coupon.discountRate! + '％OFF',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      if (coupon.discountRate != null &&
+                          coupon.upperAmount != null)
+                        Text(
                           '上限${Funcs().currencyFormat(coupon.upperAmount!)}円',
                           style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
-                  ]),
-                )
-              ],
-            )),
-            if (openCouponId == coupon.couponId)
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(child: Text(coupon.comment)),
-                    Expanded(child: Container()),
-                    // Container(
-                    //   child: ElevatedButton(
-                    //     child: Text('クーポンを使う'),
-                    //     onPressed: () {
-                    //       Navigator.push(context,
-                    //           MaterialPageRoute(builder: (_) {
-                    //         return ConnectCouponUseConfirm(
-                    //             couponId: coupon.couponId);
-                    //       }));
-                    //     },
-                    //   ),
-                    // )
-                  ],
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
+              ],
+            ),
+          ),
+          if (openCouponId == coupon.couponId)
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Container(child: Text(coupon.comment)),
+                  Expanded(child: Container()),
+                  // Container(
+                  //   child: ElevatedButton(
+                  //     child: Text('クーポンを使う'),
+                  //     onPressed: () {
+                  //       Navigator.push(context,
+                  //           MaterialPageRoute(builder: (_) {
+                  //         return ConnectCouponUseConfirm(
+                  //             couponId: coupon.couponId);
+                  //       }));
+                  //     },
+                  //   ),
+                  // )
+                ],
               ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                    child: TextButton(
+            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                child: TextButton(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('詳細を見る'),
-                      Icon(openCouponId == coupon.couponId
-                          ? Icons.keyboard_arrow_up
-                          : Icons.keyboard_arrow_down)
+                      Icon(
+                        openCouponId == coupon.couponId
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                      ),
                     ],
                   ),
                   onPressed: () {
@@ -375,11 +415,12 @@ class _ConnectCoupons extends State<ConnectCoupons> {
                       }
                     });
                   },
-                )),
-                coupon.isUserUseFlag
-                    ? Text('使用済み')
-                    : Container(
-                        child: TextButton(
+                ),
+              ),
+              coupon.isUserUseFlag
+                  ? Text('使用済み')
+                  : Container(
+                      child: TextButton(
                         child: Text(
                           '使用する',
                           style: TextStyle(color: Colors.blue),
@@ -387,10 +428,12 @@ class _ConnectCoupons extends State<ConnectCoupons> {
                         onPressed: () {
                           updateCouponUseFlag(coupon.userCouponId);
                         },
-                      )),
-              ],
-            ),
-          ],
-        ));
+                      ),
+                    ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }

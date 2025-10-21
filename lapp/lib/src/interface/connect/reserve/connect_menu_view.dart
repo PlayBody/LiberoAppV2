@@ -29,8 +29,9 @@ class _ConnectMenuView extends State<ConnectMenuView> {
 
   Future<List> loadMenuData() async {
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiLoadAdminMenuInfoUrl,
-        {'menu_id': widget.menuId}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiLoadAdminMenuInfoUrl, {'menu_id': widget.menuId})
+        .then((value) => results = value);
 
     if (results['isLoad']) {
       setState(() {
@@ -85,36 +86,36 @@ class _ConnectMenuView extends State<ConnectMenuView> {
       height: 200,
       child: menuImage == null
           ? Image.asset('images/no_image.jpg', fit: BoxFit.contain)
-          : Image.network(
-              menuImageUrl + menuImage!,
-              fit: BoxFit.cover,
-            ),
+          : Image.network(menuImageUrl + menuImage!, fit: BoxFit.cover),
     );
   }
 
   Widget _getMenuTitle() {
     return Container(
-      decoration:
-          BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey))),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey)),
+      ),
       padding: EdgeInsets.fromLTRB(30, 0, 30, 4),
       child: Row(
         children: [
           Expanded(
-              child: Container(
-                  child: Text(
-            menuName == null ? '' : menuName!,
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-          ))),
+            child: Container(
+              child: Text(
+                menuName == null ? '' : menuName!,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
           Container(
-              height: 30,
-              alignment: Alignment.bottomRight,
-              child: menuPrice == null
-                  ? Text('')
-                  : Text(
-                      '￥${Funcs().currencyFormat(menuPrice!)}',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ))
+            height: 30,
+            alignment: Alignment.bottomRight,
+            child: menuPrice == null
+                ? Text('')
+                : Text(
+                    '￥${Funcs().currencyFormat(menuPrice!)}',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+          ),
         ],
       ),
     );
@@ -122,37 +123,39 @@ class _ConnectMenuView extends State<ConnectMenuView> {
 
   Widget _getMenuDetail() {
     return Container(
-        decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: Colors.grey))),
-        alignment: Alignment.topLeft,
-        padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
-        child: Text(
-          menuDetail == null ? '' : menuDetail!,
-          style: TextStyle(fontSize: 16),
-        ));
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey)),
+      ),
+      alignment: Alignment.topLeft,
+      padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
+      child: Text(
+        menuDetail == null ? '' : menuDetail!,
+        style: TextStyle(fontSize: 16),
+      ),
+    );
   }
 
   Widget _getMenuComment() {
     return Container(
-      decoration:
-          BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey))),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: Colors.grey)),
+      ),
       padding: EdgeInsets.fromLTRB(30, 20, 30, 20),
       child: Column(
         children: [
           Container(
-              alignment: Alignment.topLeft,
-              padding: EdgeInsets.only(bottom: 8),
-              child: Text(
-                'その他・備考',
-                style: TextStyle(fontSize: 16),
-              )),
+            alignment: Alignment.topLeft,
+            padding: EdgeInsets.only(bottom: 8),
+            child: Text('その他・備考', style: TextStyle(fontSize: 16)),
+          ),
           Container(
-              alignment: Alignment.topLeft,
-              child: Text(
-                menuComment == null ? '' : menuComment!,
-                style: TextStyle(fontSize: 18),
-                //style: styleContent,
-              ))
+            alignment: Alignment.topLeft,
+            child: Text(
+              menuComment == null ? '' : menuComment!,
+              style: TextStyle(fontSize: 18),
+              //style: styleContent,
+            ),
+          ),
         ],
       ),
     );

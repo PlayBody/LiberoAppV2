@@ -20,10 +20,14 @@ class _ConnectEvent extends State<ConnectEvent> {
   late Future<List> loadData;
 
   DateTime selectedDate = DateTime.now();
-  String _fromDate = DateFormat('yyyy-MM-dd').format(
-      DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1)));
-  String _toDate = DateFormat('yyyy-MM-dd').format(DateTime.now()
-      .add(Duration(days: DateTime.daysPerWeek - DateTime.now().weekday)));
+  String _fromDate = DateFormat(
+    'yyyy-MM-dd',
+  ).format(DateTime.now().subtract(Duration(days: DateTime.now().weekday - 1)));
+  String _toDate = DateFormat('yyyy-MM-dd').format(
+    DateTime.now().add(
+      Duration(days: DateTime.daysPerWeek - DateTime.now().weekday),
+    ),
+  );
 
   List<Appointment> appointments = <Appointment>[];
 
@@ -48,15 +52,17 @@ class _ConnectEvent extends State<ConnectEvent> {
       'company_id': APPCOMANYID,
       'from_time': vFromDateTime,
       'to_time': vToDateTime,
-      'organ_id': organId
+      'organ_id': organId,
     });
 
-    appointments.addAll(await ClEvent().loadEvents(context, {
-      'company_id': APPCOMANYID,
-      'from_time': vFromDateTime,
-      'to_time': vToDateTime,
-      'is_all_organ': '1'
-    }));
+    appointments.addAll(
+      await ClEvent().loadEvents(context, {
+        'company_id': APPCOMANYID,
+        'from_time': vFromDateTime,
+        'to_time': vToDateTime,
+        'is_all_organ': '1',
+      }),
+    );
 
     setState(() {});
     return [];
@@ -64,12 +70,16 @@ class _ConnectEvent extends State<ConnectEvent> {
 
   Future<void> changeViewCalander(DateTime _date) async {
     if (_fromDate ==
-        DateFormat('yyyy-MM-dd')
-            .format(_date.subtract(Duration(days: _date.weekday - 1)))) return;
-    _fromDate = DateFormat('yyyy-MM-dd')
-        .format(_date.subtract(Duration(days: _date.weekday - 1)));
-    _toDate = DateFormat('yyyy-MM-dd').format(
-        _date.add(Duration(days: DateTime.daysPerWeek - _date.weekday)));
+        DateFormat(
+          'yyyy-MM-dd',
+        ).format(_date.subtract(Duration(days: _date.weekday - 1))))
+      return;
+    _fromDate = DateFormat(
+      'yyyy-MM-dd',
+    ).format(_date.subtract(Duration(days: _date.weekday - 1)));
+    _toDate = DateFormat(
+      'yyyy-MM-dd',
+    ).format(_date.add(Duration(days: DateTime.daysPerWeek - _date.weekday)));
 
     Dialogs().loaderDialogNormal(context);
     await loadEventData();
@@ -105,25 +115,32 @@ class _ConnectEvent extends State<ConnectEvent> {
 
   Widget _getTopButtons() {
     return Container(
-        margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-        child: Row(children: [
+      margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+      child: Row(
+        children: [
           Container(width: 80, child: Text('店名')),
           Flexible(
-              child: DropDownModelSelect(
-                  value: organId,
-                  items: [
-                    ...organs.map((e) => DropdownMenuItem(
-                          value: e.organId,
-                          child: Text(e.organName),
-                        ))
-                  ],
-                  tapFunc: (v) async {
-                    organId = v;
-                    Dialogs().loaderDialogNormal(context);
-                    await loadEventData();
-                    Navigator.pop(context);
-                  }))
-        ]));
+            child: DropDownModelSelect(
+              value: organId,
+              items: [
+                ...organs.map(
+                  (e) => DropdownMenuItem(
+                    value: e.organId,
+                    child: Text(e.organName),
+                  ),
+                ),
+              ],
+              tapFunc: (v) async {
+                organId = v;
+                Dialogs().loaderDialogNormal(context);
+                await loadEventData();
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _getCalendar() {
@@ -134,31 +151,35 @@ class _ConnectEvent extends State<ConnectEvent> {
       // cellBorderColor: timeSlotCellBorderColor,
       // selectionDecoration: timeSlotSelectDecoration,
       timeSlotViewSettings: TimeSlotViewSettings(
-          // startHour: viewFromHour.toDouble(),
-          // endHour: viewToHour.toDouble(),
-          timeIntervalHeight: 30,
-          dayFormat: 'E',
-          timeInterval: Duration(minutes: 30),
-          timeFormat: 'H:mm',
-          timeTextStyle: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 15,
-            color: Colors.black.withOpacity(0.5),
-          )),
+        // startHour: viewFromHour.toDouble(),
+        // endHour: viewToHour.toDouble(),
+        timeIntervalHeight: 30,
+        dayFormat: 'E',
+        timeInterval: Duration(minutes: 30),
+        timeFormat: 'H:mm',
+        timeTextStyle: TextStyle(
+          fontWeight: FontWeight.w500,
+          fontSize: 15,
+          color: Colors.black.withOpacity(0.5),
+        ),
+      ),
       appointmentTextStyle: TextStyle(
-          fontSize: 10, color: Colors.black, fontWeight: FontWeight.bold),
+        fontSize: 10,
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      ),
       timeRegionBuilder:
           (BuildContext context, TimeRegionDetails timeRegionDetails) {
-        return Container(
-          padding: EdgeInsets.only(top: 5),
-          color: timeRegionDetails.region.color,
-          alignment: Alignment.topCenter,
-          child: Text(
-            timeRegionDetails.region.text.toString(),
-            style: TextStyle(fontSize: 25, color: Colors.black),
-          ),
-        );
-      },
+            return Container(
+              padding: EdgeInsets.only(top: 5),
+              color: timeRegionDetails.region.color,
+              alignment: Alignment.topCenter,
+              child: Text(
+                timeRegionDetails.region.text.toString(),
+                style: TextStyle(fontSize: 25, color: Colors.black),
+              ),
+            );
+          },
       // viewNavigationMode: ViewNavigationMode.none,
       // specialRegions: regions,
       dataSource: _AppointmentDataSource(appointments),

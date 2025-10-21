@@ -47,8 +47,10 @@ class _ConnectOrganView extends State<ConnectOrganView> {
     if (organ == null) return [];
 
     openTimes = await ClOrgan().loadOrganTimes(context, widget.organId);
-    openSpecialTimes =
-        await ClOrgan().loadOrganSpecialTimes(context, widget.organId);
+    openSpecialTimes = await ClOrgan().loadOrganSpecialTimes(
+      context,
+      widget.organId,
+    );
 
     isOpen = await ClOrgan().isOpenOrgan(context, widget.organId);
     // Map<dynamic, dynamic> results = {};
@@ -87,7 +89,9 @@ class _ConnectOrganView extends State<ConnectOrganView> {
       return;
     }
     MapsLauncher.launchCoordinates(
-        double.parse(organ!.lat!), double.parse(organ!.lon!));
+      double.parse(organ!.lat!),
+      double.parse(organ!.lon!),
+    );
   }
 
   @override
@@ -100,17 +104,18 @@ class _ConnectOrganView extends State<ConnectOrganView> {
           if (snapshot.hasData) {
             return Container(
               child: SingleChildScrollView(
-                  child: Column(
-                children: [
-                  _getOrganItem(),
-                  SizedBox(height: 60),
-                  _getPhoneContent(),
-                  _getBussinessTime(),
-                  _getAccessContent(),
-                  _getParkContent(),
-                  _getComment(),
-                ],
-              )),
+                child: Column(
+                  children: [
+                    _getOrganItem(),
+                    SizedBox(height: 60),
+                    _getPhoneContent(),
+                    _getBussinessTime(),
+                    _getAccessContent(),
+                    _getParkContent(),
+                    _getComment(),
+                  ],
+                ),
+              ),
             );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
@@ -146,8 +151,9 @@ class _ConnectOrganView extends State<ConnectOrganView> {
 
   double labelWidth = 120;
   var rowPadding = EdgeInsets.fromLTRB(30, 10, 30, 10);
-  var decorationTopLine =
-      BoxDecoration(border: Border(top: BorderSide(color: Colors.grey)));
+  var decorationTopLine = BoxDecoration(
+    border: Border(top: BorderSide(color: Colors.grey)),
+  );
   Widget _getOrganImage() {
     return Container(
       width: 140,
@@ -166,22 +172,26 @@ class _ConnectOrganView extends State<ConnectOrganView> {
           if (isOpen)
             Container(
               padding: EdgeInsets.only(top: 4),
-              child: Text(
-                '営業中',
-                style: TextStyle(fontSize: 12),
-              ),
+              child: Text('営業中', style: TextStyle(fontSize: 12)),
             ),
           Container(
-              child: Text(organ!.organName,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
+            child: Text(
+              organ!.organName,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ),
           Container(
-              child: Text(organ!.organAddress ?? '',
-                  style: TextStyle(fontSize: 12))),
+            child: Text(
+              organ!.organAddress ?? '',
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
           Container(
-              child: ElevatedButton(
-            child: Text('地図アプリで見る'),
-            onPressed: () => onTapGoogleMap(),
-          )),
+            child: ElevatedButton(
+              child: Text('地図アプリで見る'),
+              onPressed: () => onTapGoogleMap(),
+            ),
+          ),
         ],
       ),
     );
@@ -189,94 +199,107 @@ class _ConnectOrganView extends State<ConnectOrganView> {
 
   Widget _getPhoneContent() {
     return Container(
-        padding: rowPadding,
-        decoration: decorationTopLine,
-        child: Row(
-          children: [
-            Container(width: labelWidth, child: Text('電話番号')),
-            Container(child: Text(organ!.organPhone ?? ''))
-          ],
-        ));
+      padding: rowPadding,
+      decoration: decorationTopLine,
+      child: Row(
+        children: [
+          Container(width: labelWidth, child: Text('電話番号')),
+          Container(child: Text(organ!.organPhone ?? '')),
+        ],
+      ),
+    );
   }
 
   Widget _getBussinessTime() {
     return Container(
-        padding: rowPadding,
-        decoration: decorationTopLine,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(width: labelWidth, child: Text('営業時間')),
-            Container(
-                child: Column(
+      padding: rowPadding,
+      decoration: decorationTopLine,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(width: labelWidth, child: Text('営業時間')),
+          Container(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ...openTimes.map((e) => Row(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            width: 80,
-                            child: (openTimes.indexOf(e) > 0 &&
-                                    e.weekday ==
-                                        openTimes[openTimes.indexOf(e) - 1]
-                                            .weekday)
-                                ? null
-                                : Text('${e.weekday}曜日')),
-                        Container(child: Text('${e.fromTime} ~ ${e.toTime}'))
-                      ],
-                    )),
-                ...openSpecialTimes.map((e) => Row(
-                      children: [
-                        Container(
-                            margin: EdgeInsets.symmetric(vertical: 4),
-                            width: 80,
-                            child:
-                                (Text(DateFormat('M月d日').format(e.fromTime)))),
-                        Container(
-                            child: Text(
-                                '${DateFormat('HH:mm').format(e.fromTime)} ~ ${DateFormat('HH:mm').format(e.toTime)}'))
-                      ],
-                    ))
+                ...openTimes.map(
+                  (e) => Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 4),
+                        width: 80,
+                        child:
+                            (openTimes.indexOf(e) > 0 &&
+                                e.weekday ==
+                                    openTimes[openTimes.indexOf(e) - 1].weekday)
+                            ? null
+                            : Text('${e.weekday}曜日'),
+                      ),
+                      Container(child: Text('${e.fromTime} ~ ${e.toTime}')),
+                    ],
+                  ),
+                ),
+                ...openSpecialTimes.map(
+                  (e) => Row(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.symmetric(vertical: 4),
+                        width: 80,
+                        child: (Text(DateFormat('M月d日').format(e.fromTime))),
+                      ),
+                      Container(
+                        child: Text(
+                          '${DateFormat('HH:mm').format(e.fromTime)} ~ ${DateFormat('HH:mm').format(e.toTime)}',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
-            ))
-          ],
-        ));
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _getAccessContent() {
     return Container(
-        padding: rowPadding,
-        decoration: decorationTopLine,
-        child: Row(
-          children: [
-            Container(width: labelWidth, child: Text('アクセス')),
-            Container(child: Text(organ!.access ?? ''))
-          ],
-        ));
+      padding: rowPadding,
+      decoration: decorationTopLine,
+      child: Row(
+        children: [
+          Container(width: labelWidth, child: Text('アクセス')),
+          Container(child: Text(organ!.access ?? '')),
+        ],
+      ),
+    );
   }
 
   Widget _getParkContent() {
     return Container(
-        padding: rowPadding,
-        decoration: decorationTopLine,
-        child: Row(
-          children: [
-            Container(width: labelWidth, child: Text('駐車場')),
-            Container(child: Text(organ!.parking ?? ''))
-          ],
-        ));
+      padding: rowPadding,
+      decoration: decorationTopLine,
+      child: Row(
+        children: [
+          Container(width: labelWidth, child: Text('駐車場')),
+          Container(child: Text(organ!.parking ?? '')),
+        ],
+      ),
+    );
   }
 
   Widget _getComment() {
     return Container(
-        padding: rowPadding,
-        decoration: decorationTopLine,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(width: labelWidth, child: Text('その他')),
-            Expanded(child: Text(organ!.organComment ?? ''))
-          ],
-        ));
+      padding: rowPadding,
+      decoration: decorationTopLine,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(width: labelWidth, child: Text('その他')),
+          Expanded(child: Text(organ!.organComment ?? '')),
+        ],
+      ),
+    );
   }
 }

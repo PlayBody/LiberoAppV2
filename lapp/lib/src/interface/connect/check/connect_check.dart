@@ -44,7 +44,8 @@ class _ConnectCheck extends State<ConnectCheck> {
 
   Widget _buildQrView(BuildContext context) {
     // For this example we check how width or tall the device is and change the scanArea and overlay accordingly.
-    var scanArea = (MediaQuery.of(context).size.width < 400 ||
+    var scanArea =
+        (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
         ? 150.0
         : 300.0;
@@ -54,11 +55,12 @@ class _ConnectCheck extends State<ConnectCheck> {
       key: qrKey,
       onQRViewCreated: _onQRViewCreated,
       overlay: QrScannerOverlayShape(
-          borderColor: Colors.red,
-          borderRadius: 10,
-          borderLength: 30,
-          borderWidth: 10,
-          cutOutSize: scanArea),
+        borderColor: Colors.red,
+        borderRadius: 10,
+        borderLength: 30,
+        borderWidth: 10,
+        cutOutSize: scanArea,
+      ),
       onPermissionSet: (ctrl, p) => _onPermissionSet(context, ctrl, p),
     );
   }
@@ -110,9 +112,14 @@ class _ConnectCheck extends State<ConnectCheck> {
           //   }));
           // }
           Navigator.pop(context);
-          Navigator.push(context, MaterialPageRoute(builder: (_) {
-            return ConnectCheckIn(organId: organ['organ_id']);
-          }));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) {
+                return ConnectCheckIn(organId: organ['organ_id']);
+              },
+            ),
+          );
         }
 
         // await checkIn(scanData.code);
@@ -132,9 +139,9 @@ class _ConnectCheck extends State<ConnectCheck> {
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     log('${DateTime.now().toIso8601String()}_onPermissionSet $p');
     if (!p) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('no Permission')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('no Permission')));
     }
   }
 
@@ -189,7 +196,8 @@ class _ConnectCheck extends State<ConnectCheck> {
     print(organ);
     if (organ == null) return;
 
-    String ticketCount = (organ['checkin_ticket_consumption'] == null ||
+    String ticketCount =
+        (organ['checkin_ticket_consumption'] == null ||
             organ['checkin_ticket_consumption'] == '')
         ? '0'
         : organ['checkin_ticket_consumption'];
@@ -203,11 +211,15 @@ class _ConnectCheck extends State<ConnectCheck> {
       await Dialogs().waitDialog(context, 'チケットが足りません。');
       return;
     } else {
-      bool isComplete =
-          await ClReserve().updateReserveStatus(context, organ['organ_id']);
+      bool isComplete = await ClReserve().updateReserveStatus(
+        context,
+        organ['organ_id'],
+      );
       if (isComplete && int.parse(ticketCount) > 0) {
-        await ClUser().updateUserTicket(context,
-            (int.parse(userTicket) - int.parse(ticketCount)).toString());
+        await ClUser().updateUserTicket(
+          context,
+          (int.parse(userTicket) - int.parse(ticketCount)).toString(),
+        );
       }
       if (!isComplete) {
         await Dialogs().waitDialog(context, '予約データが存在しません。');

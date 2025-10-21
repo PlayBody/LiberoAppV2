@@ -62,13 +62,14 @@ class _ProductDetail extends State<ProductDetail> {
     dynamic cartinfo = await ClCart().getCartSum(context);
 
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return DialogAddCart(
-              showString: '${'カートの小計（' +
-                  cartinfo['count']}点の商品） ￥' +
-                  cartinfo['amount']);
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return DialogAddCart(
+          showString:
+              '${'カートの小計（' + cartinfo['count']}点の商品） ￥' + cartinfo['amount'],
+        );
+      },
+    );
     loadInitData();
   }
 
@@ -112,53 +113,56 @@ class _ProductDetail extends State<ProductDetail> {
   double paddingV = 8;
 
   Widget _getPhotoRow() => Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
-      decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey.withOpacity(0.4))),
-      height: 160,
-      child: ticket!.image == null
-          ? Text('設定なし')
-          : Image.network(ticketImageUrl + ticket!.image!));
+    alignment: Alignment.center,
+    margin: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.grey.withOpacity(0.4)),
+    ),
+    height: 160,
+    child: ticket!.image == null
+        ? Text('設定なし')
+        : Image.network(ticketImageUrl + ticket!.image!),
+  );
 
   Widget _getTitleRow() => Container(
-        padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(ticket!.title, style: _txtTitleStyle),
-            ),
-            Container(
-              child: Text(
-                '￥${Funcs().currencyFormat(ticket!.price)}',
-                style: _txtContentStyle,
-              ),
-            )
-          ],
+    padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
+    child: Row(
+      children: [
+        Expanded(child: Text(ticket!.title, style: _txtTitleStyle)),
+        Container(
+          child: Text(
+            '￥${Funcs().currencyFormat(ticket!.price)}',
+            style: _txtContentStyle,
+          ),
         ),
-      );
+      ],
+    ),
+  );
 
   Widget _getDescription() => Container(
-        padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
-        child: Text(ticket!.detail, style: _txtContentStyle),
-      );
+    padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
+    child: Text(ticket!.detail, style: _txtContentStyle),
+  );
 
   Widget _getIncreaseButton() => Container(
-      padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
-      child: Row(
-        children: [
-          IncreaseButton(
-              tapFunc: () => increaseQuantity(false, ticket!),
-              icon: Icons.remove),
-          IncreaseView(
-              value: ticket!.cartCount == null ? 1 : ticket!.cartCount!),
-          IncreaseButton(
-              tapFunc: () => increaseQuantity(true, ticket!), icon: Icons.add),
-        ],
-      ));
+    padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
+    child: Row(
+      children: [
+        IncreaseButton(
+          tapFunc: () => increaseQuantity(false, ticket!),
+          icon: Icons.remove,
+        ),
+        IncreaseView(value: ticket!.cartCount == null ? 1 : ticket!.cartCount!),
+        IncreaseButton(
+          tapFunc: () => increaseQuantity(true, ticket!),
+          icon: Icons.add,
+        ),
+      ],
+    ),
+  );
 
   Widget _getCartButton() => Container(
-        padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
-        child: PrimaryButton(tapFunc: () => addCart(ticket!), label: 'カートに入れる'),
-      );
+    padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
+    child: PrimaryButton(tapFunc: () => addCart(ticket!), label: 'カートに入れる'),
+  );
 }

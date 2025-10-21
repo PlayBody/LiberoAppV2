@@ -34,16 +34,19 @@ class _ConnectAdviseView extends State<ConnectAdviseView> {
   Future<List> loadInitData() async {
     Map<dynamic, dynamic> results = {};
 
-    await Webservice().loadHttp(context, apiLoadAdviseInfoUrl,
-        {'advise_id': widget.adviseId}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiLoadAdviseInfoUrl, {'advise_id': widget.adviseId})
+        .then((value) => results = value);
 
     if (results['isLoad']) {
       if (results['advise']['movie_file'] != null) {
-        http.Response response = await http
-            .get(Uri.parse(adviseMovieBase + results['advise']['movie_file']));
+        http.Response response = await http.get(
+          Uri.parse(adviseMovieBase + results['advise']['movie_file']),
+        );
         if (response.statusCode == 200) {
           _controller = VideoPlayerController.network(
-              adviseMovieBase + results['advise']['movie_file']);
+            adviseMovieBase + results['advise']['movie_file'],
+          );
           await _controller!.initialize();
         }
       }
@@ -68,32 +71,33 @@ class _ConnectAdviseView extends State<ConnectAdviseView> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-                padding: EdgeInsets.all(30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _getDateAndTeacher(),
-                            SizedBox(height: 8),
-                            _getMovieView(),
-                            SizedBox(height: 8),
-                            _getQuestionTitle(),
-                            SizedBox(height: 8),
-                            _getQuestion(),
-                            SizedBox(height: 24),
-                            _getAnswerTitle(),
-                            SizedBox(height: 8),
-                            _getAnswer()
-                          ],
-                        ),
+              padding: EdgeInsets.all(30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _getDateAndTeacher(),
+                          SizedBox(height: 8),
+                          _getMovieView(),
+                          SizedBox(height: 8),
+                          _getQuestionTitle(),
+                          SizedBox(height: 8),
+                          _getQuestion(),
+                          SizedBox(height: 24),
+                          _getAnswerTitle(),
+                          SizedBox(height: 8),
+                          _getAnswer(),
+                        ],
                       ),
                     ),
-                  ],
-                ));
+                  ),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -105,50 +109,58 @@ class _ConnectAdviseView extends State<ConnectAdviseView> {
   }
 
   Widget _getDateAndTeacher() {
-    return Row(children: [
-      Container(
-        child: Text(
-          DateFormat('yyyy/MM/dd').format(DateTime.parse(uDate)),
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    return Row(
+      children: [
+        Container(
+          child: Text(
+            DateFormat('yyyy/MM/dd').format(DateTime.parse(uDate)),
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 24),
-        child: Text(
-          teacherName,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        Container(
+          padding: EdgeInsets.only(left: 24),
+          child: Text(
+            teacherName,
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
         ),
-      )
-    ]);
+      ],
+    );
   }
 
   Widget _getMovieView() {
     if (_controller == null) return Container();
     return Container(
-        child: Stack(children: [
-      _controller != null
-          ? AspectRatio(
-              aspectRatio: _controller!.value.aspectRatio,
-              child: VideoPlayer(_controller!),
-            )
-          : Container(),
-      if (_controller != null)
-        Positioned.fill(
-            child: Center(
-          child: FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                _controller!.value.isPlaying
-                    ? _controller!.pause()
-                    : _controller!.play();
-              });
-            },
-            child: Icon(
-              _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+      child: Stack(
+        children: [
+          _controller != null
+              ? AspectRatio(
+                  aspectRatio: _controller!.value.aspectRatio,
+                  child: VideoPlayer(_controller!),
+                )
+              : Container(),
+          if (_controller != null)
+            Positioned.fill(
+              child: Center(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      _controller!.value.isPlaying
+                          ? _controller!.pause()
+                          : _controller!.play();
+                    });
+                  },
+                  child: Icon(
+                    _controller!.value.isPlaying
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ))
-    ]));
+        ],
+      ),
+    );
   }
 
   Widget _getQuestionTitle() {
@@ -161,9 +173,7 @@ class _ConnectAdviseView extends State<ConnectAdviseView> {
   }
 
   Widget _getQuestion() {
-    return Container(
-      child: Text(question),
-    );
+    return Container(child: Text(question));
   }
 
   Widget _getAnswerTitle() {
@@ -176,8 +186,6 @@ class _ConnectAdviseView extends State<ConnectAdviseView> {
   }
 
   Widget _getAnswer() {
-    return Container(
-      child: Text(answer),
-    );
+    return Container(child: Text(answer));
   }
 }

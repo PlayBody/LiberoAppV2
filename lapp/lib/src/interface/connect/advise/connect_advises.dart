@@ -31,18 +31,21 @@ class _ConnetAdvises extends State<ConnetAdvises> {
 
   Future<List> loadInitData() async {
     Map<dynamic, dynamic> resultsAdvise = {};
-    await Webservice().loadHttp(context, apiLoadAdviseListUrl,
-        {'user_id': globals.userId}).then((value) => resultsAdvise = value);
+    await Webservice()
+        .loadHttp(context, apiLoadAdviseListUrl, {'user_id': globals.userId})
+        .then((value) => resultsAdvise = value);
 
     advises = [];
     if (resultsAdvise['isLoad']) {
       for (var item in resultsAdvise['advise_list']) {
         if (item['movie_file'] != null) {
-          http.Response response =
-              await http.get(Uri.parse(adviseMovieBase + item['movie_file']));
+          http.Response response = await http.get(
+            Uri.parse(adviseMovieBase + item['movie_file']),
+          );
           if (response.statusCode == 200) {
             var _controller = VideoPlayerController.network(
-                adviseMovieBase + item['movie_file']);
+              adviseMovieBase + item['movie_file'],
+            );
             await _controller.initialize();
 
             item['controller'] = _controller;
@@ -68,10 +71,7 @@ class _ConnetAdvises extends State<ConnetAdvises> {
               padding: EdgeInsets.fromLTRB(10, 20, 10, 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _getAdviseList(),
-                  _getAddButton(),
-                ],
+                children: [_getAdviseList(), _getAddButton()],
               ),
             );
           } else if (snapshot.hasError) {
@@ -91,13 +91,15 @@ class _ConnetAdvises extends State<ConnetAdvises> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-                padding: EdgeInsets.only(top: 20, bottom: 20),
-                child: Text('アドバイス待ち一覧')),
+              padding: EdgeInsets.only(top: 20, bottom: 20),
+              child: Text('アドバイス待ち一覧'),
+            ),
             ...advises.map(
               (e) => Container(
-                  padding: EdgeInsets.only(bottom: 12),
-                  child: _getAdviseItem(e)),
-            )
+                padding: EdgeInsets.only(bottom: 12),
+                child: _getAdviseItem(e),
+              ),
+            ),
           ],
         ),
       ),
@@ -107,19 +109,22 @@ class _ConnetAdvises extends State<ConnetAdvises> {
   Widget _getAdviseItem(AdviseModel item) {
     return ElevatedButton(
       onPressed: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return ConnectAdviseView(adviseId: item.adviseId);
-        }));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) {
+              return ConnectAdviseView(adviseId: item.adviseId);
+            },
+          ),
+        );
       },
       style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
-          side: BorderSide(
-            width: 1,
-            color: Color.fromARGB(255, 200, 200, 200),
-          ),
-          elevation: 0),
+        padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        side: BorderSide(width: 1, color: Color.fromARGB(255, 200, 200, 200)),
+        elevation: 0,
+      ),
       child: Column(
         children: [
           Container(
@@ -128,10 +133,7 @@ class _ConnetAdvises extends State<ConnetAdvises> {
               children: [
                 Container(
                   width: 80,
-                  child: Text(
-                    item.updateDate,
-                    style: TextStyle(fontSize: 12),
-                  ),
+                  child: Text(item.updateDate, style: TextStyle(fontSize: 12)),
                 ),
                 Container(
                   width: 110,
@@ -140,7 +142,9 @@ class _ConnetAdvises extends State<ConnetAdvises> {
                       : Text(
                           item.teacherName!,
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                 ),
               ],
@@ -165,7 +169,9 @@ class _ConnetAdvises extends State<ConnetAdvises> {
                           child: Text(
                             '質問内容',
                             style: TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         Container(child: Text(item.question)),
@@ -185,31 +191,37 @@ class _ConnetAdvises extends State<ConnetAdvises> {
     if (_controller == null) return Container();
 
     return Container(
-        child: Stack(children: [
-      _controller.value.isInitialized
-          ? AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller!),
-            )
-          : Container(),
-      if (_controller != null)
-        Positioned.fill(
-            child: Center(
-          child: FloatingActionButton(
-            heroTag: "btn" + adviseId,
-            onPressed: () {
-              setState(() {
-                _controller.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              });
-            },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+      child: Stack(
+        children: [
+          _controller.value.isInitialized
+              ? AspectRatio(
+                  aspectRatio: _controller.value.aspectRatio,
+                  child: VideoPlayer(_controller!),
+                )
+              : Container(),
+          if (_controller != null)
+            Positioned.fill(
+              child: Center(
+                child: FloatingActionButton(
+                  heroTag: "btn" + adviseId,
+                  onPressed: () {
+                    setState(() {
+                      _controller.value.isPlaying
+                          ? _controller.pause()
+                          : _controller.play();
+                    });
+                  },
+                  child: Icon(
+                    _controller.value.isPlaying
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ))
-    ]));
+        ],
+      ),
+    );
   }
 
   Widget _getAddButton() {
@@ -219,15 +231,22 @@ class _ConnetAdvises extends State<ConnetAdvises> {
         constraints: BoxConstraints.tightFor(width: 250),
         child: ElevatedButton(
           onPressed: () async {
-            await Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return ConnectAdviseAdd();
-            }));
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) {
+                  return ConnectAdviseAdd();
+                },
+              ),
+            );
             Dialogs().loaderDialogNormal(context);
             loadInitData();
             Navigator.pop(context);
           },
           style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+            padding: EdgeInsets.all(8),
+            textStyle: TextStyle(fontSize: 16),
+          ),
           child: Text('アドバイスをもらう'),
         ),
       ),

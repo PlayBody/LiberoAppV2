@@ -26,8 +26,9 @@ class _ConnectCouponConfirm extends State<ConnectCouponConfirm> {
 
   Future<List> loadMenuData() async {
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiLoadCouponListUrl,
-        {'user_id': globals.userId}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiLoadCouponListUrl, {'user_id': globals.userId})
+        .then((value) => results = value);
     coupons = [];
     if (results['isLoad']) {
       for (var item in results['coupons']) {
@@ -41,9 +42,14 @@ class _ConnectCouponConfirm extends State<ConnectCouponConfirm> {
 
   Future<void> userCoupon() async {
     Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ConnectCouponComplete();
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ConnectCouponComplete();
+        },
+      ),
+    );
   }
 
   var txtTitleStyle = TextStyle(fontSize: 22, fontWeight: FontWeight.bold);
@@ -73,23 +79,23 @@ class _ConnectCouponConfirm extends State<ConnectCouponConfirm> {
                       children: [
                         Expanded(child: Container()),
                         ElevatedButton(
-                            onPressed: () {
-                              userCoupon();
-                            },
-                            child: Text('はい')),
+                          onPressed: () {
+                            userCoupon();
+                          },
+                          child: Text('はい'),
+                        ),
                         SizedBox(width: 40),
                         ElevatedButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Text('いいえ')),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('いいえ'),
+                        ),
                         Expanded(child: Container()),
                       ],
                     ),
                   ),
-                  Container(
-                    child: Text('', style: txtContentStyle),
-                  ),
+                  Container(child: Text('', style: txtContentStyle)),
                 ],
               ),
             );

@@ -41,13 +41,21 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
   DateTime getDate(DateTime d) => DateTime(d.year, d.month, d.day);
 
   Future<List> loadInitData() async {
-    viewFromTime = DateFormat('yyyy-MM-dd 00:00:00').format(getDate(
-        selectedDate.subtract(Duration(days: selectedDate.weekday - 1))));
-    viewToTime = DateFormat('yyyy-MM-dd 23:59:59').format(selectedDate
-        .add(Duration(days: DateTime.daysPerWeek - selectedDate.weekday)));
+    viewFromTime = DateFormat('yyyy-MM-dd 00:00:00').format(
+      getDate(selectedDate.subtract(Duration(days: selectedDate.weekday - 1))),
+    );
+    viewToTime = DateFormat('yyyy-MM-dd 23:59:59').format(
+      selectedDate.add(
+        Duration(days: DateTime.daysPerWeek - selectedDate.weekday),
+      ),
+    );
 
     shiftFrames = await ClShiftFrame().loadShiftFrame(
-        context, widget.organId, viewFromTime, viewToTime);
+      context,
+      widget.organId,
+      viewFromTime,
+      viewToTime,
+    );
 
     appointments = [];
     for (var item in shiftFrames) {
@@ -60,17 +68,19 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
       if (minHour < 0) minHour = 0;
       if (maxHour > 24) maxHour = 24;
 
-      appointments.add(Appointment(
-        startTime: item.fromTime,
-        endTime: item.toTime,
-        subject:
-            '${item.comment ?? ''},${item.isReserve ? 1 : 0},${item.blankCnt},${item.id}',
-        color: item.isReserve || item.blankCnt < 1
-            ? Color(0xFFDFDFDF)
-            : Color(0xFFB6DEFF),
-        startTimeZone: '',
-        endTimeZone: '',
-      ));
+      appointments.add(
+        Appointment(
+          startTime: item.fromTime,
+          endTime: item.toTime,
+          subject:
+              '${item.comment ?? ''},${item.isReserve ? 1 : 0},${item.blankCnt},${item.id}',
+          color: item.isReserve || item.blankCnt < 1
+              ? Color(0xFFDFDFDF)
+              : Color(0xFFB6DEFF),
+          startTimeZone: '',
+          endTimeZone: '',
+        ),
+      );
     }
     sfCalanderHeight = 50 * (maxHour - minHour) + 70;
 
@@ -79,8 +89,9 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
   }
 
   Future<void> changeViewCalander(DateTime date) async {
-    String newFromTime = DateFormat('yyyy-MM-dd')
-        .format(getDate(date.subtract(Duration(days: date.weekday))));
+    String newFromTime = DateFormat(
+      'yyyy-MM-dd',
+    ).format(getDate(date.subtract(Duration(days: date.weekday))));
     if (newFromTime == viewFromTime) return;
     selectedDate = date;
     await loadInitData();
@@ -113,16 +124,21 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
       if (reserve == '1') return;
       if (blankCnt < 1) return;
 
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return ConnectReserveConfirm(
-          reserveStatus: 1,
-          reserveOrganId: widget.organId,
-          reserveStaffId: '',
-          reserveStartTime: appointmentDetails.startTime,
-          isNoReserveType: constCheckinReserveShift,
-          shiftFrameId: shiftFrameId,
-        );
-      }));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return ConnectReserveConfirm(
+              reserveStatus: 1,
+              reserveOrganId: widget.organId,
+              reserveStaffId: '',
+              reserveStartTime: appointmentDetails.startTime,
+              isNoReserveType: constCheckinReserveShift,
+              shiftFrameId: shiftFrameId,
+            );
+          },
+        ),
+      );
 
       print(appointmentDetails.subject);
     }
@@ -137,16 +153,19 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-                child: SingleChildScrollView(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                  _getComments(),
-                  _getReserveShiftComment(),
-                  _getDateView(),
-                  SizedBox(height: 8),
-                  _getCalandarContent()
-                ])));
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _getComments(),
+                    _getReserveShiftComment(),
+                    _getDateView(),
+                    SizedBox(height: 8),
+                    _getCalandarContent(),
+                  ],
+                ),
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -160,15 +179,17 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
 
   Widget _getComments() {
     return Container(
-        padding: EdgeInsets.only(left: 30, top: 20),
-        child: LeftSectionTitleText(label: '予約日と時間帯を選んでください'));
+      padding: EdgeInsets.only(left: 30, top: 20),
+      child: LeftSectionTitleText(label: '予約日と時間帯を選んでください'),
+    );
   }
 
   Widget _getDateView() {
     return Container(
       padding: EdgeInsets.only(left: 40),
       child: LeftSectionTitleText(
-          label: DateFormat('y年M月').format(DateTime.parse(viewFromTime))),
+        label: DateFormat('y年M月').format(DateTime.parse(viewFromTime)),
+      ),
     );
   }
 
@@ -182,16 +203,16 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
             children: [
               Text('〇', style: TextStyle(color: Colors.red)),
               SizedBox(width: 4),
-              Text('空きがあります。', style: commentStyle)
+              Text('空きがあります。', style: commentStyle),
             ],
           ),
           Row(
             children: [
               Text(' X', style: TextStyle(color: Colors.grey)),
               SizedBox(width: 4),
-              Text('空きがありません。', style: commentStyle)
+              Text('空きがありません。', style: commentStyle),
             ],
-          )
+          ),
         ],
       ),
     );
@@ -210,14 +231,15 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
               todayHighlightColor: Colors.black,
               cellBorderColor: Color(0xffcccccc),
               timeSlotViewSettings: TimeSlotViewSettings(
-                  dayFormat: '(E)',
-                  timeInterval: Duration(hours: 1),
-                  timeIntervalHeight: -1,
-                  timeFormat: 'H:mm',
-                  startHour: minHour.toDouble(),
-                  // endHour: double.parse(organToTime.split(':')[0]) +
-                  // (int.parse(organToTime.split(':')[1]) > 0 ? 1 : 0),
-                  timeTextStyle: TextStyle(fontSize: 15, color: Colors.grey)),
+                dayFormat: '(E)',
+                timeInterval: Duration(hours: 1),
+                timeIntervalHeight: -1,
+                timeFormat: 'H:mm',
+                startHour: minHour.toDouble(),
+                // endHour: double.parse(organToTime.split(':')[0]) +
+                // (int.parse(organToTime.split(':')[1]) > 0 ? 1 : 0),
+                timeTextStyle: TextStyle(fontSize: 15, color: Colors.grey),
+              ),
               // specialRegions: regions,
               dataSource: _AppointmentDataSource(appointments),
               appointmentBuilder: appointmentBuilder,
@@ -229,15 +251,19 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
             ),
           ),
           Positioned(
-              top: 52,
-              left: 6,
-              child: Container(
-                child: Text('$minHour:00',
-                    style: TextStyle(
-                        fontSize: 14.5,
-                        color: Colors.grey,
-                        letterSpacing: 0.5)),
-              )),
+            top: 52,
+            left: 6,
+            child: Container(
+              child: Text(
+                '$minHour:00',
+                style: TextStyle(
+                  fontSize: 14.5,
+                  color: Colors.grey,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -255,8 +281,10 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
     );
   }
 
-  Widget appointmentBuilder(BuildContext context,
-      CalendarAppointmentDetails calendarAppointmentDetails) {
+  Widget appointmentBuilder(
+    BuildContext context,
+    CalendarAppointmentDetails calendarAppointmentDetails,
+  ) {
     final Appointment appointment =
         calendarAppointmentDetails.appointments.first;
 
@@ -279,10 +307,7 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
                 '${DateFormat('HH:mm').format(appointment.startTime)}-${DateFormat('HH:mm').format(appointment.endTime)}',
                 style: TextStyle(fontSize: 8),
               ),
-              Text(
-                comment,
-                style: TextStyle(fontSize: 10),
-              )
+              Text(comment, style: TextStyle(fontSize: 10)),
             ],
           ),
         ),

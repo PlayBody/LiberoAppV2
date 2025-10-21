@@ -95,8 +95,10 @@ class _ConnectRegister extends State<ConnectRegister> {
     if (!isFormCheck()) return;
 
     Dialogs().loaderDialogNormal(context);
-    UserModel? checkuser = await ClUser().getUserModel(context,
-        {'company_id': APPCOMANYID, 'user_email': txtMailController.text});
+    UserModel? checkuser = await ClUser().getUserModel(context, {
+      'company_id': APPCOMANYID,
+      'user_email': txtMailController.text,
+    });
 
     if (checkuser != null) {
       errMail = "入力されたメールアドレスは使用中です。";
@@ -108,21 +110,28 @@ class _ConnectRegister extends State<ConnectRegister> {
     await ClUser().regVerifyCode(context, txtMailController.text);
     Navigator.pop(context);
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return RegisterVerify(saveData: {
-        'user_id': globals.userId,
-        'company_id': APPCOMANYID,
-        'user_first_name': txtFirstNameController.text,
-        'user_last_name': txtLastNameController.text,
-        'user_nick': txtAliasController.text,
-        'user_tel': txtPhoneController.text,
-        'user_email': txtMailController.text,
-        'user_sex': strSex,
-        'user_birthday': strBirthDay,
-        'user_device_token': globals.connectDeviceToken,
-        'user_password': txtPassController.text
-      });
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return RegisterVerify(
+            saveData: {
+              'user_id': globals.userId,
+              'company_id': APPCOMANYID,
+              'user_first_name': txtFirstNameController.text,
+              'user_last_name': txtLastNameController.text,
+              'user_nick': txtAliasController.text,
+              'user_tel': txtPhoneController.text,
+              'user_email': txtMailController.text,
+              'user_sex': strSex,
+              'user_birthday': strBirthDay,
+              'user_device_token': globals.connectDeviceToken,
+              'user_password': txtPassController.text,
+            },
+          );
+        },
+      ),
+    );
   }
 
   Future<void> deleteAccount() async {
@@ -130,9 +139,14 @@ class _ConnectRegister extends State<ConnectRegister> {
     if (!conf) return;
     bool isDelete = await ClUser().deleteUser(context, globals.userId);
     if (isDelete)
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return ConnectLogin();
-      }));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return ConnectLogin();
+          },
+        ),
+      );
   }
 
   Future<void> updateUserInfo() async {
@@ -152,7 +166,7 @@ class _ConnectRegister extends State<ConnectRegister> {
       'user_sex': strSex,
       'user_birthday': strBirthDay,
       'user_device_token': globals.connectDeviceToken,
-      'user_password': txtPassController.text
+      'user_password': txtPassController.text,
     };
     await ClUser().updateUserProfile(context, param);
     Navigator.pop(context);
@@ -216,10 +230,11 @@ class _ConnectRegister extends State<ConnectRegister> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage('images/shop_login_back.jpg'),
-        fit: BoxFit.cover,
-      )),
+        image: DecorationImage(
+          image: AssetImage('images/shop_login_back.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: FutureBuilder<List>(
@@ -229,9 +244,7 @@ class _ConnectRegister extends State<ConnectRegister> {
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 25),
                 child: SingleChildScrollView(
-                  child: Column(
-                    children: _getBodyContents(),
-                  ),
+                  child: Column(children: _getBodyContents()),
                 ),
               );
             } else if (snapshot.hasError) {
@@ -244,17 +257,18 @@ class _ConnectRegister extends State<ConnectRegister> {
     );
   }
 
-  var txtBorder =
-      OutlineInputBorder(borderSide: BorderSide(color: Colors.grey));
+  var txtBorder = OutlineInputBorder(
+    borderSide: BorderSide(color: Colors.grey),
+  );
   var txtPadding = EdgeInsets.all(8);
 
   List<Widget> _getBodyContents() {
     return [
       Container(
-          padding: EdgeInsets.only(top: 10, right: 10),
-          alignment: Alignment.topRight,
-          child:
-              Text('', style: TextStyle(fontSize: 10, color: Colors.black45))),
+        padding: EdgeInsets.only(top: 10, right: 10),
+        alignment: Alignment.topRight,
+        child: Text('', style: TextStyle(fontSize: 10, color: Colors.black45)),
+      ),
       _getShopTitle(),
       _getContentTitle('氏名'),
       _getNameInput(),
@@ -287,15 +301,17 @@ class _ConnectRegister extends State<ConnectRegister> {
             style: TextStyle(color: Colors.black.withOpacity(0.5)),
           ),
           onPressed: () => Navigator.pushNamed(context, '/Login'),
-        )
+        ),
     ];
   }
 
   Widget _getShopTitle() {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 36),
-      child: Text(APPCOMPANYTITLE,
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+      child: Text(
+        APPCOMPANYTITLE,
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+      ),
     );
   }
 
@@ -320,39 +336,46 @@ class _ConnectRegister extends State<ConnectRegister> {
 
   Widget _getNameInput() {
     return Container(
-      child: Row(children: [
-        Flexible(
-          child: TextInputNormal(
+      child: Row(
+        children: [
+          Flexible(
+            child: TextInputNormal(
               isEnabled: widget.isProfile == null ? true : !widget.isProfile!,
               controller: txtFirstNameController,
-              errorText: errFirstName),
-        ),
-        SizedBox(width: 8),
-        Flexible(
+              errorText: errFirstName,
+            ),
+          ),
+          SizedBox(width: 8),
+          Flexible(
             child: TextInputNormal(
-                isEnabled: widget.isProfile == null ? true : !widget.isProfile!,
-                controller: txtLastNameController,
-                errorText: errLastName))
-      ]),
+              isEnabled: widget.isProfile == null ? true : !widget.isProfile!,
+              controller: txtLastNameController,
+              errorText: errLastName,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _getAliasInput() {
     return Container(
       child: TextInputNormal(
-          isEnabled: widget.isProfile == null ? true : !widget.isProfile!,
-          controller: txtAliasController,
-          errorText: errAlias),
+        isEnabled: widget.isProfile == null ? true : !widget.isProfile!,
+        controller: txtAliasController,
+        errorText: errAlias,
+      ),
     );
   }
 
   Widget _getEmailInput() {
     return Container(
       child: TextInputNormal(
-          isEnabled: widget.isProfile == null ? true : !widget.isProfile!,
-          controller: txtMailController,
-          inputType: TextInputType.emailAddress,
-          errorText: errMail),
+        isEnabled: widget.isProfile == null ? true : !widget.isProfile!,
+        controller: txtMailController,
+        inputType: TextInputType.emailAddress,
+        errorText: errMail,
+      ),
     );
   }
 

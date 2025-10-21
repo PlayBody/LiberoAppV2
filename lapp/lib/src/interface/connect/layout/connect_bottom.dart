@@ -23,15 +23,16 @@ class ConnectBottomBar extends StatelessWidget {
         children: [
           Container(width: 20),
           ConnectBottomItem(
-              icon: Image.asset(
-                'images/icon/icon_home.png',
-                color: Colors.white,
-                width: 24,
-              ),
-              label: 'ホーム',
-              tap: isHome == null
-                  ? () => Navigator.pushNamed(context, '/Home')
-                  : () {}),
+            icon: Image.asset(
+              'images/icon/icon_home.png',
+              color: Colors.white,
+              width: 24,
+            ),
+            label: 'ホーム',
+            tap: isHome == null
+                ? () => Navigator.pushNamed(context, '/Home')
+                : () {},
+          ),
           ConnectBottomItem(
             icon: Image.asset(
               'images/icon/icon_back.png',
@@ -53,10 +54,14 @@ class ConnectBottomBar extends StatelessWidget {
                 width: 24,
               ),
               label: 'カート',
-              tap: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                return ProductCart();
-              })),
+              tap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) {
+                    return ProductCart();
+                  },
+                ),
+              ),
             ),
           ConnectBottomItem(
             icon: Image.asset(
@@ -67,9 +72,14 @@ class ConnectBottomBar extends StatelessWidget {
             label: '設定',
             tap: globals.userId == ''
                 ? () => Navigator.pushNamed(context, '/Login')
-                : () => Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return ConnectSetting();
-                    })),
+                : () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) {
+                        return ConnectSetting();
+                      },
+                    ),
+                  ),
           ),
           Container(width: 20),
         ],
@@ -82,30 +92,35 @@ class ConnectBottomItem extends StatelessWidget {
   final String label;
   final icon;
   final tap;
-  const ConnectBottomItem(
-      {required this.label, required this.icon, required this.tap, super.key});
+  const ConnectBottomItem({
+    required this.label,
+    required this.icon,
+    required this.tap,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: Container(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
+      child: Container(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
             padding: EdgeInsets.only(top: 5),
             backgroundColor: Colors.transparent,
             foregroundColor: Colors.white,
             elevation: 0,
-            shadowColor: Colors.transparent),
-        onPressed: tap,
-        child: Column(children: [
-          icon,
-          Container(height: 10),
-          Text(
-            label,
-            style: TextStyle(fontSize: 12),
-          )
-        ]),
+            shadowColor: Colors.transparent,
+          ),
+          onPressed: tap,
+          child: Column(
+            children: [
+              icon,
+              Container(height: 10),
+              Text(label, style: TextStyle(fontSize: 12)),
+            ],
+          ),
+        ),
       ),
-    ));
+    );
   }
 }

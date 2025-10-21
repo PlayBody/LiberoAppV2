@@ -35,8 +35,9 @@ class _DialogAttachPreview extends State<DialogAttachPreview> {
 
   Future<void> loadShift() async {
     if (widget.previewType == '2') {
-      videoController = await SelectAttachments()
-          .loadVideoNetWorkController(widget.attachUrl);
+      videoController = await SelectAttachments().loadVideoNetWorkController(
+        widget.attachUrl,
+      );
     }
     isLoading = false;
     setState(() {});
@@ -47,14 +48,15 @@ class _DialogAttachPreview extends State<DialogAttachPreview> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(
-          // borderRadius: BorderRadius.circular(AppConst.padding),
-          ),
+        // borderRadius: BorderRadius.circular(AppConst.padding),
+      ),
       elevation: 0,
       backgroundColor: Colors.transparent,
       child: isLoading
           ? Container(
               height: 120,
-              child: Center(child: CircularProgressIndicator()))
+              child: Center(child: CircularProgressIndicator()),
+            )
           : contentBox(context),
     );
   }
@@ -68,7 +70,7 @@ class _DialogAttachPreview extends State<DialogAttachPreview> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(child: Image.network(widget.attachUrl))
+                Container(child: Image.network(widget.attachUrl)),
               ],
             ),
           ),
@@ -78,17 +80,19 @@ class _DialogAttachPreview extends State<DialogAttachPreview> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
-                    height: MediaQuery.of(context).size.height * 0.85,
-                    child: videoController == null
-                        ? Container()
-                        : Chewie(controller: videoController))
+                  height: MediaQuery.of(context).size.height * 0.85,
+                  child: videoController == null
+                      ? Container()
+                      : Chewie(controller: videoController),
+                ),
               ],
             ),
           ),
         Positioned(
-            right: -40,
-            top: 0,
-            child: UserBtnCircleClose(tapFunc: () => Navigator.pop(context))),
+          right: -40,
+          top: 0,
+          child: UserBtnCircleClose(tapFunc: () => Navigator.pop(context)),
+        ),
       ],
     );
   }

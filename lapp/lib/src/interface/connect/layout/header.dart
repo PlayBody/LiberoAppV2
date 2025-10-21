@@ -27,26 +27,29 @@ class MyConnetAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 Container(
-                    padding: EdgeInsets.only(bottom: 10, left: 16),
-                    // margin: EdgeInsets.symmetric(vertical: 16),
-                    child: Text(
-                      global.connectHeaerTitle,
-                      style: TextStyle(
-                          color: primaryColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          letterSpacing: 1.5),
-                    )),
+                  padding: EdgeInsets.only(bottom: 10, left: 16),
+                  // margin: EdgeInsets.symmetric(vertical: 16),
+                  child: Text(
+                    global.connectHeaerTitle,
+                    style: TextStyle(
+                      color: primaryColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ),
                 Container(
                   width: 150,
                   height: 4,
                   decoration: BoxDecoration(
-                      color: Color(0xffd4dc57),
-                      borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(8),
-                        bottomRight: Radius.circular(8),
-                      )),
-                )
+                    color: Color(0xffd4dc57),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(8),
+                      bottomRight: Radius.circular(8),
+                    ),
+                  ),
+                ),
               ],
             ),
             Expanded(child: Container()),
@@ -65,23 +68,24 @@ class MyConnetAppBar extends StatelessWidget implements PreferredSizeWidget {
               Text(
                 global.userName,
                 style: TextStyle(fontSize: 10, color: primaryColor),
-              )
+              ),
             ],
           ),
         ),
         ElevatedButton(
-            onPressed: () => Scaffold.of(context).openDrawer(),
-            style: ElevatedButton.styleFrom(
-              visualDensity: VisualDensity(horizontal: -2),
-              padding: EdgeInsets.all(0),
-              elevation: 0,
-            ),
-            child: Container(
-              width: 70,
-              height: 70,
-              color: primaryColor,
-              child: Icon(Icons.menu, color: Colors.white, size: 32),
-            ))
+          onPressed: () => Scaffold.of(context).openDrawer(),
+          style: ElevatedButton.styleFrom(
+            visualDensity: VisualDensity(horizontal: -2),
+            padding: EdgeInsets.all(0),
+            elevation: 0,
+          ),
+          child: Container(
+            width: 70,
+            height: 70,
+            color: primaryColor,
+            child: Icon(Icons.menu, color: Colors.white, size: 32),
+          ),
+        ),
       ],
     );
   }

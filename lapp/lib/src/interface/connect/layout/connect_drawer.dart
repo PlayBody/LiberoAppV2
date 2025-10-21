@@ -20,12 +20,17 @@ class ConnectDrawer extends StatelessWidget {
         children: <Widget>[
           createDrawerHeader(),
           createDrawerBodyItem(
-              icon: Icons.home,
-              text: 'メニューに戻る',
-              onTap: () =>
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return ConnectHome();
-                  }))),
+            icon: Icons.home,
+            text: 'メニューに戻る',
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) {
+                  return ConnectHome();
+                },
+              ),
+            ),
+          ),
           Divider(),
           // createDrawerBodyItem(
           //     icon: Icons.info,
@@ -43,22 +48,29 @@ class ConnectDrawer extends StatelessWidget {
           //         }))),
           if (globals.userId != '')
             createDrawerBodyItem(
-                icon: Icons.settings,
-                text: '設定',
-                onTap: () =>
-                    Navigator.push(context, MaterialPageRoute(builder: (_) {
-                      return ConnectSetting();
-                    }))),
+              icon: Icons.settings,
+              text: '設定',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) {
+                    return ConnectSetting();
+                  },
+                ),
+              ),
+            ),
           if (globals.userId == '')
             createDrawerBodyItem(
-                icon: Icons.settings,
-                text: 'ログイン',
-                onTap: () => Navigator.pushNamed(context, '/Login')),
+              icon: Icons.settings,
+              text: 'ログイン',
+              onTap: () => Navigator.pushNamed(context, '/Login'),
+            ),
           if (globals.userId != '')
             createDrawerBodyItem(
-                icon: Icons.settings,
-                text: 'ログアウト',
-                onTap: () => Funcs().logout(context)),
+              icon: Icons.settings,
+              text: 'ログアウト',
+              onTap: () => Funcs().logout(context),
+            ),
         ],
       ),
     );
@@ -72,33 +84,36 @@ Widget createDrawerHeader() {
     child: DrawerHeader(
       margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
-      child: Stack(children: <Widget>[
-        Positioned(
-          bottom: 12.0,
-          left: 16.0,
-          child: Text(
-            "CRM APP",
-            style: TextStyle(
+      child: Stack(
+        children: <Widget>[
+          Positioned(
+            bottom: 12.0,
+            left: 16.0,
+            child: Text(
+              "CRM APP",
+              style: TextStyle(
                 color: Colors.black,
                 fontSize: 20.0,
-                fontWeight: FontWeight.w500),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ),
-        ),
-      ]),
+        ],
+      ),
     ),
   );
 }
 
-Widget createDrawerBodyItem(
-    {required IconData icon, required String text, GestureTapCallback? onTap}) {
+Widget createDrawerBodyItem({
+  required IconData icon,
+  required String text,
+  GestureTapCallback? onTap,
+}) {
   return ListTile(
     title: Row(
       children: <Widget>[
         Icon(icon),
-        Padding(
-          padding: EdgeInsets.only(left: 8.0),
-          child: Text(text),
-        )
+        Padding(padding: EdgeInsets.only(left: 8.0), child: Text(text)),
       ],
     ),
     onTap: onTap,

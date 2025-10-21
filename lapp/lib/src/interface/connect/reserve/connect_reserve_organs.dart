@@ -31,12 +31,17 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
     organs = await ClOrgan().loadOrganList(context, APPCOMANYID);
 
     if (organs.length == 1 && mounted) {
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return ReserveMultiUser(
-          organId: organs.first.organId, 
-          isNoReserveType: organs.first.isNoReserveType,
-        );
-      }));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return ReserveMultiUser(
+              organId: organs.first.organId,
+              isNoReserveType: organs.first.isNoReserveType,
+            );
+          },
+        ),
+      );
     }
     return organs;
   }
@@ -51,14 +56,13 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return GridView.count(
-                  padding: EdgeInsets.all(12),
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 8,
-                  mainAxisSpacing: 16,
-                  childAspectRatio: 0.95,
-                  children: [
-                    ...organs.map((d) => _getOrganContent(d)),
-                  ]);
+                padding: EdgeInsets.all(12),
+                crossAxisCount: 2,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.95,
+                children: [...organs.map((d) => _getOrganContent(d))],
+              );
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
             }
@@ -74,36 +78,42 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
   Widget _getOrganContent(OrganModel organ) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          if(organ.isNoReserveType == constCheckinReserveRiRa){
-            return ReserveMultiUser(
-              organId: organ.organId, 
-              isNoReserveType: constCheckinReserveRiRa
-            );
-          } else {
-            globals.selStaffType = 0;
-            globals.menuSelectNumber = 1;
-            globals.reserveMultiUsers = [];
-            globals.connectReserveMenuList = [];
-            globals.reserveTime = 10;
-            globals.reserveUserCnt = 1;
-            return ConnectReserveMenus(
-              organId: organ.organId, 
-              isNoReserveType: constCheckinReserveShift,
-            );
-          }
-        }));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) {
+              if (organ.isNoReserveType == constCheckinReserveRiRa) {
+                return ReserveMultiUser(
+                  organId: organ.organId,
+                  isNoReserveType: constCheckinReserveRiRa,
+                );
+              } else {
+                globals.selStaffType = 0;
+                globals.menuSelectNumber = 1;
+                globals.reserveMultiUsers = [];
+                globals.connectReserveMenuList = [];
+                globals.reserveTime = 10;
+                globals.reserveUserCnt = 1;
+                return ConnectReserveMenus(
+                  organId: organ.organId,
+                  isNoReserveType: constCheckinReserveShift,
+                );
+              }
+            },
+          ),
+        );
       },
       child: Card(
         clipBehavior: Clip.antiAlias,
         elevation: 4,
         shadowColor: Colors.grey,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12))),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
+        ),
         child: Column(
           children: [
             Expanded(child: _getOrganImage(organ)),
-            _getOrganTitle(organ)
+            _getOrganTitle(organ),
           ],
         ),
       ),
@@ -112,9 +122,9 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
 
   Widget _getOrganImage(OrganModel organ) {
     String? imageUrl = organ.organImage;
-    Color color = organ.isNoReserveType == constCheckinReserveRiRa 
-      ? Color.fromARGB(126, 255, 107, 107) 
-      : Color.fromARGB(127, 0, 114, 180);
+    Color color = organ.isNoReserveType == constCheckinReserveRiRa
+        ? Color.fromARGB(126, 255, 107, 107)
+        : Color.fromARGB(127, 0, 114, 180);
     return Stack(
       children: [
         Container(
@@ -123,10 +133,13 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
             color: Colors.grey,
             image: imageUrl == null
                 ? DecorationImage(
-                    image: AssetImage('images/no_image.jpg'), fit: BoxFit.cover)
+                    image: AssetImage('images/no_image.jpg'),
+                    fit: BoxFit.cover,
+                  )
                 : DecorationImage(
                     image: NetworkImage(organImageUrl + imageUrl),
-                    fit: BoxFit.cover),
+                    fit: BoxFit.cover,
+                  ),
           ),
         ),
         Positioned(
@@ -142,21 +155,21 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
               child: Container(
                 margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
                 alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: color,
-                ),
+                decoration: BoxDecoration(color: color),
                 child: Text(
-                  organ.isNoReserveType == constCheckinReserveRiRa ? "出勤スタッフ" : "シフト枠",
+                  organ.isNoReserveType == constCheckinReserveRiRa
+                      ? "出勤スタッフ"
+                      : "シフト枠",
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.normal,
-                    fontSize: 12
+                    fontSize: 12,
                   ),
                 ),
               ),
             ),
-          )
-        )
+          ),
+        ),
       ],
     );
   }
@@ -169,11 +182,16 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
           padding: EdgeInsets.all(6),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-              color: Color(0xFF709a49), borderRadius: BorderRadius.circular(6)),
+            color: Color(0xFF709a49),
+            borderRadius: BorderRadius.circular(6),
+          ),
           child: Text(
             organ.organName,
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14),
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
           ),
         ),
         Positioned(
@@ -184,11 +202,16 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
             width: 16,
             height: 16,
             decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(20)),
-            child: Icon(Icons.keyboard_arrow_right,
-                color: Color(0xFF709a49), size: 16),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Icon(
+              Icons.keyboard_arrow_right,
+              color: Color(0xFF709a49),
+              size: 16,
+            ),
           ),
-        )
+        ),
       ],
     );
   }

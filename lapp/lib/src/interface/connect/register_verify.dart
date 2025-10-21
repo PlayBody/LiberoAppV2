@@ -72,10 +72,11 @@ class _RegisterVerify extends State<RegisterVerify> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage('images/shop_login_back.jpg'),
-        fit: BoxFit.cover,
-      )),
+        image: DecorationImage(
+          image: AssetImage('images/shop_login_back.jpg'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: FutureBuilder<List>(
@@ -85,30 +86,36 @@ class _RegisterVerify extends State<RegisterVerify> {
               return Container(
                 padding: EdgeInsets.fromLTRB(30, 20, 30, 0),
                 child: SingleChildScrollView(
-                    child: Column(
-                  children: [
-                    SizedBox(height: 60),
-                    _getShopTitle(),
-                    SizedBox(height: 80),
-                    _getEmailInput(),
-                    SizedBox(height: 16),
-                    Container(
-                        child: Text(errorText,
-                            style: TextStyle(color: Colors.red))),
-                    SizedBox(height: 44),
-                    Text('セキュリティコード'),
-                    SizedBox(height: 24),
-                    _numberInput(),
-                    TextButton(
-                      autofocus: true,
-                      child: Text(
-                        '新規会員登録画面へ',
-                        style: TextStyle(color: Colors.black.withOpacity(0.5)),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 60),
+                      _getShopTitle(),
+                      SizedBox(height: 80),
+                      _getEmailInput(),
+                      SizedBox(height: 16),
+                      Container(
+                        child: Text(
+                          errorText,
+                          style: TextStyle(color: Colors.red),
+                        ),
                       ),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                  ],
-                )),
+                      SizedBox(height: 44),
+                      Text('セキュリティコード'),
+                      SizedBox(height: 24),
+                      _numberInput(),
+                      TextButton(
+                        autofocus: true,
+                        child: Text(
+                          '新規会員登録画面へ',
+                          style: TextStyle(
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                ),
               );
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");
@@ -135,16 +142,20 @@ class _RegisterVerify extends State<RegisterVerify> {
       children: [
         Expanded(child: Container()),
         _getVerifyCodeItem(
-            verifyCode.length > 0 ? verifyCode.substring(0, 1) : ''),
+          verifyCode.length > 0 ? verifyCode.substring(0, 1) : '',
+        ),
         Expanded(child: Container()),
         _getVerifyCodeItem(
-            verifyCode.length > 1 ? verifyCode.substring(1, 2) : ''),
+          verifyCode.length > 1 ? verifyCode.substring(1, 2) : '',
+        ),
         Expanded(child: Container()),
         _getVerifyCodeItem(
-            verifyCode.length > 2 ? verifyCode.substring(2, 3) : ''),
+          verifyCode.length > 2 ? verifyCode.substring(2, 3) : '',
+        ),
         Expanded(child: Container()),
         _getVerifyCodeItem(
-            verifyCode.length > 3 ? verifyCode.substring(3, 4) : ''),
+          verifyCode.length > 3 ? verifyCode.substring(3, 4) : '',
+        ),
         Expanded(child: Container()),
       ],
     );
@@ -154,8 +165,9 @@ class _RegisterVerify extends State<RegisterVerify> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       decoration: BoxDecoration(
-          border: Border.all(color: Colors.grey),
-          borderRadius: BorderRadius.circular(8)),
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8),
+      ),
       alignment: Alignment.center,
       width: 50,
       child: Text(
@@ -167,45 +179,51 @@ class _RegisterVerify extends State<RegisterVerify> {
 
   Widget _numberInput() {
     return Container(
-        child: GridView.count(
-            physics: NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            padding: EdgeInsets.fromLTRB(30, 10, 30, 30),
-            crossAxisCount: 3,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-            childAspectRatio: 1.9,
-            children: [...numItems.map((num) => _getNumpadContent(num))]));
+      child: GridView.count(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        padding: EdgeInsets.fromLTRB(30, 10, 30, 30),
+        crossAxisCount: 3,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20,
+        childAspectRatio: 1.9,
+        children: [...numItems.map((num) => _getNumpadContent(num))],
+      ),
+    );
   }
 
   Widget _getNumpadContent(num) {
     return GestureDetector(
-        onTap: () {
-          errorText = '';
-          setState(() {});
-          if (num == '') return;
-          if (num == '←') {
-            if (verifyCode.length < 1) return;
-            verifyCode = verifyCode.substring(0, verifyCode.length - 1);
-          } else {
-            verifyCode = verifyCode + num;
-          }
-          if (verifyCode.length == 4) {
-            registerUser();
-          }
-          setState(() {});
-        },
-        child: Container(
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(12),
+      onTap: () {
+        errorText = '';
+        setState(() {});
+        if (num == '') return;
+        if (num == '←') {
+          if (verifyCode.length < 1) return;
+          verifyCode = verifyCode.substring(0, verifyCode.length - 1);
+        } else {
+          verifyCode = verifyCode + num;
+        }
+        if (verifyCode.length == 4) {
+          registerUser();
+        }
+        setState(() {});
+      },
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(
+          num,
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-          child: Text(
-            num,
-            style: TextStyle(
-                fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        ));
+        ),
+      ),
+    );
   }
 }

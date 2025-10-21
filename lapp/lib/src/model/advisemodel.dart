@@ -11,39 +11,42 @@ class AdviseModel {
   final String updateDate;
   final VideoPlayerController? videoController;
 
-  const AdviseModel(
-      {required this.adviseId,
-      required this.question,
-      this.answer,
-      required this.userName,
-      this.teacherName,
-      this.movieFile,
-      required this.updateDate,
-      this.videoController});
+  const AdviseModel({
+    required this.adviseId,
+    required this.question,
+    this.answer,
+    required this.userName,
+    this.teacherName,
+    this.movieFile,
+    required this.updateDate,
+    this.videoController,
+  });
 
   factory AdviseModel.fromJson(Map<String, dynamic> json) {
     var userNameLabel = json['user_nick'] ?? '';
     if (userNameLabel == '') {
       userNameLabel =
           (json['user_first_name'] ?? '') +
-              ' ' +
-              (json['user_last_name'] ?? '');
+          ' ' +
+          (json['user_last_name'] ?? '');
     }
 
     var teacherLabel =
         (json['staff_first_name'] ?? '') +
-            ' ' +
-            (json['staff_last_name'] ?? '');
+        ' ' +
+        (json['staff_last_name'] ?? '');
 
     return AdviseModel(
-        adviseId: json['advise_id'],
-        question: json['question'],
-        answer: json['answer'],
-        userName: userNameLabel,
-        teacherName: teacherLabel,
-        movieFile: json['movie_file'],
-        updateDate: DateFormat('yyyy/MM/dd')
-            .format(DateTime.parse(json['update_date'])),
-        videoController: json['controller']);
+      adviseId: json['advise_id'],
+      question: json['question'],
+      answer: json['answer'],
+      userName: userNameLabel,
+      teacherName: teacherLabel,
+      movieFile: json['movie_file'],
+      updateDate: DateFormat(
+        'yyyy/MM/dd',
+      ).format(DateTime.parse(json['update_date'])),
+      videoController: json['controller'],
+    );
   }
 }

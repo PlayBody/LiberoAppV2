@@ -27,8 +27,11 @@ class _ConnectQuestions extends State<ConnectQuestions> {
 
   Future<List> loadMenuData() async {
     Map<dynamic, dynamic> results = {};
-    await Webservice().loadHttp(context, apiLoadFavortieQuestionUrl,
-        {'company_id': APPCOMANYID}).then((value) => results = value);
+    await Webservice()
+        .loadHttp(context, apiLoadFavortieQuestionUrl, {
+          'company_id': APPCOMANYID,
+        })
+        .then((value) => results = value);
     questions = [];
     if (results['isLoad']) {
       for (var item in results['questions']) {
@@ -62,7 +65,7 @@ class _ConnectQuestions extends State<ConnectQuestions> {
                       ),
                     ),
                   ),
-                  _getQuestionButton()
+                  _getQuestionButton(),
                 ],
               ),
             );
@@ -87,7 +90,10 @@ class _ConnectQuestions extends State<ConnectQuestions> {
       child: Text(
         'よくあるご質問',
         style: TextStyle(
-            color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -100,7 +106,10 @@ class _ConnectQuestions extends State<ConnectQuestions> {
       child: Text(
         'お問い合わせ',
         style: TextStyle(
-            color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          color: Colors.white,
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
@@ -119,12 +128,19 @@ class _ConnectQuestions extends State<ConnectQuestions> {
         constraints: BoxConstraints.tightFor(width: 250),
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return ConnectQuestionAdd();
-            }));
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) {
+                  return ConnectQuestionAdd();
+                },
+              ),
+            );
           },
           style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+            padding: EdgeInsets.all(8),
+            textStyle: TextStyle(fontSize: 16),
+          ),
           child: Text('お問い合わせ'),
         ),
       ),
@@ -134,8 +150,9 @@ class _ConnectQuestions extends State<ConnectQuestions> {
   Widget _getFavoriteQuestionItem(item) {
     return Container(
       decoration: BoxDecoration(
-          color: Color(0xffFAF8F5),
-          border: Border(bottom: BorderSide(color: Colors.grey))),
+        color: Color(0xffFAF8F5),
+        border: Border(bottom: BorderSide(color: Colors.grey)),
+      ),
       child: Column(
         children: [
           ListTile(
@@ -148,9 +165,11 @@ class _ConnectQuestions extends State<ConnectQuestions> {
               setState(() {});
             },
             visualDensity: VisualDensity(horizontal: 0, vertical: -2),
-            trailing: Icon(openQuestion == item.id
-                ? Icons.keyboard_arrow_up
-                : Icons.keyboard_arrow_down),
+            trailing: Icon(
+              openQuestion == item.id
+                  ? Icons.keyboard_arrow_up
+                  : Icons.keyboard_arrow_down,
+            ),
             title: Text('Q. ' + 'dddd', style: txtQuestionStyle),
           ),
           if (openQuestion == item.id)
@@ -159,9 +178,11 @@ class _ConnectQuestions extends State<ConnectQuestions> {
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
-                  color: Colors.white, border: Border.all(color: Colors.grey)),
+                color: Colors.white,
+                border: Border.all(color: Colors.grey),
+              ),
               child: Text(item.answer, style: txtAnswerStyle),
-            )
+            ),
         ],
       ),
     );

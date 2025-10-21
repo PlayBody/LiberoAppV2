@@ -12,7 +12,11 @@ import '../../../common/globals.dart' as globals;
 class ReserveStaff extends StatefulWidget {
   final String organId;
   final String isNoReserveType;
-  const ReserveStaff({required this.organId, required this.isNoReserveType, super.key});
+  const ReserveStaff({
+    required this.organId,
+    required this.isNoReserveType,
+    super.key,
+  });
 
   @override
   _ReserveStaff createState() => _ReserveStaff();
@@ -39,8 +43,11 @@ class _ReserveStaff extends State<ReserveStaff> {
 
   Future<List> loadInitData() async {
     if (selectSex == 3)
-      staffs = await ClStaff().loadStaffs(context,
-          {'organ_id': widget.organId, 'min_auth': '1', 'max_auth': '4'});
+      staffs = await ClStaff().loadStaffs(context, {
+        'organ_id': widget.organId,
+        'min_auth': '1',
+        'max_auth': '4',
+      });
     else
       staffs = [];
 
@@ -62,8 +69,9 @@ class _ReserveStaff extends State<ReserveStaff> {
   void onSelectStaff(String? staffId) {
     selectStaff = staffId;
     if (staffId == null) return;
-    StaffListModel selStaff =
-        staffs.firstWhere((element) => element.staffId == staffId);
+    StaffListModel selStaff = staffs.firstWhere(
+      (element) => element.staffId == staffId,
+    );
 
     staffName = selStaff.staffNick == ''
         ? ('${selStaff.staffFirstName!} ${selStaff.staffLastName!}')
@@ -81,9 +89,18 @@ class _ReserveStaff extends State<ReserveStaff> {
 
     globals.selStaffType = selectSex;
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ReserveDateFirst(organId: widget.organId, isNoReserveType: widget.isNoReserveType, staffId: selectStaff);
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ReserveDateFirst(
+            organId: widget.organId,
+            isNoReserveType: widget.isNoReserveType,
+            staffId: selectStaff,
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -101,9 +118,7 @@ class _ReserveStaff extends State<ReserveStaff> {
           }
 
           // By default, show a loading spinner.
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -115,7 +130,7 @@ class _ReserveStaff extends State<ReserveStaff> {
       child: Column(
         children: <Widget>[
           Expanded(child: SingleChildScrollView(child: _getMainColumn())),
-          PrimaryButton(label: '次へ', tapFunc: () => pushReserveDateFirst())
+          PrimaryButton(label: '次へ', tapFunc: () => pushReserveDateFirst()),
         ],
       ),
     );
@@ -132,7 +147,7 @@ class _ReserveStaff extends State<ReserveStaff> {
         SizedBox(height: 8),
         if (isShowAmountContent) _getAboutAmountContent(),
         if (staffName != '') _getStaffName(),
-        if (isShowStaffComment) CommentBigText(label: staffComment)
+        if (isShowStaffComment) CommentBigText(label: staffComment),
       ],
     );
   }
@@ -153,16 +168,18 @@ class _ReserveStaff extends State<ReserveStaff> {
 
   Widget _getSelectSexItem(label, val, groupVal) {
     return GestureDetector(
-        onTap: () => onChangeStaffType(val),
-        child: Container(
-            margin: EdgeInsets.symmetric(vertical: 4),
-            child: Row(
-              children: [
-                Icon(val == groupVal ? Icons.circle : Icons.circle_outlined),
-                SizedBox(width: 8),
-                TextLabel(label: label)
-              ],
-            )));
+      onTap: () => onChangeStaffType(val),
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          children: [
+            Icon(val == groupVal ? Icons.circle : Icons.circle_outlined),
+            SizedBox(width: 8),
+            TextLabel(label: label),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _getStaffSelect() {
@@ -171,17 +188,19 @@ class _ReserveStaff extends State<ReserveStaff> {
         dropdownState: dropdownState,
         value: selectStaff,
         items: [
-          ...staffs.map((e) => DropdownMenuItem(
-                value: e.staffId,
-                child: Text(
-                  e.staffNick == ''
-                      ? ('${e.staffFirstName!} ${e.staffLastName!}')
-                      : e.staffNick,
-                  style: TextStyle(
-                      color:
-                          e.staffSex == '1' ? Colors.blue : Colors.pinkAccent),
+          ...staffs.map(
+            (e) => DropdownMenuItem(
+              value: e.staffId,
+              child: Text(
+                e.staffNick == ''
+                    ? ('${e.staffFirstName!} ${e.staffLastName!}')
+                    : e.staffNick,
+                style: TextStyle(
+                  color: e.staffSex == '1' ? Colors.blue : Colors.pinkAccent,
                 ),
-              ))
+              ),
+            ),
+          ),
         ],
         tapFunc: (v) => onSelectStaff(v),
       ),
@@ -194,9 +213,11 @@ class _ReserveStaff extends State<ReserveStaff> {
       child: Row(
         children: [
           Expanded(child: CommentTitleText(label: '指名料金について')),
-          Icon(isShowAmountContent
-              ? Icons.keyboard_arrow_up
-              : Icons.keyboard_arrow_down)
+          Icon(
+            isShowAmountContent
+                ? Icons.keyboard_arrow_up
+                : Icons.keyboard_arrow_down,
+          ),
         ],
       ),
     );
@@ -223,9 +244,11 @@ class _ReserveStaff extends State<ReserveStaff> {
       child: Row(
         children: [
           Expanded(child: LeftSectionTitleText(label: staffName)),
-          Icon(isShowStaffComment
-              ? Icons.keyboard_arrow_up
-              : Icons.keyboard_arrow_down)
+          Icon(
+            isShowStaffComment
+                ? Icons.keyboard_arrow_up
+                : Icons.keyboard_arrow_down,
+          ),
         ],
       ),
     );

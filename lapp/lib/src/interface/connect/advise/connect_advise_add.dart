@@ -39,8 +39,11 @@ class _ConnectAdviseAdd extends State<ConnectAdviseAdd> {
 
   Future<List> loadInitData() async {
     Map<dynamic, dynamic> resultsTeacher = {};
-    await Webservice().loadHttp(context, apiLoadCompanyStaffListUrl,
-        {'company_id': APPCOMANYID}).then((value) => resultsTeacher = value);
+    await Webservice()
+        .loadHttp(context, apiLoadCompanyStaffListUrl, {
+          'company_id': APPCOMANYID,
+        })
+        .then((value) => resultsTeacher = value);
 
     teachers = [];
     if (resultsTeacher['isLoad']) {
@@ -75,58 +78,64 @@ class _ConnectAdviseAdd extends State<ConnectAdviseAdd> {
       return;
     }
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ConnectAdviseAddConfirm(
-        teacherId: teacherId!,
-        videoFile: _videoFile!,
-        adviseContent: contentController.text,
-      );
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ConnectAdviseAddConfirm(
+            teacherId: teacherId!,
+            videoFile: _videoFile!,
+            adviseContent: contentController.text,
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return MainForm(
-        title: 'アドバイス質問一覧',
-        render: FutureBuilder<List>(
-          future: loadData,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return Container(
-                padding: EdgeInsets.all(30),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            _getTitle(),
-                            SizedBox(height: 8),
-                            _getSelectTeacher(),
-                            SizedBox(height: 12),
-                            _getSelectMovie(),
-                            _getMovieView(),
-                            SizedBox(height: 12),
-                            _getContentTitle(),
-                            SizedBox(height: 8),
-                            _getInputContent(),
-                          ],
-                        ),
+      title: 'アドバイス質問一覧',
+      render: FutureBuilder<List>(
+        future: loadData,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Container(
+              padding: EdgeInsets.all(30),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _getTitle(),
+                          SizedBox(height: 8),
+                          _getSelectTeacher(),
+                          SizedBox(height: 12),
+                          _getSelectMovie(),
+                          _getMovieView(),
+                          SizedBox(height: 12),
+                          _getContentTitle(),
+                          SizedBox(height: 8),
+                          _getInputContent(),
+                        ],
                       ),
                     ),
-                    _getAddButton(),
-                  ],
-                ),
-              );
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // By default, show a loading spinner.
-            return Center(child: CircularProgressIndicator());
-          },
-        ));
+                  ),
+                  _getAddButton(),
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          // By default, show a loading spinner.
+          return Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
   }
 
   Widget _getTitle() {
@@ -147,9 +156,11 @@ class _ConnectAdviseAdd extends State<ConnectAdviseAdd> {
               value: e.staffId,
               child: e.staffNick == ''
                   ? Text(e.staffNick)
-                  : (Text('${e.staffFirstName == null ? '' : e.staffFirstName!} ${e.staffFirstName == null ? '' : e.staffLastName!}')),
+                  : (Text(
+                      '${e.staffFirstName == null ? '' : e.staffFirstName!} ${e.staffFirstName == null ? '' : e.staffLastName!}',
+                    )),
             ),
-          )
+          ),
         ],
         onChanged: (v) {
           teacherId = v.toString();
@@ -171,8 +182,9 @@ class _ConnectAdviseAdd extends State<ConnectAdviseAdd> {
       child: ElevatedButton(
         child: Text(('動画アップロード')),
         onPressed: () async {
-          final XFile? video =
-              await _picker.pickVideo(source: ImageSource.gallery);
+          final XFile? video = await _picker.pickVideo(
+            source: ImageSource.gallery,
+          );
 
           final path = video!.path;
           _videoFile = File(path);
@@ -195,30 +207,36 @@ class _ConnectAdviseAdd extends State<ConnectAdviseAdd> {
   Widget _getMovieView() {
     if (_controller == null) return Container();
     return Container(
-        child: Stack(children: [
-      _controller!.value.isInitialized
-          ? AspectRatio(
-              aspectRatio: _controller!.value.aspectRatio,
-              child: VideoPlayer(_controller!),
-            )
-          : Container(),
-      if (_controller != null)
-        Positioned.fill(
-            child: Center(
-          child: FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                _controller!.value.isPlaying
-                    ? _controller!.pause()
-                    : _controller!.play();
-              });
-            },
-            child: Icon(
-              _controller!.value.isPlaying ? Icons.pause : Icons.play_arrow,
+      child: Stack(
+        children: [
+          _controller!.value.isInitialized
+              ? AspectRatio(
+                  aspectRatio: _controller!.value.aspectRatio,
+                  child: VideoPlayer(_controller!),
+                )
+              : Container(),
+          if (_controller != null)
+            Positioned.fill(
+              child: Center(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      _controller!.value.isPlaying
+                          ? _controller!.pause()
+                          : _controller!.play();
+                    });
+                  },
+                  child: Icon(
+                    _controller!.value.isPlaying
+                        ? Icons.pause
+                        : Icons.play_arrow,
+                  ),
+                ),
+              ),
             ),
-          ),
-        ))
-    ]));
+        ],
+      ),
+    );
   }
 
   Widget _getContentTitle() {
@@ -253,7 +271,9 @@ class _ConnectAdviseAdd extends State<ConnectAdviseAdd> {
         child: ElevatedButton(
           onPressed: () => pushAdviseConfirm(),
           style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+            padding: EdgeInsets.all(8),
+            textStyle: TextStyle(fontSize: 16),
+          ),
           child: Text('確認画面へ'),
         ),
       ),

@@ -5,12 +5,13 @@ class AccountingMenu {
   final String amount;
   final String? menuId;
 
-  const AccountingMenu(
-      {required this.id,
-      required this.title,
-      required this.quantity,
-      required this.amount,
-      this.menuId});
+  const AccountingMenu({
+    required this.id,
+    required this.title,
+    required this.quantity,
+    required this.amount,
+    this.menuId,
+  });
 
   factory AccountingMenu.fromJson(Map<String, dynamic> json) {
     return AccountingMenu(

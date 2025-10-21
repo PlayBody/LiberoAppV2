@@ -48,9 +48,9 @@ class _LicenseView extends State<LicenseView> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async => false,
-        child: Scaffold(
-            body: FutureBuilder<List>(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: FutureBuilder<List>(
           future: loadData,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
@@ -60,22 +60,18 @@ class _LicenseView extends State<LicenseView> {
             }
 
             // By default, show a loading spinner.
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+            return Center(child: CircularProgressIndicator());
           },
-        )));
+        ),
+      ),
+    );
   }
 
   Widget _getBodyContent() {
     return Container(
       color: Colors.white,
       child: Column(
-        children: [
-          _getPageTitle(),
-          _getLicenseContent(),
-          _getBottom(),
-        ],
+        children: [_getPageTitle(), _getLicenseContent(), _getBottom()],
       ),
     );
   }
@@ -83,38 +79,41 @@ class _LicenseView extends State<LicenseView> {
   Widget _getPageTitle() {
     return Container(
       padding: EdgeInsets.only(top: 30),
-      child: Text('利用規約',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
+      child: Text(
+        '利用規約',
+        style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+      ),
     );
   }
 
   Widget _getLicenseContent() {
     return Expanded(
-        child: SingleChildScrollView(
-            child: Column(children: [
-      _getTextView(),
-      _getCheckContent(),
-    ])));
+      child: SingleChildScrollView(
+        child: Column(children: [_getTextView(), _getCheckContent()]),
+      ),
+    );
   }
 
   Widget _getTextView() {
     return Container(
-        padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-        child: Html(
-          data: company == null ? '' : company!.licensText,
-          style: {'h5': Style(padding: HtmlPaddings.only(top: 20, bottom: 5))},
-        ));
+      padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+      child: Html(
+        data: company == null ? '' : company!.licensText,
+        style: {'h5': Style(padding: HtmlPaddings.only(top: 20, bottom: 5))},
+      ),
+    );
   }
 
   Widget _getCheckContent() {
     return Container(
-        padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
-        child: Row(
-          children: [
-            Checkbox(value: ischeck, onChanged: (v) => onReadCheck(v!)),
-            Container(child: Text('すべて読みました。'))
-          ],
-        ));
+      padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
+      child: Row(
+        children: [
+          Checkbox(value: ischeck, onChanged: (v) => onReadCheck(v!)),
+          Container(child: Text('すべて読みました。')),
+        ],
+      ),
+    );
   }
 
   var buttonSide = BorderSide(color: Color(0xffefefef), width: 1);
@@ -123,17 +122,25 @@ class _LicenseView extends State<LicenseView> {
       child: Row(
         children: [
           Expanded(
-              child: Container(
-                  decoration: BoxDecoration(
-                      border: Border(top: buttonSide, right: buttonSide)),
-                  child: TextButton(
-                      onPressed: ischeck ? () => onTapAgree() : null,
-                      child: Text('同意します。')))),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(top: buttonSide, right: buttonSide),
+              ),
+              child: TextButton(
+                onPressed: ischeck ? () => onTapAgree() : null,
+                child: Text('同意します。'),
+              ),
+            ),
+          ),
           Expanded(
-              child: Container(
-                  decoration: BoxDecoration(border: Border(top: buttonSide)),
-                  child: TextButton(
-                      child: Text('同意しない。'), onPressed: () => exit(1))))
+            child: Container(
+              decoration: BoxDecoration(border: Border(top: buttonSide)),
+              child: TextButton(
+                child: Text('同意しない。'),
+                onPressed: () => exit(1),
+              ),
+            ),
+          ),
         ],
       ),
     );

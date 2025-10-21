@@ -18,8 +18,11 @@ import 'connect_menu_view.dart';
 class ReserveMenus extends StatefulWidget {
   final String organId;
   final String isNoReserveType;
-  const ReserveMenus(
-      {required this.organId, required this.isNoReserveType, super.key});
+  const ReserveMenus({
+    required this.organId,
+    required this.isNoReserveType,
+    super.key,
+  });
 
   @override
   _ReserveMenus createState() => _ReserveMenus();
@@ -37,8 +40,10 @@ class _ReserveMenus extends State<ReserveMenus> {
   }
 
   Future<List> loadInitData() async {
-    menus = await ClMenu().loadMenuList(
-        context, {'organ_id': widget.organId, 'is_user_menu': '1'});
+    menus = await ClMenu().loadMenuList(context, {
+      'organ_id': widget.organId,
+      'is_user_menu': '1',
+    });
 
     setState(() {});
     return [];
@@ -68,9 +73,14 @@ class _ReserveMenus extends State<ReserveMenus> {
   }
 
   void pushMenuDetailView(String menuId) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return ConnectMenuView(menuId: menuId);
-    }));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) {
+          return ConnectMenuView(menuId: menuId);
+        },
+      ),
+    );
   }
 
   @override
@@ -84,20 +94,21 @@ class _ReserveMenus extends State<ReserveMenus> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
-                child: Column(children: <Widget>[
-              _getMenusContent(),
-              Header3Text(label: '注文内容一覧'),
-              SizedBox(height: 8),
-              _getContentBottom()
-            ]));
+              child: Column(
+                children: <Widget>[
+                  _getMenusContent(),
+                  Header3Text(label: '注文内容一覧'),
+                  SizedBox(height: 8),
+                  _getContentBottom(),
+                ],
+              ),
+            );
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
 
           // By default, show a loading spinner.
-          return Center(
-            child: CircularProgressIndicator(),
-          );
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
@@ -118,58 +129,67 @@ class _ReserveMenus extends State<ReserveMenus> {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
         decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: Color(0xffb8b8b8)))),
+          border: Border(bottom: BorderSide(color: Color(0xffb8b8b8))),
+        ),
         child: Row(
           children: [
             Container(
               width: 7,
               height: 40,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  color: Color(0xffec5a01)),
+                borderRadius: BorderRadius.circular(4),
+                color: Color(0xffec5a01),
+              ),
             ),
             SizedBox(width: 16),
             Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  menu.menuTitle.length > 23
-                      ? ('${menu.menuTitle.substring(0, 21)}...')
-                      : menu.menuTitle,
-                  style: TextStyle(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    menu.menuTitle.length > 23
+                        ? ('${menu.menuTitle.substring(0, 21)}...')
+                        : menu.menuTitle,
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff525252)),
-                ),
-              ],
-            )),
+                      color: Color(0xff525252),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
-                padding: EdgeInsets.only(right: 16),
-                alignment: Alignment.centerRight,
-                width: 100,
-                child: Text('${Funcs().currencyFormat(menu.menuPrice)}円',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xff525252)))),
+              padding: EdgeInsets.only(right: 16),
+              alignment: Alignment.centerRight,
+              width: 100,
+              child: Text(
+                '${Funcs().currencyFormat(menu.menuPrice)}円',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff525252),
+                ),
+              ),
+            ),
             Container(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16.0),
-                    ),
-                    visualDensity: VisualDensity(vertical: -2),
-                    elevation: 0,
-                    backgroundColor: Color(0xffffe6d7),
-                    foregroundColor: Color(0xffec5a01)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16.0),
+                  ),
+                  visualDensity: VisualDensity(vertical: -2),
+                  elevation: 0,
+                  backgroundColor: Color(0xffffe6d7),
+                  foregroundColor: Color(0xffec5a01),
+                ),
                 child: Text(
                   '詳 細',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 onPressed: () => pushMenuDetailView(menu.menuId),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -183,12 +203,14 @@ class _ReserveMenus extends State<ReserveMenus> {
         margin: EdgeInsets.symmetric(horizontal: 20),
         padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(12)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: Column(
           children: [
             _getReservesContent(),
             SizedBox(height: 12),
-            _getButtons()
+            _getButtons(),
           ],
         ),
       ),
@@ -200,8 +222,9 @@ class _ReserveMenus extends State<ReserveMenus> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            ...globals.connectReserveMenuList
-                .map((e) => _getReserveContentRow(e)),
+            ...globals.connectReserveMenuList.map(
+              (e) => _getReserveContentRow(e),
+            ),
           ],
         ),
       ),
@@ -210,21 +233,17 @@ class _ReserveMenus extends State<ReserveMenus> {
 
   Widget _getReserveContentRow(e) {
     return Container(
-        color: (globals.connectReserveMenuList.indexOf(e) % 2 != 0)
-            ? Colors.white
-            : Color(0xffeff9e6),
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Row(children: [
+      color: (globals.connectReserveMenuList.indexOf(e) % 2 != 0)
+          ? Colors.white
+          : Color(0xffeff9e6),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Row(
+        children: [
           Container(
             alignment: Alignment.center,
             width: 12,
-            decoration: BoxDecoration(
-              color: Colors.red,
-            ),
-            child: Text(
-              e.multiNumber,
-              style: TextStyle(color: Colors.white),
-            ),
+            decoration: BoxDecoration(color: Colors.red),
+            child: Text(e.multiNumber, style: TextStyle(color: Colors.white)),
           ),
           SizedBox(width: 4),
           Expanded(child: Text(e.menuTitle)),
@@ -232,10 +251,14 @@ class _ReserveMenus extends State<ReserveMenus> {
             width: 80,
             child: e.multiNumber == _menuNumber.toString()
                 ? Flat1Button(
-                    tapFunc: () => removeMenuFromReserve(e), label: '削  除')
+                    tapFunc: () => removeMenuFromReserve(e),
+                    label: '削  除',
+                  )
                 : null,
-          )
-        ]));
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _getButtons() {
@@ -264,26 +287,41 @@ class _ReserveMenus extends State<ReserveMenus> {
 
     if (widget.isNoReserveType == constCheckinReserveRiRa) {
       if (_menuNumber > globals.reserveMultiUsers.length) {
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return ReserveStaff(
-            organId: widget.organId,
-            isNoReserveType: widget.isNoReserveType,
-          );
-        }));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) {
+              return ReserveStaff(
+                organId: widget.organId,
+                isNoReserveType: widget.isNoReserveType,
+              );
+            },
+          ),
+        );
       } else {
         globals.menuSelectNumber = _menuNumber + 1;
-        Navigator.push(context, MaterialPageRoute(builder: (_) {
-          return ReserveMenus(
-            organId: widget.organId,
-            isNoReserveType: widget.isNoReserveType,
-          );
-        }));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) {
+              return ReserveMenus(
+                organId: widget.organId,
+                isNoReserveType: widget.isNoReserveType,
+              );
+            },
+          ),
+        );
       }
     } else {
       globals.selStaffType = 0;
-      Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return ReserveDateFrame(organId: widget.organId);
-      }));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) {
+            return ReserveDateFrame(organId: widget.organId);
+          },
+        ),
+      );
     }
   }
 }

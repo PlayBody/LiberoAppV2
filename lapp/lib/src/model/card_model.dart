@@ -9,22 +9,23 @@ class CardModel {
   final String customerId;
   final String sourceId;
 
-  const CardModel(
-      {required this.id,
-      required this.userId,
-      required this.brand,
-      required this.cardNum,
-      required this.expDate,
-      required this.type,
-      required this.postalCode,
-      required this.customerId,
-      required this.sourceId,
-      });
+  const CardModel({
+    required this.id,
+    required this.userId,
+    required this.brand,
+    required this.cardNum,
+    required this.expDate,
+    required this.type,
+    required this.postalCode,
+    required this.customerId,
+    required this.sourceId,
+  });
 
   factory CardModel.fromJson(Map<String, dynamic> json) {
     int month = int.parse(json['exp_month'].toString());
     int year = int.parse(json['exp_year'].toString()) - 2000;
-    String expDate = '${month<10 ? '0' : ''}$month/${year<10 ? '0' : ''}$year';
+    String expDate =
+        '${month < 10 ? '0' : ''}$month/${year < 10 ? '0' : ''}$year';
     return CardModel(
       id: json['id'].toString(),
       userId: json['user_id'].toString(),
