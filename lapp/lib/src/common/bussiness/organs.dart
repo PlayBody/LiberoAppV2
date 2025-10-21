@@ -30,7 +30,7 @@ class ClOrgan {
   }
 
   Future<OrganModel?> loadOrganInfo(context, String organId) async {
-    String apiUrl = apiBase + '/apiorgans/loadOrganInfo';
+    String apiUrl = '$apiBase/apiorgans/loadOrganInfo';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(
         context, apiUrl, {'organ_id': organId}).then((v) => {results = v});
@@ -42,7 +42,7 @@ class ClOrgan {
   }
 
   Future<dynamic> loadOrganBussinessTime(context, String organId) async {
-    String apiUrl = apiBase + '/apiorgans/loadOrganBusinessTime';
+    String apiUrl = '$apiBase/apiorgans/loadOrganBusinessTime';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(
         context, apiUrl, {'organ_id': organId}).then((v) => {results = v});
@@ -58,7 +58,7 @@ class ClOrgan {
   }
 
   Future<dynamic> loadOrganInfoByNum(context, String organNumber) async {
-    String apiUrl = apiBase + '/apiorgans/getOrganInfoByOrganNumber';
+    String apiUrl = '$apiBase/apiorgans/getOrganInfoByOrganNumber';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
       'company_id': APPCOMANYID,
@@ -69,7 +69,7 @@ class ClOrgan {
   }
 
   Future<List<OrganTimeModel>> loadOrganTimes(context, String organId) async {
-    String apiUrl = apiBase + '/apiorgans/loadOrganTimes';
+    String apiUrl = '$apiBase/apiorgans/loadOrganTimes';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(
         context, apiUrl, {'organ_id': organId}).then((v) => {results = v});
@@ -85,7 +85,7 @@ class ClOrgan {
 
   Future<List<OrganSpecialTimeModel>> loadOrganSpecialTimes(
       context, String organId) async {
-    String apiUrl = apiBase + '/apis/organ/opentime/getTodaySpecialTime';
+    String apiUrl = '$apiBase/apis/organ/opentime/getTodaySpecialTime';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(
         context, apiUrl, {'organ_id': organId}).then((v) => {results = v});
@@ -100,7 +100,7 @@ class ClOrgan {
   }
 
   Future<bool> isOpenOrgan(context, String organId) async {
-    String apiUrl = apiBase + '/apis/organ/opentime/isOpen';
+    String apiUrl = '$apiBase/apis/organ/opentime/isOpen';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(
         context, apiUrl, {'organ_id': organId}).then((v) => {results = v});
@@ -109,7 +109,7 @@ class ClOrgan {
 
   Future<dynamic> getShiftCountFromTime(
       context, String organId, String selectedTime) async {
-    String apiUrl = apiBase + '/apishiftsettings/loadCountShiftStatus';
+    String apiUrl = '$apiBase/apishiftsettings/loadCountShiftStatus';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
       'organ_id': organId,

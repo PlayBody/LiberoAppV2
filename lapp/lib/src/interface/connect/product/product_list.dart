@@ -16,7 +16,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 //import 'package:location/location.dart';
 
 class ProductList extends StatefulWidget {
-  const ProductList({Key? key}) : super(key: key);
+  const ProductList({super.key});
 
   @override
   _ProductList createState() => _ProductList();
@@ -68,9 +68,8 @@ class _ProductList extends State<ProductList> {
         context: context,
         builder: (BuildContext context) {
           return DialogAddCart(
-              showString: 'カートの小計（' +
-                  cartinfo['count'] +
-                  '点の商品） ￥' +
+              showString: '${'カートの小計（' +
+                  cartinfo['count']}点の商品） ￥' +
                   cartinfo['amount']);
         });
     loadInitData();
@@ -131,15 +130,15 @@ class _ProductList extends State<ProductList> {
                 children: [
                   Container(
                     alignment: Alignment.center,
-                    child: item.image == null
-                        ? Text('設定なし')
-                        : Image.network(ticketImageUrl + item.image!),
                     decoration: BoxDecoration(
                         border: Border.all(
                             color: Colors.grey.withOpacity(0.4), width: 1),
                         borderRadius: BorderRadius.circular(4)),
                     width: 120,
                     height: 80,
+                    child: item.image == null
+                        ? Text('設定なし')
+                        : Image.network(ticketImageUrl + item.image!),
                   ),
                   SizedBox(width: 15),
                   Flexible(
@@ -154,9 +153,7 @@ class _ProductList extends State<ProductList> {
                               ))),
                       SizedBox(height: 6),
                       Text(
-                          '小計  ￥' +
-                              (int.parse(item.price) * item.cartCount!)
-                                  .toString(),
+                          '小計  ￥${int.parse(item.price) * item.cartCount!}',
                           style: TextStyle(fontSize: 22)),
                     ],
                   ))

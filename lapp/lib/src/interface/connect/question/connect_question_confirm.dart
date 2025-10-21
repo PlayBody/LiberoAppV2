@@ -10,8 +10,7 @@ class ConnectQuestionConfirm extends StatefulWidget {
   final String title;
   final String question;
   const ConnectQuestionConfirm(
-      {required this.title, required this.question, Key? key})
-      : super(key: key);
+      {required this.title, required this.question, super.key});
 
   @override
   _ConnectQuestionConfirm createState() => _ConnectQuestionConfirm();
@@ -90,9 +89,9 @@ class _ConnectQuestionConfirm extends State<ConnectQuestionConfirm> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16),
       padding: EdgeInsets.only(top: 16, left: 30, right: 30),
-      child: Text('お問い合わせ内容', style: txtlblStyle),
       decoration:
           BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+      child: Text('お問い合わせ内容', style: txtlblStyle),
     );
   }
 
@@ -115,12 +114,12 @@ class _ConnectQuestionConfirm extends State<ConnectQuestionConfirm> {
       margin: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
       padding: EdgeInsets.only(top: 40),
       child: ElevatedButton(
-        child: Text('送信する'),
         onPressed: () {
           saveQuestion();
         },
         style: ElevatedButton.styleFrom(
             padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+        child: Text('送信する'),
       ),
     );
   }

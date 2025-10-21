@@ -15,7 +15,7 @@ import 'package:libero/src/common/bussiness/company.dart';
 import '../../../common/const.dart';
 
 class ConnectCoupons extends StatefulWidget {
-  const ConnectCoupons({Key? key}) : super(key: key);
+  const ConnectCoupons({super.key});
 
   @override
   _ConnectCoupons createState() => _ConnectCoupons();
@@ -179,15 +179,6 @@ class _ConnectCoupons extends State<ConnectCoupons> {
                                   Container(
                                     height: 50,
                                     alignment: Alignment.center,
-                                    child: i <= stamps.length
-                                        ? null
-
-                                        // Icon(Icons.card_giftcard_outlined,
-                                        //     color: Colors.white, size: 32)
-                                        : Text((i + prevCnt).toString(),
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 24)),
                                     decoration: BoxDecoration(
                                       image: (i <= stamps.length)
                                           ? DecorationImage(
@@ -209,6 +200,15 @@ class _ConnectCoupons extends State<ConnectCoupons> {
                                           Border.all(color: Color(0xFFf3f3f3)),
                                       borderRadius: BorderRadius.circular(60),
                                     ),
+                                    child: i <= stamps.length
+                                        ? null
+
+                                        // Icon(Icons.card_giftcard_outlined,
+                                        //     color: Colors.white, size: 32)
+                                        : Text((i + prevCnt).toString(),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 24)),
                                   )
                                 ],
                               )
@@ -311,8 +311,7 @@ class _ConnectCoupons extends State<ConnectCoupons> {
                   child: Column(children: [
                     if (coupon.discountAmount != null)
                       Text(
-                        Funcs().currencyFormat(coupon.discountAmount!) +
-                            '円 OFF',
+                        '${Funcs().currencyFormat(coupon.discountAmount!)}円 OFF',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -323,9 +322,7 @@ class _ConnectCoupons extends State<ConnectCoupons> {
                     if (coupon.discountRate != null &&
                         coupon.upperAmount != null)
                       Text(
-                          '上限' +
-                              Funcs().currencyFormat(coupon.upperAmount!) +
-                              '円',
+                          '上限${Funcs().currencyFormat(coupon.upperAmount!)}円',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                   ]),

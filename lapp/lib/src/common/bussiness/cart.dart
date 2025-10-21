@@ -8,7 +8,7 @@ import '../../common/globals.dart' as globals;
 
 class ClCart {
   Future<bool> addCart(context, TicketModel item) async {
-    String apiUrl = apiBase + '/apicarts/addCart';
+    String apiUrl = '$apiBase/apicarts/addCart';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -22,9 +22,9 @@ class ClCart {
   }
 
   Future<bool> updateCart(context) async {
-    String apiUrl = apiBase + '/apicarts/updateCart';
+    String apiUrl = '$apiBase/apicarts/updateCart';
 
-    print(globals.userId);
+    // print(globals.userId);
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
       'user_id': globals.userId,
@@ -34,7 +34,7 @@ class ClCart {
   }
 
   Future<dynamic> getCartSum(context) async {
-    String apiUrl = apiBase + '/apicarts/getSumCart';
+    String apiUrl = '$apiBase/apicarts/getSumCart';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -54,7 +54,7 @@ class ClCart {
   }
 
   Future<List<CartDetailModel>> getCarts(context) async {
-    String apiUrl = apiBase + '/apicarts/getCarts';
+    String apiUrl = '$apiBase/apicarts/getCarts';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -72,7 +72,7 @@ class ClCart {
   }
 
   Future<bool> updateCartDetail(context, CartDetailModel item) async {
-    String apiUrl = apiBase + '/apicarts/updateCartDetail';
+    String apiUrl = '$apiBase/apicarts/updateCartDetail';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -84,7 +84,7 @@ class ClCart {
   }
 
   Future<bool> deleteCartDetail(context, CartDetailModel item) async {
-    String apiUrl = apiBase + '/apicarts/deleteCartDetail';
+    String apiUrl = '$apiBase/apicarts/deleteCartDetail';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {

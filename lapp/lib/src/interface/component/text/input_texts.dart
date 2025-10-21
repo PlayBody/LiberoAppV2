@@ -22,14 +22,13 @@ class TextInputNormal extends StatelessWidget {
       this.fontSize,
       this.isEnabled,
       this.multiline,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      maxLines: multiline == null ? 1 : multiline,
-      enabled: isEnabled == null ? true : isEnabled,
+      maxLines: multiline ?? 1,
+      enabled: isEnabled ?? true,
       textAlign:
           (isCenter == null || false) ? TextAlign.left : TextAlign.center,
       obscureText: isPassword == null ? false : isPassword!,
@@ -58,7 +57,7 @@ class TextInputNormal extends StatelessWidget {
           borderSide: BorderSide(color: Colors.red),
         ),
       ),
-      style: TextStyle(fontSize: fontSize == null ? 14 : fontSize),
+      style: TextStyle(fontSize: fontSize ?? 14),
     );
   }
 }

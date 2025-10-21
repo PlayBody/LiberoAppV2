@@ -15,7 +15,7 @@ import '../const.dart';
 class ClReserve {
   Future<List<ReserveModel>> loadUserReserveList(
       context, userId, organId, fromDate, toDate) async {
-    String apiURL = apiBase + '/apireserves/loadUserReserveList';
+    String apiURL = '$apiBase/apireserves/loadUserReserveList';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiURL, {
@@ -36,7 +36,7 @@ class ClReserve {
   }
 
   Future<String?> loadLastReserveStaffId(context, String organId) async {
-    String apiUrl = apiBase + '/apireserves/getLastReserve';
+    String apiUrl = '$apiBase/apireserves/getLastReserve';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -47,7 +47,7 @@ class ClReserve {
   }
 
   Future<bool> updateReserveStatus(context, String reserveId) async {
-    String apiUrl = apiBase + '/apireserves/updateReserveStatus';
+    String apiUrl = '$apiBase/apireserves/updateReserveStatus';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
       'reserve_id': reserveId,
@@ -58,7 +58,7 @@ class ClReserve {
 
   Future<bool> enteringOrgan(
       context, String organId, String reserveId, String menuIds) async {
-    String apiUrl = apiBase + '/apireserves/enteringOrgan';
+    String apiUrl = '$apiBase/apireserves/enteringOrgan';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
       'organ_id': organId,
@@ -74,7 +74,7 @@ class ClReserve {
   }
 
   Future<ReserveModel?> getReserveNow(context, String organId) async {
-    String apiUrl = apiBase + '/apireserves/getReserveNow';
+    String apiUrl = '$apiBase/apireserves/getReserveNow';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
       'user_id': globals.userId,
@@ -89,7 +89,7 @@ class ClReserve {
   }
 
   Future<List<OrderModel>> loadReserveList(context) async {
-    String apiURL = apiBase + '/apiorders/loadOrderList';
+    String apiURL = '$apiBase/apiorders/loadOrderList';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiURL, {
       'user_id': globals.userId,
@@ -106,7 +106,7 @@ class ClReserve {
   }
 
   Future<List<OrderModel>> loadReserves(context, param) async {
-    String apiURL = apiBase + '/apiorders/loadOrderList';
+    String apiURL = '$apiBase/apiorders/loadOrderList';
     Map<dynamic, dynamic> results = {};
     await Webservice()
         .loadHttp(context, apiURL, param)
@@ -122,7 +122,7 @@ class ClReserve {
   }
 
   Future<OrderModel?> loadReserveInfo(context, String orderId) async {
-    String apiURL = apiBase + '/apiorders/loadOrderInfo';
+    String apiURL = '$apiBase/apiorders/loadOrderInfo';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiURL, {'order_id': orderId}).then(
@@ -137,7 +137,7 @@ class ClReserve {
   }
 
   Future<ReserveModel?> loadReserveMenus(context, reserveId) async {
-    String apiURL = apiBase + '/apireserves/loadReserveInfo';
+    String apiURL = '$apiBase/apireserves/loadReserveInfo';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiURL,
@@ -151,7 +151,7 @@ class ClReserve {
   }
 
   Future<bool> updateReserveCancel(context, String reserveId) async {
-    String apiUrl = apiBase + '/apiorders/updateStatus';
+    String apiUrl = '$apiBase/apiorders/updateStatus';
     await Webservice()
         .loadHttp(context, apiUrl, {'order_id': reserveId, 'status': ORDER_STATUS_RESERVE_CANCEL});
     return true;
@@ -160,7 +160,7 @@ class ClReserve {
   Future<bool> updateReceiptUserName(
       context, String reserveId, String updateUserName) async {
     dynamic data = {'id': reserveId, 'user_input_name': updateUserName};
-    String apiUrl = apiBase + '/apiorders/updateOrder';
+    String apiUrl = '$apiBase/apiorders/updateOrder';
     await Webservice()
         .loadHttp(context, apiUrl, {'update_data': jsonEncode(data)});
     return true;
@@ -195,7 +195,7 @@ class ClReserve {
     if (!results['is_result']) return [];
 
     DateTime fDateTime = DateTime.parse(fromDate);
-    DateTime tDateTime = DateTime.parse(toDate + " 23:59:59");
+    DateTime tDateTime = DateTime.parse("$toDate 23:59:59");
     DateTime now = DateTime.parse(
         DateFormat('yyyy-MM-dd HH:00:00').format(DateTime.now()));
     now = now.add(Duration(hours: 1));

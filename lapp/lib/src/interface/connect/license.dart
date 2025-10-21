@@ -8,7 +8,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LicenseView extends StatefulWidget {
-  const LicenseView({Key? key}) : super(key: key);
+  const LicenseView({super.key});
 
   @override
   _LicenseView createState() => _LicenseView();
@@ -102,7 +102,7 @@ class _LicenseView extends State<LicenseView> {
         padding: EdgeInsets.fromLTRB(30, 10, 30, 10),
         child: Html(
           data: company == null ? '' : company!.licensText,
-          style: {'h5': Style(padding: EdgeInsets.only(top: 20, bottom: 5))},
+          style: {'h5': Style(padding: HtmlPaddings.only(top: 20, bottom: 5))},
         ));
   }
 
@@ -127,8 +127,8 @@ class _LicenseView extends State<LicenseView> {
                   decoration: BoxDecoration(
                       border: Border(top: buttonSide, right: buttonSide)),
                   child: TextButton(
-                      child: Text('同意します。'),
-                      onPressed: ischeck ? () => onTapAgree() : null))),
+                      onPressed: ischeck ? () => onTapAgree() : null,
+                      child: Text('同意します。')))),
           Expanded(
               child: Container(
                   decoration: BoxDecoration(border: Border(top: buttonSide)),

@@ -13,7 +13,7 @@ import 'package:maps_launcher/maps_launcher.dart';
 
 class ConnectOrganView extends StatefulWidget {
   final String organId;
-  const ConnectOrganView({required this.organId, Key? key}) : super(key: key);
+  const ConnectOrganView({required this.organId, super.key});
 
   @override
   _ConnectOrganView createState() => _ConnectOrganView();
@@ -153,7 +153,7 @@ class _ConnectOrganView extends State<ConnectOrganView> {
       width: 140,
       height: 90,
       child: organ!.organImage == null || organ!.organImage!.isEmpty
-          ? Image.network(organImageUrl + 'no_image.jpg')
+          ? Image.network('${organImageUrl}no_image.jpg')
           : Image.network(organImageUrl + organ!.organImage!),
     );
   }

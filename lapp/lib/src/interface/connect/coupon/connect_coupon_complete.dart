@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../common/globals.dart' as globals;
 
 class ConnectCouponComplete extends StatefulWidget {
-  const ConnectCouponComplete({Key? key}) : super(key: key);
+  const ConnectCouponComplete({super.key});
 
   @override
   _ConnectCouponComplete createState() => _ConnectCouponComplete();

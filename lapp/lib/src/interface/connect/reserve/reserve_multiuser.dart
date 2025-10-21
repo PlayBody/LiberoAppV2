@@ -6,15 +6,13 @@ import 'package:libero/src/interface/component/text/input_texts.dart';
 import 'package:libero/src/interface/component/text/label_text.dart';
 import 'package:libero/src/interface/connect/reserve/reserve_date_first.dart';
 import 'package:libero/src/interface/connect/reserve/reserve_menus.dart';
-import 'package:libero/src/model/organmodel.dart';
 import '../../../common/globals.dart' as globals;
 
 class ReserveMultiUser extends StatefulWidget {
-  final OrganModel organ;
+  final String organId;
   final String isNoReserveType;
   const ReserveMultiUser(
-      {required this.organ, required this.isNoReserveType, Key? key})
-      : super(key: key);
+      {required this.organId, required this.isNoReserveType, super.key});
 
   @override
   _ReserveMultiUser createState() => _ReserveMultiUser();
@@ -60,14 +58,14 @@ class _ReserveMultiUser extends State<ReserveMultiUser> {
     if (userCount > 1) {
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return ReserveDateFirst(
-          organId: widget.organ.organId,
+          organId: widget.organId,
           isNoReserveType: widget.isNoReserveType,
         );
       }));
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return ReserveMenus(
-          organ: widget.organ,
+          organId: widget.organId,
           isNoReserveType: widget.isNoReserveType,
         );
       }));

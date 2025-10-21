@@ -7,7 +7,7 @@ import '../../common/globals.dart' as globals;
 class ClSquare {
   Future<bool> addPayments(context, String amount, String uuid, String nonce,
       String isSave, String customerId, String postalCode) async {
-    String apiURL = apiBase + '/apisquare/addPayment';
+    String apiURL = '$apiBase/apisquare/addPayment';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiURL, {
       'amount': amount,
@@ -20,7 +20,7 @@ class ClSquare {
       'auth_token': globals.squareToken,
       'postal_code': postalCode
     }).then((v) => {results = v});
-    print(results);
+    // print(results);
     return results['isPay'];
   }
 

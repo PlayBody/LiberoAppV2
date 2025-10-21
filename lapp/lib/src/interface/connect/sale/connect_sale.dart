@@ -9,7 +9,7 @@ import '../../../common/globals.dart' as globals;
 
 class ConnectSale extends StatefulWidget {
   final String url;
-  const ConnectSale({required this.url, Key? key}) : super(key: key);
+  const ConnectSale({required this.url, super.key});
 
   @override
   _ConnectSale createState() => _ConnectSale();
@@ -17,13 +17,17 @@ class ConnectSale extends StatefulWidget {
 
 class _ConnectSale extends State<ConnectSale> {
   late Future<List> loadData;
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  late final WebViewController _controller;
 
   @override
   void initState() {
     super.initState();
     loadData = loadSiteData();
+
+    // Initialize WebViewController
+    _controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(widget.url));
   }
 
   @override
@@ -37,14 +41,8 @@ class _ConnectSale extends State<ConnectSale> {
             if (snapshot.hasData) {
               return Container(
                   // padding: EdgeInsets.only(left: 10, right: 10),
-                  child: WebView(
-                initialUrl: widget.url,
-                javascriptMode: JavascriptMode.unrestricted,
-                gestureRecognizers: Set()
-                  ..add(Factory(() => EagerGestureRecognizer())),
-                onWebViewCreated: (WebViewController webViewController) {
-                  _controller.complete(webViewController);
-                },
+                  child: WebViewWidget(
+                controller: _controller,
               ));
             } else if (snapshot.hasError) {
               return Text("${snapshot.error}");

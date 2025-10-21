@@ -10,7 +10,7 @@ class ClEvent {
   Future<List<Appointment>> loadEvents(context, dynamic param) async {
     List<Appointment> appointments = [];
 
-    String apiUrl = apiBase + '/apievents/loadEvents';
+    String apiUrl = '$apiBase/apievents/loadEvents';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl,
         {'condition': jsonEncode(param)}).then((value) => results = value);
@@ -20,8 +20,8 @@ class ClEvent {
           endTime: DateTime.parse(item['to_time']),
           subject: item['comment'],
           color: item['organ_id'].toString() == '0'
-              ? Colors.green.withOpacity(0.5)
-              : Colors.blue.withOpacity(0.5),
+              ? Colors.green.withValues(alpha: 0.5)
+              : Colors.blue.withValues(alpha: 0.5),
           startTimeZone: '',
           endTimeZone: '',
           notes: item['id'].toString()));

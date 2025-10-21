@@ -10,7 +10,7 @@ import 'package:libero/src/model/organmodel.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ConnectEvent extends StatefulWidget {
-  const ConnectEvent({Key? key}) : super(key: key);
+  const ConnectEvent({super.key});
 
   @override
   _ConnectEvent createState() => _ConnectEvent();
@@ -40,8 +40,8 @@ class _ConnectEvent extends State<ConnectEvent> {
   Future<List> loadEventData() async {
     organs = await ClOrgan().loadOrganList(context, APPCOMANYID);
     if (organId == null) organId = organs.first.organId;
-    String vFromDateTime = _fromDate + ' 00:00:00';
-    String vToDateTime = _toDate + ' 23:59:59';
+    String vFromDateTime = '$_fromDate 00:00:00';
+    String vToDateTime = '$_toDate 23:59:59';
 
     appointments = [];
     appointments = await ClEvent().loadEvents(context, {
@@ -107,14 +107,14 @@ class _ConnectEvent extends State<ConnectEvent> {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 12, horizontal: 20),
         child: Row(children: [
-          Container(child: Text('店名'), width: 80),
+          Container(width: 80, child: Text('店名')),
           Flexible(
               child: DropDownModelSelect(
                   value: organId,
                   items: [
                     ...organs.map((e) => DropdownMenuItem(
-                          child: Text(e.organName),
                           value: e.organId,
+                          child: Text(e.organName),
                         ))
                   ],
                   tapFunc: (v) async {

@@ -14,7 +14,7 @@ import 'package:intl/intl.dart';
 
 class ConnectHistoryView extends StatefulWidget {
   final String orderId;
-  const ConnectHistoryView({required this.orderId, Key? key}) : super(key: key);
+  const ConnectHistoryView({required this.orderId, super.key});
 
   @override
   _ConnectHistoryView createState() => _ConnectHistoryView();
@@ -61,7 +61,7 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
     }
 
     if (user != null) {
-      userName = user!.userFirstName + ' ' + user!.userLastName;
+      userName = '${user!.userFirstName} ${user!.userLastName}';
     }
     updateUserName = order!.userInputName;
 
@@ -71,7 +71,7 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
           DateFormat('yyyy年M月d日').format(DateTime.parse(order!.createTime));
 
       int yobi = DateTime.parse(order!.createTime).weekday;
-      reserveDate += "(" + weekAry[yobi - 1] + "曜日)";
+      reserveDate += "(${weekAry[yobi - 1]}曜日)";
       reserveTime =
           DateFormat('HH:mm:ss').format(DateTime.parse(order!.createTime));
       sumAmount = order!.amount.toString();
@@ -200,9 +200,7 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
                                     bottom: BorderSide(
                                         width: 1, color: Colors.grey))),
                             child: Text(
-                                '￥' +
-                                    Funcs().currencyFormat(amount.toString()) +
-                                    'ー',
+                                '￥${Funcs().currencyFormat(amount.toString())}ー',
                                 style: textStyle1))),
                     _getNoramlText('上記                        として領収致しました。'),
                     SizedBox(height: 30),
@@ -211,7 +209,7 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
                     _getNoramlText(organName),
                     _getNoramlText(address),
                     _getNoramlText(phone),
-                    _getNoramlText('登録番号：' + receiptNumber),
+                    _getNoramlText('登録番号：$receiptNumber'),
                     SizedBox(height: 24),
                     Container(
                         child: Row(children: [
@@ -232,13 +230,11 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
                       _getMenuContent('割引', couponAmount.toString()),
                     Container(height: 1, color: Colors.grey.withOpacity(0.4)),
                     _getMenuContent(
-                        '内、消費税         (￥' +
-                            Funcs().currencyFormat(subAmount.toString()) +
-                            ')',
+                        '内、消費税         (￥${Funcs().currencyFormat(subAmount.toString())})',
                         (subAmount ~/ 11).toString()),
                     Container(height: 1, color: Colors.grey.withOpacity(0.4)),
                     _getMenuContent(
-                        '合計 ' + order!.menus.length.toString() + '点',
+                        '合計 ${order!.menus.length}点',
                         amount.toString()),
                     SizedBox(height: 20),
                     Container(
@@ -273,6 +269,6 @@ class _ConnectHistoryView extends State<ConnectHistoryView> {
         SizedBox(width: 12),
         Text(title, style: contentTextStyle),
         Expanded(child: Container()),
-        Text('￥' + Funcs().currencyFormat(price), style: contentTextStyle)
+        Text('￥${Funcs().currencyFormat(price)}', style: contentTextStyle)
       ]));
 }

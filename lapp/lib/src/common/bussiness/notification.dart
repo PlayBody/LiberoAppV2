@@ -1,5 +1,5 @@
 import 'package:libero/src/http/webservice.dart';
-import 'package:flutter_app_badger/flutter_app_badger.dart';
+import 'package:app_badge_plus/app_badge_plus.dart';
 
 import '../apiendpoint.dart';
 
@@ -15,7 +15,7 @@ class ClNotification {
     receiverType,
   ) async {
     // Map<dynamic, dynamic> results = {};
-    String apiUrl = apiBase + '/apinotifications/sendNotifications';
+    String apiUrl = '$apiBase/apinotifications/sendNotifications';
     await Webservice().loadHttp(context, apiUrl, {
       'type': type,
       'title': title,
@@ -30,7 +30,7 @@ class ClNotification {
   }
 
   Future<String> getBageCount(context, userId) async {
-    String apiUrl = apiBase + '/apimessages/getStaffUnreadCount';
+    String apiUrl = '$apiBase/apimessages/getStaffUnreadCount';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -42,7 +42,7 @@ class ClNotification {
   }
 
   Future<void> removeBadge(context, receiverId, notificationType) async {
-    String apiUrl = apiBase + '/apinotifications/removeBadge';
+    String apiUrl = '$apiBase/apinotifications/removeBadge';
 
     String badgeCount = '0';
 
@@ -53,8 +53,8 @@ class ClNotification {
       'badge_count': badgeCount
     });
 
-    String badge = await this.getBageCount(context, receiverId);
+    String badge = await getBageCount(context, receiverId);
 
-    FlutterAppBadger.updateBadgeCount(int.parse(badge == 'null' ? '0' : badge));
+    AppBadgePlus.updateBadge(int.parse(badge == 'null' ? '0' : badge));
   }
 }

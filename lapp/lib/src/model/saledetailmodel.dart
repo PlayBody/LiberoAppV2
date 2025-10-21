@@ -18,19 +18,19 @@ class SaleDetailModel {
 
   factory SaleDetailModel.fromJson(Map<String, dynamic> json) {
     String _hour = DateTime.parse(json['start_time']).hour < 10
-        ? '0' + DateTime.parse(json['start_time']).hour.toString()
+        ? '0${DateTime.parse(json['start_time']).hour}'
         : DateTime.parse(json['start_time']).hour.toString();
     String _minute = DateTime.parse(json['start_time']).minute < 10
-        ? '0' + DateTime.parse(json['start_time']).minute.toString()
+        ? '0${DateTime.parse(json['start_time']).minute}'
         : DateTime.parse(json['start_time']).minute.toString();
     return SaleDetailModel(
       historyId: json['order_table_history_id'],
-      startTime: _hour + ':' + _minute,
+      startTime: '$_hour:$_minute',
       position: json['table_position'],
       amount: json['amount'],
       menuCount: json['menu_count'],
       userSort: json['user_sort'],
-      personCount: json['person_count'] == null ? '' : json['person_count'],
+      personCount: json['person_count'] ?? '',
     );
   }
 }

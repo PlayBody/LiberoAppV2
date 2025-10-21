@@ -50,16 +50,16 @@ class OrderModel {
     return OrderModel(
         orderId: json['id'].toString(),
         userId: json['user_id'] == null ? '0' : json['user_id'].toString(),
-        tableTitle: json['table_name'] == null ? '' : json['table_name'],
-        organName: json['organ_name'] == null ? '' : json['organ_name'],
-        organId: json['organ_id'] == null ? '' : json['organ_id'],
-        staffName: json['staff_name'] == null ? '' : json['staff_name'],
+        tableTitle: json['table_name'] ?? '',
+        organName: json['organ_name'] ?? '',
+        organId: json['organ_id'] ?? '',
+        staffName: json['staff_name'] ?? '',
         staffType: json['select_staff_type'] == null
             ? '0'
             : json['select_staff_type'].toString(),
-        userName: json['user_name'] == null ? '' : json['user_name'],
+        userName: json['user_name'] ?? '',
         userInputName:
-            json['user_input_name'] == null ? '' : json['user_input_name'],
+            json['user_input_name'] ?? '',
         seatno: json['table_position'].toString(),
         status: json['status'].toString(),
         fromTime: json['from_time'] == null ? '' : json['from_time'].toString(),

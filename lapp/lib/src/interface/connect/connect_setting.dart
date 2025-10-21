@@ -8,7 +8,7 @@ import '../../common/globals.dart' as globals;
 import 'connect_register.dart';
 
 class ConnectSetting extends StatefulWidget {
-  const ConnectSetting({Key? key}) : super(key: key);
+  const ConnectSetting({super.key});
 
   @override
   _ConnectSetting createState() => _ConnectSetting();

@@ -13,7 +13,7 @@ import 'package:libero/src/model/cartdetailmodel.dart';
 import 'package:flutter/material.dart';
 
 class ProductCart extends StatefulWidget {
-  const ProductCart({Key? key}) : super(key: key);
+  const ProductCart({super.key});
 
   @override
   _ProductCart createState() => _ProductCart();
@@ -173,15 +173,15 @@ class _ProductCart extends State<ProductCart> {
             children: [
               Container(
                 alignment: Alignment.center,
-                child: item.image == null
-                    ? Text('設定なし')
-                    : Image.network(ticketImageUrl + item.image!),
                 decoration: BoxDecoration(
                     border: Border.all(
                         color: Colors.grey.withOpacity(0.4), width: 1),
                     borderRadius: BorderRadius.circular(4)),
                 width: 120,
                 height: 80,
+                child: item.image == null
+                    ? Text('設定なし')
+                    : Image.network(ticketImageUrl + item.image!),
               ),
               SizedBox(width: 15),
               Flexible(
@@ -193,8 +193,7 @@ class _ProductCart extends State<ProductCart> {
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                   SizedBox(height: 6),
                   Text(
-                      '小計  ￥' +
-                          (int.parse(item.price) * item.cartCount!).toString(),
+                      '小計  ￥${int.parse(item.price) * item.cartCount!}',
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                 ],

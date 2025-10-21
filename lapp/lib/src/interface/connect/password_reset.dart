@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PasswordReset extends StatefulWidget {
-  const PasswordReset({Key? key}) : super(key: key);
+  const PasswordReset({super.key});
 
   @override
   _PasswordReset createState() => _PasswordReset();
@@ -71,6 +71,10 @@ class _PasswordReset extends State<PasswordReset> {
     return WillPopScope(
         onWillPop: () async => true,
         child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('images/shop_login_back.jpg'),
+                  fit: BoxFit.cover)),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: FutureBuilder<List>(
@@ -89,10 +93,6 @@ class _PasswordReset extends State<PasswordReset> {
               },
             ),
           ),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('images/shop_login_back.jpg'),
-                  fit: BoxFit.cover)),
         ));
   }
 

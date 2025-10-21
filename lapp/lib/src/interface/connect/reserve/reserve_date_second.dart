@@ -22,8 +22,7 @@ class ReserveDateSecond extends StatefulWidget {
       required this.isNoReserveType,
       this.staffId,
       required this.selTime,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   _ReserveDateSecond createState() => _ReserveDateSecond();

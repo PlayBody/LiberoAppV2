@@ -5,9 +5,9 @@ class DialogAddCart extends StatefulWidget {
   final String showString;
 
   const DialogAddCart({
-    Key? key,
+    super.key,
     required this.showString,
-  }) : super(key: key);
+  });
 
   @override
   _DialogAddCart createState() => _DialogAddCart();

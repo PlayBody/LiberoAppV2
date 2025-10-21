@@ -14,9 +14,7 @@ class DropDownNumberSelect extends StatelessWidget {
       this.diff,
       this.contentPadding,
       this.min,
-      Key? key})
-      : super(key: key);
-
+      super.key});
   @override
   Widget build(BuildContext context) {
     List<String> itemList = [];
@@ -43,14 +41,13 @@ class DropDownNumberSelect extends StatelessWidget {
             color: Color(0xffbebebe),
           ),
         ),
-        contentPadding: contentPadding == null
-            ? EdgeInsets.fromLTRB(8, 8, 0, 8)
-            : contentPadding,
+        contentPadding: contentPadding ?? EdgeInsets.fromLTRB(8, 8, 0, 8),
       ),
-      value: value,
+      initialValue: value,
       items: [
         ...itemList.map((e) => DropdownMenuItem(
-            child: Text(e, textAlign: TextAlign.right), value: e))
+            value: e,
+            child: Text(e, textAlign: TextAlign.right)))
       ],
       onChanged: tapFunc,
     );

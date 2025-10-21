@@ -3,7 +3,6 @@ import 'package:libero/src/common/const.dart';
 import 'package:libero/src/interface/component/form/main_form.dart';
 import 'package:libero/src/interface/component/text/label_text.dart';
 import 'package:libero/src/interface/connect/reserve/connect_reserve_confirm.dart';
-import 'package:libero/src/model/organmodel.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -12,8 +11,8 @@ import 'package:libero/src/model/shift_frame_model.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class ReserveDateFrame extends StatefulWidget {
-  final OrganModel organ;
-  const ReserveDateFrame({required this.organ, Key? key}) : super(key: key);
+  final String organId;
+  const ReserveDateFrame({required this.organId, super.key});
 
   @override
   _ReserveDateFrame createState() => _ReserveDateFrame();
@@ -48,7 +47,7 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
         .add(Duration(days: DateTime.daysPerWeek - selectedDate.weekday)));
 
     shiftFrames = await ClShiftFrame().loadShiftFrame(
-        context, widget.organ.organId, viewFromTime, viewToTime);
+        context, widget.organId, viewFromTime, viewToTime);
 
     appointments = [];
     for (var item in shiftFrames) {
@@ -79,11 +78,11 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
     return [];
   }
 
-  Future<void> changeViewCalander(_date) async {
+  Future<void> changeViewCalander(DateTime date) async {
     String newFromTime = DateFormat('yyyy-MM-dd')
-        .format(getDate(_date.subtract(Duration(days: _date.weekday))));
+        .format(getDate(date.subtract(Duration(days: date.weekday))));
     if (newFromTime == viewFromTime) return;
-    selectedDate = _date;
+    selectedDate = date;
     await loadInitData();
   }
 
@@ -117,7 +116,7 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return ConnectReserveConfirm(
           reserveStatus: 1,
-          reserveOrganId: widget.organ.organId,
+          reserveOrganId: widget.organId,
           reserveStaffId: '',
           reserveStartTime: appointmentDetails.startTime,
           isNoReserveType: constCheckinReserveShift,
@@ -233,7 +232,7 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
               top: 52,
               left: 6,
               child: Container(
-                child: Text(minHour.toString() + ':00',
+                child: Text('$minHour:00',
                     style: TextStyle(
                         fontSize: 14.5,
                         color: Colors.grey,
@@ -277,9 +276,7 @@ class _ReserveDateFrame extends State<ReserveDateFrame> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                DateFormat('HH:mm').format(appointment.startTime) +
-                    '-' +
-                    DateFormat('HH:mm').format(appointment.endTime),
+                '${DateFormat('HH:mm').format(appointment.startTime)}-${DateFormat('HH:mm').format(appointment.endTime)}',
                 style: TextStyle(fontSize: 8),
               ),
               Text(

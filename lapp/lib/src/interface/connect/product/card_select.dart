@@ -12,7 +12,7 @@ import 'package:square_in_app_payments/in_app_payments.dart';
 
 class CardSelect extends StatefulWidget {
   final String payAmount;
-  const CardSelect({required this.payAmount, Key? key}) : super(key: key);
+  const CardSelect({required this.payAmount, super.key});
 
   @override
   _CardSelect createState() => _CardSelect();
@@ -203,7 +203,7 @@ class _CardSelect extends State<CardSelect> {
       cardImageUrl = 'images/card_brand/diners.png';
     return Container(
         alignment: Alignment.centerLeft,
-        child: cardImageUrl == '' ? Text(cardBrand) : Image.asset(cardImageUrl),
-        height: 40);
+        height: 40,
+        child: cardImageUrl == '' ? Text(cardBrand) : Image.asset(cardImageUrl));
   }
 }

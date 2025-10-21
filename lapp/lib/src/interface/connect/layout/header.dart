@@ -71,16 +71,16 @@ class MyConnetAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
         ElevatedButton(
             onPressed: () => Scaffold.of(context).openDrawer(),
+            style: ElevatedButton.styleFrom(
+              visualDensity: VisualDensity(horizontal: -2),
+              padding: EdgeInsets.all(0),
+              elevation: 0,
+            ),
             child: Container(
               width: 70,
               height: 70,
               color: primaryColor,
               child: Icon(Icons.menu, color: Colors.white, size: 32),
-            ),
-            style: ElevatedButton.styleFrom(
-              visualDensity: VisualDensity(horizontal: -2),
-              padding: EdgeInsets.all(0),
-              elevation: 0,
             ))
       ],
     );

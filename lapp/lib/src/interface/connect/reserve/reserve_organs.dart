@@ -10,7 +10,7 @@ import 'package:libero/src/interface/component/form/main_form.dart';
 import '../../../common/globals.dart' as globals;
 
 class ReserveOrgans extends StatefulWidget {
-  const ReserveOrgans({Key? key}) : super(key: key);
+  const ReserveOrgans({super.key});
 
   @override
   _ReserveOrgans createState() => _ReserveOrgans();
@@ -36,7 +36,7 @@ class _ReserveOrgans extends State<ReserveOrgans> {
     Navigator.push(context, MaterialPageRoute(builder: (_) {
       if (organ.isNoReserveType == constCheckinReserveRiRa) {
         return ReserveMultiUser(
-            organ: organ, isNoReserveType: constCheckinReserveRiRa);
+            organId: organ.organId, isNoReserveType: constCheckinReserveRiRa);
       } else {
         globals.selStaffType = 0;
         globals.menuSelectNumber = 1;
@@ -45,7 +45,7 @@ class _ReserveOrgans extends State<ReserveOrgans> {
         globals.reserveTime = 10;
         globals.reserveUserCnt = 1;
         return ReserveMenus(
-          organ: organ,
+          organId: organ.organId,
           isNoReserveType: constCheckinReserveShift,
         );
       }
@@ -81,14 +81,14 @@ class _ReserveOrgans extends State<ReserveOrgans> {
       onTap: () => pushNext(organ),
       child: Card(
           clipBehavior: Clip.antiAlias,
-          child: Column(children: [
-            Expanded(child: _getOrganImage(organ)),
-            _getOrganTitle(organ)
-          ]),
           elevation: 4,
           shadowColor: Colors.grey,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)))),
+              borderRadius: BorderRadius.all(Radius.circular(12))),
+          child: Column(children: [
+            Expanded(child: _getOrganImage(organ)),
+            _getOrganTitle(organ)
+          ])),
     );
   }
 

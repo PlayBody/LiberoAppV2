@@ -24,12 +24,11 @@ const double _kCloseProgressThreshold = 0.5;
 
 class BottomSheet extends StatefulWidget {
   const BottomSheet(
-      {Key? key,
+      {super.key,
       this.animationController,
       this.enableDrag = true,
       required this.onClosing,
-      required this.builder})
-      : super(key: key);
+      required this.builder});
 
   final AnimationController? animationController;
   final VoidCallback onClosing;
@@ -92,8 +91,8 @@ class _BottomSheetState extends State<BottomSheet> {
         : GestureDetector(
             onVerticalDragUpdate: _handleDragUpdate,
             onVerticalDragEnd: _handleDragEnd,
-            child: bottomSheet,
             excludeFromSemantics: true,
+            child: bottomSheet,
           );
   }
 }
@@ -121,7 +120,7 @@ class _ModalBottomSheetLayout extends SingleChildLayoutDelegate {
 }
 
 class _ModalBottomSheet<T> extends StatefulWidget {
-  const _ModalBottomSheet({Key? key, this.route}) : super(key: key);
+  const _ModalBottomSheet({super.key, this.route});
 
   final _ModalBottomSheetRoute<T>? route;
 
@@ -243,8 +242,8 @@ Future<T?> showModalBottomSheet<T>({
       ));
 }
 
-PersistentBottomSheetController<T> showMyBottomSheet<T>({
+PersistentBottomSheetController showMyBottomSheet<T>({
   required BuildContext context,
   required WidgetBuilder builder,
 }) =>
-    Scaffold.of(context).showBottomSheet<T>(builder);
+    Scaffold.of(context).showBottomSheet(builder);

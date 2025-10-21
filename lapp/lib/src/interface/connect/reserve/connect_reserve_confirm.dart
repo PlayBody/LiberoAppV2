@@ -36,8 +36,7 @@ class ConnectReserveConfirm extends StatefulWidget {
       required this.reserveStatus,
       required this.isNoReserveType,
       this.shiftFrameId,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   _ConnectReserveConfirm createState() => _ConnectReserveConfirm();
@@ -174,7 +173,7 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
       'organ_id': widget.reserveOrganId,
       'user_id': globals.userId,
       'staff_type': globals.selStaffType.toString(),
-      'staff_id': widget.reserveStaffId == null ? '' : widget.reserveStaffId,
+      'staff_id': widget.reserveStaffId ?? '',
       'from_time': DateFormat('yyyy-MM-dd HH:mm:ss').format(reserveFromTime),
       'to_time': DateFormat('yyyy-MM-dd HH:mm:ss').format(reserveEndTime),
       'shift_frame_id': widget.shiftFrameId ?? '',
@@ -217,7 +216,7 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
         .then((v) => results = v);
     if (results['is_result']) {
       useCouponIds.forEach((element) {
-        Webservice().loadHttp(context, apiBase + '/apicoupons/useUserCoupon',
+        Webservice().loadHttp(context, '$apiBase/apicoupons/useUserCoupon',
             {'user_coupon_id': element});
       });
 
@@ -317,8 +316,8 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
             value: payMethod,
             items: [
               if (widget.reserveStatus == 1 && globals.reserveUserCnt == 1)
-                DropdownMenuItem(child: Text('クレジット決済'), value: '1'),
-              DropdownMenuItem(child: Text('店頭で決済'), value: '2')
+                DropdownMenuItem(value: '1', child: Text('クレジット決済')),
+              DropdownMenuItem(value: '2', child: Text('店頭で決済'))
             ],
             tapFunc: (v) {
               payMethod = v;
@@ -343,7 +342,7 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
             child: Row(children: [
               Expanded(child: Text(e.menuTitle, style: txtContentStyle)),
               Container(
-                  child: Text(Funcs().currencyFormat(e.menuPrice) + '円',
+                  child: Text('${Funcs().currencyFormat(e.menuPrice)}円',
                       style: txtContentStyle)),
             ]))),
         Container(
@@ -352,9 +351,8 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
               Expanded(child: Text('指名料', style: txtContentStyle)),
               Container(
                   child: Text(
-                      Funcs().currencyFormat(
-                              (selAmount * 1.1).toInt().toString()) +
-                          '円',
+                      '${Funcs().currencyFormat(
+                              (selAmount * 1.1).toInt().toString())}円',
                       style: txtContentStyle)),
             ]))
       ])),
@@ -364,7 +362,7 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
           child: Row(children: [
             Expanded(child: Text('合計金額', style: txtContentStyle)),
             Container(
-                child: Text(Funcs().currencyFormat(sumAmount.toString()) + '円',
+                child: Text('${Funcs().currencyFormat(sumAmount.toString())}円',
                     style: txtContentStyle))
           ]))
     ]));
@@ -382,9 +380,7 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
           Container(
               margin: EdgeInsets.symmetric(vertical: 8),
               child: Text(
-                  DateFormat('yyyy/MM/dd HH:mm').format(reserveFromTime) +
-                      ' ~ ' +
-                      DateFormat('HH:mm').format(reserveEndTime),
+                  '${DateFormat('yyyy/MM/dd HH:mm').format(reserveFromTime)} ~ ${DateFormat('HH:mm').format(reserveEndTime)}',
                   style: txtContentStyle))
         ],
       ),
@@ -480,10 +476,9 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
           Expanded(child: Text('クーポン適用後金額', style: txtHeaderStyle)),
           Container(
               child: Text(
-                  Funcs().currencyFormat(
+                  '${Funcs().currencyFormat(
                           (sumAmount - couposAmount - sumTicketAmount)
-                              .toString()) +
-                      '円',
+                              .toString())}円',
                   style: txtHeaderStyle))
         ]));
   }
@@ -494,11 +489,11 @@ class _ConnectReserveConfirm extends State<ConnectReserveConfirm> {
         child: Container(
             margin: EdgeInsets.symmetric(vertical: 12),
             child: ElevatedButton(
-              child: Text('確定'),
               onPressed: () => saveReserve(),
               style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(8),
                   textStyle: TextStyle(fontSize: 16)),
+              child: Text('確定'),
             )));
   }
 }

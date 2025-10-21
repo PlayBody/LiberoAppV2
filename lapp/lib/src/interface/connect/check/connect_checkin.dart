@@ -20,7 +20,7 @@ import '../../../common/const.dart';
 class ConnectCheckIn extends StatefulWidget {
   final String organId;
   // final String reserveId;
-  const ConnectCheckIn({required this.organId, Key? key}) : super(key: key);
+  const ConnectCheckIn({required this.organId, super.key});
 
   @override
   _ConnectCheckIn createState() => _ConnectCheckIn();
@@ -151,9 +151,7 @@ class _ConnectCheckIn extends State<ConnectCheckIn> {
                   groupValue: selReserveId,
                 ),
                 Container(
-                    child: Text(Funcs().dateFormatHHMMJP(e.fromTime) +
-                        ' ~ ' +
-                        Funcs().dateFormatHHMMJP(e.toTime)))
+                    child: Text('${Funcs().dateFormatHHMMJP(e.fromTime)} ~ ${Funcs().dateFormatHHMMJP(e.toTime)}'))
               ])),
             )),
         if (organ!.isNoReserve == constCheckinTypeBoth)
@@ -195,7 +193,7 @@ class _ConnectCheckIn extends State<ConnectCheckIn> {
                       Container(
                         alignment: Alignment.centerRight,
                         width: 120,
-                        child: Text(Funcs().currencyFormat(e.menuPrice) + '円'),
+                        child: Text('${Funcs().currencyFormat(e.menuPrice)}円'),
                       ),
                     ],
                   )))),
@@ -207,7 +205,7 @@ class _ConnectCheckIn extends State<ConnectCheckIn> {
           ),
         SizedBox(height: 12),
         Header4Text(
-            label: '必要なチケット数 : ' + organ!.checkTicketConsumtion.toString()),
+            label: '必要なチケット数 : ${organ!.checkTicketConsumtion}'),
         SizedBox(height: 48),
         Header4Text(label: 'チケット消費設定'),
         SizedBox(height: 8),

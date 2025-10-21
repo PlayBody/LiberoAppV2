@@ -26,8 +26,7 @@ import 'package:flutter/material.dart';
 class UserAddButton extends StatelessWidget {
   final String label;
   final tapFunc;
-  const UserAddButton({required this.label, required this.tapFunc, Key? key})
-      : super(key: key);
+  const UserAddButton({required this.label, required this.tapFunc, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +34,19 @@ class UserAddButton extends StatelessWidget {
         padding: EdgeInsets.only(top: 10, bottom: 10),
         child: ElevatedButton(
             onPressed: tapFunc,
-            child: Row(children: [Container(width: 10), Text(label)]),
             style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.all(8),
                 side: BorderSide(
                   width: 1,
                   color: Colors.grey,
                 ),
-                primary: Colors.white, //Color.fromARGB(255, 160, 30, 30),
-                onPrimary: Colors.grey,
+                backgroundColor: Colors.white, //Color.fromARGB(255, 160, 30, 30),
+                foregroundColor: Colors.grey,
                 elevation: 0,
                 textStyle: TextStyle(
                   fontSize: 20,
-                ))));
+                )),
+            child: Row(children: [Container(width: 10), Text(label)])));
   }
 }
 
@@ -55,40 +54,37 @@ class UserPrimaryButton extends StatelessWidget {
   final String label;
   final tapFunc;
   const UserPrimaryButton(
-      {required this.label, required this.tapFunc, Key? key})
-      : super(key: key);
+      {required this.label, required this.tapFunc, super.key});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         onPressed: tapFunc,
-        child: Text(label),
         style: ElevatedButton.styleFrom(
             padding: EdgeInsets.all(8),
             side: BorderSide(
               width: 1,
               color: Colors.grey,
             ),
-            primary: Colors.white, //Color.fromARGB(255, 160, 30, 30),
-            onPrimary: Colors.grey,
+            backgroundColor: Colors.white, //Color.fromARGB(255, 160, 30, 30),
+            foregroundColor: Colors.grey,
             elevation: 0,
             textStyle: TextStyle(
               fontSize: 20,
-            )));
+            )),
+        child: Text(label));
   }
 }
 
 class AdminUserTicketAddButton extends StatelessWidget {
   final tapFunc;
-  const AdminUserTicketAddButton({required this.tapFunc, Key? key})
-      : super(key: key);
+  const AdminUserTicketAddButton({required this.tapFunc, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Row(children: [
       Expanded(
           child: ElevatedButton(
-              child: Text('すべてのユーザーのチケットを+1枚'),
               onPressed: tapFunc,
               style: ElevatedButton.styleFrom(
                   padding: EdgeInsets.all(10),
@@ -96,10 +92,11 @@ class AdminUserTicketAddButton extends StatelessWidget {
                     width: 0.5,
                     color: Colors.black,
                   ),
-                  primary: Colors.white, //Color.fromARGB(255, 160, 30, 30),
-                  onPrimary: Colors.black,
+                  backgroundColor: Colors.white, //Color.fromARGB(255, 160, 30, 30),
+                  foregroundColor: Colors.black,
                   elevation: 0,
-                  textStyle: TextStyle(fontSize: 14))))
+                  textStyle: TextStyle(fontSize: 14)),
+              child: Text('すべてのユーザーのチケットを+1枚')))
     ]);
   }
 }
@@ -130,7 +127,7 @@ class AdminUserTicketAddButton extends StatelessWidget {
 
 class AdminBtnIconRemove extends StatelessWidget {
   final tapFunc;
-  const AdminBtnIconRemove({required this.tapFunc, Key? key}) : super(key: key);
+  const AdminBtnIconRemove({required this.tapFunc, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -146,8 +143,7 @@ class UserBtnIconDefualt extends StatelessWidget {
   final tapFunc;
   final icon;
   const UserBtnIconDefualt(
-      {required this.tapFunc, required this.icon, Key? key})
-      : super(key: key);
+      {required this.tapFunc, required this.icon, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -162,12 +158,12 @@ class UserBtnIconDefualt extends StatelessWidget {
 class UserBtnCircleIcon extends StatelessWidget {
   final tapFunc;
   final icon;
-  const UserBtnCircleIcon({required this.tapFunc, required this.icon, Key? key})
-      : super(key: key);
+  const UserBtnCircleIcon({required this.tapFunc, required this.icon, super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: tapFunc,
       child: Container(
         margin: EdgeInsets.all(4),
         width: 24,
@@ -179,18 +175,18 @@ class UserBtnCircleIcon extends StatelessWidget {
         ),
         child: Icon(icon, color: Colors.white, size: 18),
       ),
-      onTap: tapFunc,
     );
   }
 }
 
 class UserBtnCircleClose extends StatelessWidget {
   final tapFunc;
-  const UserBtnCircleClose({required this.tapFunc, Key? key}) : super(key: key);
+  const UserBtnCircleClose({required this.tapFunc, super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: tapFunc,
       child: Container(
         padding: EdgeInsets.all(6),
         decoration: BoxDecoration(
@@ -199,7 +195,6 @@ class UserBtnCircleClose extends StatelessWidget {
         ),
         child: Icon(Icons.close, size: 18, color: Colors.white),
       ),
-      onTap: tapFunc,
     );
   }
 }
@@ -207,12 +202,12 @@ class UserBtnCircleClose extends StatelessWidget {
 class IncreaseButton extends StatelessWidget {
   final icon;
   final tapFunc;
-  const IncreaseButton({required this.icon, required this.tapFunc, Key? key})
-      : super(key: key);
+  const IncreaseButton({required this.icon, required this.tapFunc, super.key});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: tapFunc,
       child: Container(
         padding: EdgeInsets.all(2),
         decoration: BoxDecoration(
@@ -223,7 +218,6 @@ class IncreaseButton extends StatelessWidget {
           icon,
         ),
       ),
-      onTap: tapFunc,
     );
   }
 }

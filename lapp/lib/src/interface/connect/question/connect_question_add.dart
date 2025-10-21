@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'connect_question_confirm.dart';
 
 class ConnectQuestionAdd extends StatefulWidget {
-  const ConnectQuestionAdd({Key? key}) : super(key: key);
+  const ConnectQuestionAdd({super.key});
 
   @override
   _ConnectQuestionAdd createState() => _ConnectQuestionAdd();
@@ -86,9 +86,9 @@ class _ConnectQuestionAdd extends State<ConnectQuestionAdd> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16),
       padding: EdgeInsets.only(top: 16, left: 30, right: 30),
-      child: Text('お問い合わせ内容', style: txtlblStyle),
       decoration:
           BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+      child: Text('お問い合わせ内容', style: txtlblStyle),
     );
   }
 
@@ -129,12 +129,12 @@ class _ConnectQuestionAdd extends State<ConnectQuestionAdd> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
       child: ElevatedButton(
-        child: Text('確認画面へ'),
         onPressed: () {
           pushConfirm();
         },
         style: ElevatedButton.styleFrom(
             padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+        child: Text('確認画面へ'),
       ),
     );
   }

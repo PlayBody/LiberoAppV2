@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Header1Text extends StatelessWidget {
   final String label;
-  const Header1Text({required this.label, Key? key}) : super(key: key);
+  const Header1Text({required this.label, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class Header1Text extends StatelessWidget {
 
 class Header3Text extends StatelessWidget {
   final String label;
-  const Header3Text({required this.label, Key? key}) : super(key: key);
+  const Header3Text({required this.label, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class Header3Text extends StatelessWidget {
 
 class Header4Text extends StatelessWidget {
   final String label;
-  const Header4Text({required this.label, Key? key}) : super(key: key);
+  const Header4Text({required this.label, super.key});
 
   @override
   Widget build(BuildContext context) {

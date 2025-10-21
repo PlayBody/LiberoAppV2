@@ -12,7 +12,7 @@ import '../../../common/globals.dart' as globals;
 class ReserveStaff extends StatefulWidget {
   final String organId;
   final String isNoReserveType;
-  const ReserveStaff({required this.organId, required this.isNoReserveType, Key? key}) : super(key: key);
+  const ReserveStaff({required this.organId, required this.isNoReserveType, super.key});
 
   @override
   _ReserveStaff createState() => _ReserveStaff();
@@ -66,7 +66,7 @@ class _ReserveStaff extends State<ReserveStaff> {
         staffs.firstWhere((element) => element.staffId == staffId);
 
     staffName = selStaff.staffNick == ''
-        ? (selStaff.staffFirstName! + ' ' + selStaff.staffLastName!)
+        ? ('${selStaff.staffFirstName!} ${selStaff.staffLastName!}')
         : selStaff.staffNick;
     staffComment = selStaff.comment;
     isShowStaffComment = true;
@@ -172,15 +172,15 @@ class _ReserveStaff extends State<ReserveStaff> {
         value: selectStaff,
         items: [
           ...staffs.map((e) => DropdownMenuItem(
+                value: e.staffId,
                 child: Text(
                   e.staffNick == ''
-                      ? (e.staffFirstName! + ' ' + e.staffLastName!)
+                      ? ('${e.staffFirstName!} ${e.staffLastName!}')
                       : e.staffNick,
                   style: TextStyle(
                       color:
                           e.staffSex == '1' ? Colors.blue : Colors.pinkAccent),
                 ),
-                value: e.staffId,
               ))
         ],
         tapFunc: (v) => onSelectStaff(v),

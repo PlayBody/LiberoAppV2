@@ -34,7 +34,7 @@ import 'package:libero/src/http/webservice.dart';
 // only IOS import 'package:gallery_saver/gallery_saver.dart';
 
 class ConnectMessage extends StatefulWidget {
-  const ConnectMessage({Key? key}) : super(key: key);
+  const ConnectMessage({super.key});
 
   @override
   _ConnectMessage createState() => _ConnectMessage();
@@ -178,7 +178,7 @@ class _ConnectMessage extends State<ConnectMessage> {
         builder: (BuildContext context) {
           return DialogAttachPreview(
               previewType: fileType,
-              attachUrl: apiBase + '/assets/messages/' + fileUrl);
+              attachUrl: '$apiBase/assets/messages/$fileUrl');
         });
   }
 
@@ -297,7 +297,7 @@ class _ConnectMessage extends State<ConnectMessage> {
                             child: Row(children: [
                               Text('from'),
                               SizedBox(width: 4),
-                              Text(e.staffName + 'さん',
+                              Text('${e.staffName}さん',
                                   style: TextStyle(
                                       fontSize: 13,
                                       color: Colors.white,
@@ -356,7 +356,7 @@ class _ConnectMessage extends State<ConnectMessage> {
               width: 170,
               height: 120,
               child: Image.network(
-                  apiBase + '/assets/messages/' + attach.fileUrl)),
+                  '$apiBase/assets/messages/' + attach.fileUrl)),
           onTap: () => attach.fileType == '2'
               ? pushPreviewAttach(attach.fileType,
                   attach.videoUrl == null ? '' : attach.videoUrl!)
@@ -418,10 +418,10 @@ class _ConnectMessage extends State<ConnectMessage> {
 
   void requestDownload(String link, String fileName) async {
     String savePath = '';
-    String uriLink = apiBase + '/assets/messages/' + link;
+    String uriLink = '$apiBase/assets/messages/$link';
     if (Platform.isAndroid) {
       savePath = (await ExternalPath.getExternalStoragePublicDirectory(
-          ExternalPath.DIRECTORY_DOWNLOADS));
+          ExternalPath.DIRECTORY_DOWNLOAD));
     } else {
       savePath = (await getApplicationDocumentsDirectory()).absolute.path;
     }
@@ -432,19 +432,15 @@ class _ConnectMessage extends State<ConnectMessage> {
       savedDir.create();
     }
 
-    String filePath = savePath + '/' + fileName;
+    String filePath = '$savePath/$fileName';
     String saveFileName = fileName;
     var ext = path.extension(filePath);
 
     int i = 0;
     while (File(filePath).existsSync()) {
       i++;
-      saveFileName = fileName.substring(0, fileName.length - ext.length) +
-          '[' +
-          i.toString() +
-          ']' +
-          fileName.substring(fileName.length - ext.length);
-      filePath = savePath + '/' + saveFileName;
+      saveFileName = '${fileName.substring(0, fileName.length - ext.length)}[$i]${fileName.substring(fileName.length - ext.length)}';
+      filePath = '$savePath/$saveFileName';
     }
 
     await FlutterDownloader.enqueue(
@@ -465,7 +461,7 @@ class _ConnectMessage extends State<ConnectMessage> {
     taskInfos = [];
     for (var item in tasks) {
       if (item.status == DownloadTaskStatus.complete) {
-        String tempPath = item.savedDir + '/' + item.filename!;
+        String tempPath = '${item.savedDir}/${item.filename!}';
         File(tempPath).setLastModified(DateTime.now());
         /* only IOS
         if (Platform.isIOS) {
@@ -501,7 +497,7 @@ class _ConnectMessage extends State<ConnectMessage> {
         ? (attach.videoUrl == null ? '' : attach.videoUrl!)
         : attach.fileUrl;
     for (var item in taskInfos!) {
-      if (item.link == apiBase + '/assets/messages/' + url) {
+      if (item.link == '$apiBase/assets/messages/$url') {
         return item;
       }
     }
@@ -532,31 +528,27 @@ class _ConnectMessage extends State<ConnectMessage> {
     String attachFileUrl = '';
     String attachVideoFile = '';
     if (attachType != '') {
-      attachFileUrl = 'msg_attach_file_' +
-          DateTime.now()
+      attachFileUrl = 'msg_attach_file_${DateTime.now()
               .toString()
               .replaceAll(':', '')
               .replaceAll('-', '')
               .replaceAll('.', '')
-              .replaceAll(' ', '') +
-          '.jpg';
+              .replaceAll(' ', '')}.jpg';
       await Webservice().callHttpMultiPart(
           apiUploadMessageAttachFileUrl, filePath, attachFileUrl);
 
       if (attachType == '2') {
-        attachVideoFile = 'msg_video_file_' +
-            DateTime.now()
+        attachVideoFile = 'msg_video_file_${DateTime.now()
                 .toString()
                 .replaceAll(':', '')
                 .replaceAll('-', '')
                 .replaceAll('.', '')
-                .replaceAll(' ', '') +
-            '.mp4';
+                .replaceAll(' ', '')}.mp4';
         await callHttpMultiPartWithProgressOwn(context, 'upload',
             apiUploadMessageAttachFileUrl, File(videoPath), attachVideoFile);
       }
     }
-    String apiURL = apiBase + '/apimessages/sendUserMessage';
+    String apiURL = '$apiBase/apimessages/sendUserMessage';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiURL, {
       'company_id': APPCOMANYID,

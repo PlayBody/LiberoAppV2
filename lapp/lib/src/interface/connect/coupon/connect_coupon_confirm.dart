@@ -7,7 +7,7 @@ import '../../../common/globals.dart' as globals;
 import 'connect_coupon_complete.dart';
 
 class ConnectCouponConfirm extends StatefulWidget {
-  const ConnectCouponConfirm({Key? key}) : super(key: key);
+  const ConnectCouponConfirm({super.key});
 
   @override
   _ConnectCouponConfirm createState() => _ConnectCouponConfirm();

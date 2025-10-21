@@ -19,8 +19,7 @@ class ConnectAdviseAddConfirm extends StatefulWidget {
       {required this.teacherId,
       required this.videoFile,
       required this.adviseContent,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   _ConnectAdviseAddConfirm createState() => _ConnectAdviseAddConfirm();
@@ -51,14 +50,12 @@ class _ConnectAdviseAddConfirm extends State<ConnectAdviseAddConfirm> {
 
     //base64Image = base64Encode(_photoFile.readAsBytesSync());
     // fileName = _photoFile.path.split("/").last;
-    String videoFileName = 'advise-video' +
-        DateTime.now()
+    String videoFileName = 'advise-video${DateTime.now()
             .toString()
             .replaceAll(':', '')
             .replaceAll('-', '')
             .replaceAll('.', '')
-            .replaceAll(' ', '') +
-        '.mp4';
+            .replaceAll(' ', '')}.mp4';
 
     await Webservice().callHttpMultiPart(
         apiUploadAdviseVideo, widget.videoFile.path, videoFileName);
@@ -174,10 +171,10 @@ class _ConnectAdviseAddConfirm extends State<ConnectAdviseAddConfirm> {
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(width: 250),
         child: ElevatedButton(
-          child: Text('送信する'),
           onPressed: () => saveAdvise(),
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+          child: Text('送信する'),
         ),
       ),
     );

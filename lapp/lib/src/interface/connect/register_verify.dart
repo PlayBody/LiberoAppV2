@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterVerify extends StatefulWidget {
   final dynamic saveData;
-  const RegisterVerify({Key? key, required this.saveData}) : super(key: key);
+  const RegisterVerify({super.key, required this.saveData});
 
   @override
   _RegisterVerify createState() => _RegisterVerify();
@@ -71,6 +71,11 @@ class _RegisterVerify extends State<RegisterVerify> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage('images/shop_login_back.jpg'),
+        fit: BoxFit.cover,
+      )),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: FutureBuilder<List>(
@@ -113,11 +118,6 @@ class _RegisterVerify extends State<RegisterVerify> {
           },
         ),
       ),
-      decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage('images/shop_login_back.jpg'),
-        fit: BoxFit.cover,
-      )),
     );
   }
 
@@ -197,14 +197,14 @@ class _RegisterVerify extends State<RegisterVerify> {
         },
         child: Container(
           alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.grey,
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: Text(
             num,
             style: TextStyle(
                 fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          decoration: BoxDecoration(
-            color: Colors.grey,
-            borderRadius: BorderRadius.circular(12),
           ),
         ));
   }

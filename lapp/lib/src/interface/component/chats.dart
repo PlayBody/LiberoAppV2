@@ -14,8 +14,7 @@ class ChatAttachContent extends StatelessWidget {
       {required this.attachType,
       required this.filePath,
       required this.tapFunc,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +42,7 @@ class ChatAttachContent extends StatelessWidget {
 
 class ChatInputContent extends StatelessWidget {
   final controller;
-  const ChatInputContent({required this.controller, Key? key})
-      : super(key: key);
+  const ChatInputContent({required this.controller, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -73,8 +71,7 @@ class ChatInputButtons extends StatelessWidget {
       required this.isSending,
       required this.isUploading,
       required this.progressPercent,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -124,13 +121,20 @@ class ChatListContent extends StatelessWidget {
       {required this.content,
       required this.type,
       required this.readflag,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        color: type == '1'
+            ? Colors.blue[100]
+            : readflag
+                ? Colors.grey[300]
+                : Colors.red[100],
+        borderRadius: BorderRadius.circular(6),
+      ),
       child: Linkify(
         text: content,
         options: LinkifyOptions(humanize: false),
@@ -142,21 +146,13 @@ class ChatListContent extends StatelessWidget {
           // if (isRun) launch(link.url);
         },
       ),
-      decoration: BoxDecoration(
-        color: type == '1'
-            ? Colors.blue[100]
-            : readflag
-                ? Colors.grey[300]
-                : Colors.red[100],
-        borderRadius: BorderRadius.circular(6),
-      ),
     );
   }
 }
 
 class ChatListDate extends StatelessWidget {
   final String date;
-  const ChatListDate({required this.date, Key? key}) : super(key: key);
+  const ChatListDate({required this.date, super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,7 @@ import 'package:video_player/video_player.dart';
 import 'connect_advise_addconfirm.dart';
 
 class ConnectAdviseAdd extends StatefulWidget {
-  const ConnectAdviseAdd({Key? key}) : super(key: key);
+  const ConnectAdviseAdd({super.key});
 
   @override
   _ConnectAdviseAdd createState() => _ConnectAdviseAdd();
@@ -144,12 +144,10 @@ class _ConnectAdviseAdd extends State<ConnectAdviseAdd> {
         items: [
           ...teachers.map(
             (e) => DropdownMenuItem(
+              value: e.staffId,
               child: e.staffNick == ''
                   ? Text(e.staffNick)
-                  : (Text((e.staffFirstName == null ? '' : e.staffFirstName!) +
-                      ' ' +
-                      (e.staffFirstName == null ? '' : e.staffLastName!))),
-              value: e.staffId,
+                  : (Text('${e.staffFirstName == null ? '' : e.staffFirstName!} ${e.staffFirstName == null ? '' : e.staffLastName!}')),
             ),
           )
         ],
@@ -253,10 +251,10 @@ class _ConnectAdviseAdd extends State<ConnectAdviseAdd> {
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(width: 250),
         child: ElevatedButton(
-          child: Text('確認画面へ'),
           onPressed: () => pushAdviseConfirm(),
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+          child: Text('確認画面へ'),
         ),
       ),
     );

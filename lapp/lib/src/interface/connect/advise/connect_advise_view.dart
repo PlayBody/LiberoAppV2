@@ -10,7 +10,7 @@ import 'package:http/http.dart' as http;
 class ConnectAdviseView extends StatefulWidget {
   final String adviseId;
 
-  const ConnectAdviseView({required this.adviseId, Key? key}) : super(key: key);
+  const ConnectAdviseView({required this.adviseId, super.key});
 
   @override
   _ConnectAdviseView createState() => _ConnectAdviseView();
@@ -50,6 +50,7 @@ class _ConnectAdviseView extends State<ConnectAdviseView> {
       uDate = results['advise']['update_date'];
       teacherName = results['advise']['teacher_name'];
       question = results['advise']['question'];
+      // ignore: prefer_if_null_operators
       answer = results['advise']['answer'] == null
           ? ''
           : results['advise']['answer'];

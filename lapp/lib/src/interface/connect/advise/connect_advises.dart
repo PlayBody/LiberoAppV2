@@ -12,7 +12,7 @@ import 'connect_advise_add.dart';
 import 'package:http/http.dart' as http;
 
 class ConnetAdvises extends StatefulWidget {
-  const ConnetAdvises({Key? key}) : super(key: key);
+  const ConnetAdvises({super.key});
 
   @override
   _ConnetAdvises createState() => _ConnetAdvises();
@@ -113,8 +113,8 @@ class _ConnetAdvises extends State<ConnetAdvises> {
       },
       style: ElevatedButton.styleFrom(
           padding: EdgeInsets.fromLTRB(10, 8, 10, 8),
-          primary: Colors.white,
-          onPrimary: Colors.black,
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
           side: BorderSide(
             width: 1,
             color: Color.fromARGB(255, 200, 200, 200),
@@ -218,7 +218,6 @@ class _ConnetAdvises extends State<ConnetAdvises> {
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(width: 250),
         child: ElevatedButton(
-          child: Text('アドバイスをもらう'),
           onPressed: () async {
             await Navigator.push(context, MaterialPageRoute(builder: (_) {
               return ConnectAdviseAdd();
@@ -229,6 +228,7 @@ class _ConnetAdvises extends State<ConnetAdvises> {
           },
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+          child: Text('アドバイスをもらう'),
         ),
       ),
     );

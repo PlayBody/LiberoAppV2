@@ -2,13 +2,12 @@ import 'package:libero/src/common/apiendpoint.dart';
 import 'package:libero/src/http/webservice.dart';
 import 'package:libero/src/model/messagemodel.dart';
 
-import '../apiendpoint.dart';
 import '../const.dart';
 
 class ClMessage {
   Future<int> loadUnreadMessageCount(context, userId, companyId) async {
     Map<dynamic, dynamic> results = {};
-    String apiUrl = apiBase + '/apimessages/getUserUnreadCount';
+    String apiUrl = '$apiBase/apimessages/getUserUnreadCount';
     await Webservice().loadHttp(context, apiUrl, {
       'user_id': userId,
     }).then((v) => {results = v});
@@ -19,7 +18,7 @@ class ClMessage {
   Future<List<MessageModel>> loadMessageList(context, userId, companyId) async {
     Map<dynamic, dynamic> results = {};
     List<MessageModel> messages = [];
-    String apiUrl = apiBase + '/apimessages/loadUserMessages';
+    String apiUrl = '$apiBase/apimessages/loadUserMessages';
     await Webservice().loadHttp(context, apiUrl, {
       'user_id': userId,
       'company_id': companyId
@@ -38,31 +37,27 @@ class ClMessage {
     String attachFileUrl = '';
     String attachVideoFile = '';
     if (attachType != '') {
-      attachFileUrl = 'msg_attach_file_' +
-          DateTime.now()
+      attachFileUrl = 'msg_attach_file_${DateTime.now()
               .toString()
               .replaceAll(':', '')
               .replaceAll('-', '')
               .replaceAll('.', '')
-              .replaceAll(' ', '') +
-          '.jpg';
+              .replaceAll(' ', '')}.jpg';
       await Webservice().callHttpMultiPart(
           apiUploadMessageAttachFileUrl, filePath, attachFileUrl);
 
       if (attachType == '2') {
-        attachVideoFile = 'msg_video_file_' +
-            DateTime.now()
+        attachVideoFile = 'msg_video_file_${DateTime.now()
                 .toString()
                 .replaceAll(':', '')
                 .replaceAll('-', '')
                 .replaceAll('.', '')
-                .replaceAll(' ', '') +
-            '.mp4';
+                .replaceAll(' ', '')}.mp4';
         await Webservice().callHttpMultiPart(
             apiUploadMessageAttachFileUrl, videoPath, attachVideoFile);
       }
     }
-    String apiURL = apiBase + '/apimessages/sendUserMessage';
+    String apiURL = '$apiBase/apimessages/sendUserMessage';
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiURL, {
       'company_id': APPCOMANYID,

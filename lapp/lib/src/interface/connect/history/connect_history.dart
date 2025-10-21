@@ -16,7 +16,7 @@ import 'package:libero/src/model/organmodel.dart';
 import '../../../common/globals.dart' as globals;
 
 class ConnectHistory extends StatefulWidget {
-  const ConnectHistory({Key? key}) : super(key: key);
+  const ConnectHistory({super.key});
 
   @override
   _ConnectHistory createState() => _ConnectHistory();
@@ -50,7 +50,7 @@ class _ConnectHistory extends State<ConnectHistory> {
     globals.connectReserveMenuList = [];
     Navigator.push(context, MaterialPageRoute(builder: (_) {
       return ReserveMultiUser(
-        organ: organ,
+        organId: organ.organId,
         isNoReserveType: constCheckinReserveRiRa,
       );
     }));
@@ -103,6 +103,13 @@ class _ConnectHistory extends State<ConnectHistory> {
 
   Widget _getHistoryItem(OrderModel item) {
     return GestureDetector(
+        onTap: item.status == ORDER_STATUS_TABLE_COMPLETE
+            ? () {
+                Navigator.push(context, MaterialPageRoute(builder: (_) {
+                  return ConnectHistoryView(orderId: item.orderId);
+                }));
+              }
+            : null,
         child: Container(
           margin: EdgeInsets.symmetric(vertical: 8),
           padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -123,14 +130,7 @@ class _ConnectHistory extends State<ConnectHistory> {
               _getItemBottom(item),
             ],
           ),
-        ),
-        onTap: item.status == ORDER_STATUS_TABLE_COMPLETE
-            ? () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) {
-                  return ConnectHistoryView(orderId: item.orderId);
-                }));
-              }
-            : null);
+        ));
   }
 
   Widget _getItemHeader(OrderModel item) {
@@ -172,6 +172,7 @@ class _ConnectHistory extends State<ConnectHistory> {
         children: [
           SizedBox(height: 12),
           Container(
+            alignment: Alignment.center,
             child: Text(
               item.payMethod == '1' ? '決済すみ' : '店決済あり',
               style: TextStyle(
@@ -179,11 +180,11 @@ class _ConnectHistory extends State<ConnectHistory> {
                 color: item.payMethod == '1' ? Colors.red : Colors.blue,
               ),
             ),
-            alignment: Alignment.center,
           ),
           if (item.status == ORDER_STATUS_RESERVE_CANCEL)
             Container(
               padding: EdgeInsets.only(top: 12, bottom: 8),
+              alignment: Alignment.center,
               child: Text(
                 'キャンセル済み',
                 style: TextStyle(
@@ -192,7 +193,6 @@ class _ConnectHistory extends State<ConnectHistory> {
                   color: Colors.grey,
                 ),
               ),
-              alignment: Alignment.center,
             ),
           if (item.status == ORDER_STATUS_RESERVE_APPLY || item.status == ORDER_STATUS_TABLE_START)
             Container(
@@ -220,7 +220,7 @@ class _ConnectHistory extends State<ConnectHistory> {
               Container(
                 alignment: Alignment.topRight,
                 width: 70,
-                child: Text('￥' + Funcs().currencyFormat(e.menuPrice)),
+                child: Text('￥${Funcs().currencyFormat(e.menuPrice)}'),
               )
             ],
           ),
@@ -230,7 +230,7 @@ class _ConnectHistory extends State<ConnectHistory> {
         Container(
           padding: EdgeInsets.only(top: 12),
           alignment: Alignment.topLeft,
-          child: Text('【' + item.staffName + '】'),
+          child: Text('${'【' + item.staffName}】'),
         )
     ];
   }
@@ -240,17 +240,14 @@ class _ConnectHistory extends State<ConnectHistory> {
       children: [
         Expanded(
           child: Text(
-            DateFormat('yyyy-MM-dd' +
-                    '(' +
-                    weekAry[DateTime.parse(item.fromTime).weekday - 1] +
-                    ') HH:mm')
+            DateFormat('yyyy-MM-dd(${weekAry[DateTime.parse(item.fromTime).weekday - 1]}) HH:mm')
                 .format(DateTime.parse(item.fromTime)),
             style: txtContentStyle,
           ),
         ),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Colors.indigo,
+              backgroundColor: Colors.indigo,
               textStyle: TextStyle(fontSize: 12),
             ),
             onPressed: item.status == ORDER_STATUS_TABLE_COMPLETE
@@ -260,7 +257,7 @@ class _ConnectHistory extends State<ConnectHistory> {
         SizedBox(width: 4),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Colors.green,
+              backgroundColor: Colors.green,
               textStyle: TextStyle(fontSize: 12),
             ),
             onPressed: item.status == ORDER_STATUS_TABLE_COMPLETE

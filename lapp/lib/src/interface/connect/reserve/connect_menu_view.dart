@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class ConnectMenuView extends StatefulWidget {
   final String menuId;
-  const ConnectMenuView({required this.menuId, Key? key}) : super(key: key);
+  const ConnectMenuView({required this.menuId, super.key});
 
   @override
   _ConnectMenuView createState() => _ConnectMenuView();
@@ -111,7 +111,7 @@ class _ConnectMenuView extends State<ConnectMenuView> {
               child: menuPrice == null
                   ? Text('')
                   : Text(
-                      '￥' + Funcs().currencyFormat(menuPrice!),
+                      '￥${Funcs().currencyFormat(menuPrice!)}',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ))

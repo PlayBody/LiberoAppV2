@@ -7,7 +7,7 @@ import '../apiendpoint.dart';
 
 class ClStaff {
   Future<List<StaffListModel>> loadStaffs(context, dynamic condition) async {
-    String apiStaffLoadAddpointUrl = apiBase + '/apistaffs/getStaffs';
+    String apiStaffLoadAddpointUrl = '$apiBase/apistaffs/getStaffs';
 
     List<StaffListModel> staffs = [];
     Map<dynamic, dynamic> results = {};

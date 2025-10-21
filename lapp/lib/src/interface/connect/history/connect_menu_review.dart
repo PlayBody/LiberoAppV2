@@ -10,7 +10,7 @@ import '../../../common/globals.dart' as globals;
 
 class ConnectMenuReview extends StatefulWidget {
   final String orderId;
-  const ConnectMenuReview({required this.orderId, Key? key}) : super(key: key);
+  const ConnectMenuReview({required this.orderId, super.key});
 
   @override
   _ConnectMenuReview createState() => _ConnectMenuReview();

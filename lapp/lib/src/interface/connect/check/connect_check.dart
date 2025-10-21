@@ -10,11 +10,11 @@ import 'package:libero/src/interface/component/form/main_form.dart';
 import 'package:libero/src/interface/connect/check/connect_checkin.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import '../../../common/globals.dart' as globals;
 
 class ConnectCheck extends StatefulWidget {
-  const ConnectCheck({Key? key}) : super(key: key);
+  const ConnectCheck({super.key});
 
   @override
   _ConnectCheck createState() => _ConnectCheck();

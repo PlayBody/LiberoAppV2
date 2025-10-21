@@ -15,7 +15,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 class ConnectOrganList extends StatefulWidget {
-  const ConnectOrganList({Key? key}) : super(key: key);
+  const ConnectOrganList({super.key});
 
   @override
   _ConnectOrganList createState() => _ConnectOrganList();
@@ -225,7 +225,7 @@ class _ConnectOrganList extends State<ConnectOrganList> {
       width: 140,
       height: 90,
       child: item.organImage == null || item.organImage!.isEmpty
-          ? Image.network(organImageUrl + 'no_image.jpg')
+          ? Image.network('${organImageUrl}no_image.jpg')
           : Image.network(organImageUrl + item.organImage!),
     );
   }
@@ -248,7 +248,7 @@ class _ConnectOrganList extends State<ConnectOrganList> {
                             item.distance == '' ||
                             !item.distance_status)
                         ? ''
-                        : (item.distance! + 'm'),
+                        : ('${item.distance!}m'),
                     style: TextStyle(fontSize: 16))
               ])),
           Container(
@@ -260,7 +260,7 @@ class _ConnectOrganList extends State<ConnectOrganList> {
             child: Row(children: [
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    primary: Colors.orange,
+                    backgroundColor: Colors.orange,
                     padding: EdgeInsets.all(6),
                     visualDensity: VisualDensity(vertical: -2)),
                 child: Text('電話問い合わせ', style: TextStyle(fontSize: 12)),
@@ -301,7 +301,7 @@ class _ConnectOrganList extends State<ConnectOrganList> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.only(top: 12, bottom: 12),
-                    primary: Colors.orange),
+                    backgroundColor: Colors.orange),
                 child: Container(
                     child: Row(children: [
                   Container(
@@ -320,7 +320,7 @@ class _ConnectOrganList extends State<ConnectOrganList> {
                       ))
                 ])),
                 onPressed: () {
-                  launchUrl(Uri.parse("tel://" + phone));
+                  launchUrl(Uri.parse("tel://$phone"));
                 },
               )
             ],

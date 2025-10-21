@@ -27,11 +27,11 @@ Future<void> main() async {
   await FlutterDownloader.initialize();
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky)
-      .then((_) => runApp(new MyApp()));
+      .then((_) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,18 +52,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.red),
       home: AppInit(), //ConnectRegister(), //AdminHome(), //AppInit(),
       routes: <String, WidgetBuilder>{
-        '/Home': (BuildContext context) => new ConnectHome(),
-        '/Login': (BuildContext context) => new ConnectLogin(),
-        '/License': (BuildContext context) => new LicenseView(),
-        '/Register': (BuildContext context) => new ConnectRegister(),
-        '/Reset': (BuildContext context) => new PasswordReset(),
+        '/Home': (BuildContext context) => ConnectHome(),
+        '/Login': (BuildContext context) => ConnectLogin(),
+        '/License': (BuildContext context) => LicenseView(),
+        '/Register': (BuildContext context) => ConnectRegister(),
+        '/Reset': (BuildContext context) => PasswordReset(),
       },
     ));
   }
 }
 
 class AppInit extends StatefulWidget {
-  const AppInit({Key? key}) : super(key: key);
+  const AppInit({super.key});
 
   @override
   _AppInit createState() => _AppInit();
@@ -102,7 +102,7 @@ class _AppInit extends State<AppInit> {
       if (user.userId != '') {
         globals.userId = user.userId.toString();
         globals.userName =
-            user.userFirstName + ' ' + user.userLastName.toString();
+            '${user.userFirstName} ${user.userLastName}';
       }
     }
 

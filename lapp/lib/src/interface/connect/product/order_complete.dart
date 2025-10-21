@@ -7,7 +7,7 @@ import 'package:libero/src/model/cartdetailmodel.dart';
 import 'package:flutter/material.dart';
 
 class OrderComplete extends StatefulWidget {
-  const OrderComplete({Key? key}) : super(key: key);
+  const OrderComplete({super.key});
 
   @override
   _OrderComplete createState() => _OrderComplete();

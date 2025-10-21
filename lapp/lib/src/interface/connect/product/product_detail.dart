@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 
 class ProductDetail extends StatefulWidget {
   final String ticketId;
-  const ProductDetail({required this.ticketId, Key? key}) : super(key: key);
+  const ProductDetail({required this.ticketId, super.key});
 
   @override
   _ProductDetail createState() => _ProductDetail();
@@ -65,9 +65,8 @@ class _ProductDetail extends State<ProductDetail> {
         context: context,
         builder: (BuildContext context) {
           return DialogAddCart(
-              showString: 'カートの小計（' +
-                  cartinfo['count'] +
-                  '点の商品） ￥' +
+              showString: '${'カートの小計（' +
+                  cartinfo['count']}点の商品） ￥' +
                   cartinfo['amount']);
         });
     loadInitData();
@@ -117,10 +116,10 @@ class _ProductDetail extends State<ProductDetail> {
       margin: EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey.withOpacity(0.4))),
+      height: 160,
       child: ticket!.image == null
           ? Text('設定なし')
-          : Image.network(ticketImageUrl + ticket!.image!),
-      height: 160);
+          : Image.network(ticketImageUrl + ticket!.image!));
 
   Widget _getTitleRow() => Container(
         padding: EdgeInsets.symmetric(horizontal: paddingH, vertical: paddingV),
@@ -131,7 +130,7 @@ class _ProductDetail extends State<ProductDetail> {
             ),
             Container(
               child: Text(
-                '￥' + Funcs().currencyFormat(ticket!.price),
+                '￥${Funcs().currencyFormat(ticket!.price)}',
                 style: _txtContentStyle,
               ),
             )

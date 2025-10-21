@@ -1,4 +1,4 @@
-package com.example.liberov2
+package cloud.connect.libero
 
 import io.flutter.embedding.android.FlutterActivity
 

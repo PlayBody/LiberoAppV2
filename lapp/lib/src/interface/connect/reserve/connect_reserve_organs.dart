@@ -10,7 +10,7 @@ import 'package:libero/src/interface/component/form/main_form.dart';
 import '../../../common/globals.dart' as globals;
 
 class ConnectReserveOrgan extends StatefulWidget {
-  const ConnectReserveOrgan({Key? key}) : super(key: key);
+  const ConnectReserveOrgan({super.key});
 
   @override
   _ConnectReserveOrgan createState() => _ConnectReserveOrgan();
@@ -30,7 +30,7 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
   Future<List> initLoadData() async {
     organs = await ClOrgan().loadOrganList(context, APPCOMANYID);
 
-    if (organs.length == 1) {
+    if (organs.length == 1 && mounted) {
       Navigator.push(context, MaterialPageRoute(builder: (_) {
         return ReserveMultiUser(
           organId: organs.first.organId, 
@@ -96,16 +96,16 @@ class _ConnectReserveOrgan extends State<ConnectReserveOrgan> {
       },
       child: Card(
         clipBehavior: Clip.antiAlias,
+        elevation: 4,
+        shadowColor: Colors.grey,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(12))),
         child: Column(
           children: [
             Expanded(child: _getOrganImage(organ)),
             _getOrganTitle(organ)
           ],
         ),
-        elevation: 4,
-        shadowColor: Colors.grey,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12))),
       ),
     );
   }

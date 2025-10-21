@@ -7,7 +7,7 @@ import 'package:libero/src/model/favoritequestionmodel.dart';
 import 'package:flutter/material.dart';
 
 class ConnectQuestions extends StatefulWidget {
-  const ConnectQuestions({Key? key}) : super(key: key);
+  const ConnectQuestions({super.key});
 
   @override
   _ConnectQuestions createState() => _ConnectQuestions();
@@ -81,34 +81,34 @@ class _ConnectQuestions extends State<ConnectQuestions> {
 
   Widget _getFavoriteTitle() {
     return Container(
+      color: Color(0xff443F2F),
+      padding: EdgeInsets.fromLTRB(8, 5, 8, 5),
+      alignment: Alignment.centerLeft,
       child: Text(
         'よくあるご質問',
         style: TextStyle(
             color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
       ),
-      color: Color(0xff443F2F),
-      padding: EdgeInsets.fromLTRB(8, 5, 8, 5),
-      alignment: Alignment.centerLeft,
     );
   }
 
   Widget _getQuestionTitle() {
     return Container(
+      color: Color(0xff443F2F),
+      padding: EdgeInsets.fromLTRB(8, 5, 8, 5),
+      alignment: Alignment.centerLeft,
       child: Text(
         'お問い合わせ',
         style: TextStyle(
             color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
       ),
-      color: Color(0xff443F2F),
-      padding: EdgeInsets.fromLTRB(8, 5, 8, 5),
-      alignment: Alignment.centerLeft,
     );
   }
 
   Widget _getQuestionContent() {
     return Container(
-      child: Text('お問い合わせいただく前に、ヘルプをご確認ください。それでも解決しない場合は、以下のお問い合わせ先よりご連絡ください。'),
       margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      child: Text('お問い合わせいただく前に、ヘルプをご確認ください。それでも解決しない場合は、以下のお問い合わせ先よりご連絡ください。'),
     );
   }
 
@@ -118,7 +118,6 @@ class _ConnectQuestions extends State<ConnectQuestions> {
       child: ConstrainedBox(
         constraints: BoxConstraints.tightFor(width: 250),
         child: ElevatedButton(
-          child: Text('お問い合わせ'),
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (_) {
               return ConnectQuestionAdd();
@@ -126,6 +125,7 @@ class _ConnectQuestions extends State<ConnectQuestions> {
           },
           style: ElevatedButton.styleFrom(
               padding: EdgeInsets.all(8), textStyle: TextStyle(fontSize: 16)),
+          child: Text('お問い合わせ'),
         ),
       ),
     );
@@ -155,12 +155,12 @@ class _ConnectQuestions extends State<ConnectQuestions> {
           ),
           if (openQuestion == item.id)
             Container(
-              child: Text(item.answer, style: txtAnswerStyle),
               alignment: Alignment.topLeft,
               padding: EdgeInsets.all(8),
               margin: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               decoration: BoxDecoration(
                   color: Colors.white, border: Border.all(color: Colors.grey)),
+              child: Text(item.answer, style: txtAnswerStyle),
             )
         ],
       ),

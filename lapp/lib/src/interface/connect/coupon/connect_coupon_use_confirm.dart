@@ -9,8 +9,7 @@ import 'connect_coupon_complete.dart';
 
 class ConnectCouponUseConfirm extends StatefulWidget {
   final String couponId;
-  const ConnectCouponUseConfirm({required this.couponId, Key? key})
-      : super(key: key);
+  const ConnectCouponUseConfirm({required this.couponId, super.key});
 
   @override
   _ConnectCouponUseConfirm createState() => _ConnectCouponUseConfirm();
@@ -138,7 +137,7 @@ class _ConnectCouponUseConfirm extends State<ConnectCouponUseConfirm> {
                         )),
                     Container(
                         child: Text(
-                      '有効期限: ' + useDate.replaceAll('-', '/'),
+                      '有効期限: ${useDate.replaceAll('-', '/')}',
                     )),
                     Container(
                         child: Text(
@@ -153,16 +152,16 @@ class _ConnectCouponUseConfirm extends State<ConnectCouponUseConfirm> {
                   child: Column(children: [
                     if (discountAmount != '')
                       Text(
-                        Funcs().currencyFormat(discountAmount) + '円 OFF',
+                        '${Funcs().currencyFormat(discountAmount)}円 OFF',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     if (discountRate != '')
-                      Text(discountRate + '％OFF',
+                      Text('$discountRate％OFF',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                     if (discountRate != '' && upperAmount != '')
-                      Text('上限' + Funcs().currencyFormat(upperAmount) + '円',
+                      Text('上限${Funcs().currencyFormat(upperAmount)}円',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                   ]),

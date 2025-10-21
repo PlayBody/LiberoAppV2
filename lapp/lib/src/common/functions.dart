@@ -50,12 +50,12 @@ class Funcs {
     if (_time == null) return '設定なし';
 
     String hour =
-        _time.hour < 10 ? '0' + _time.hour.toString() : _time.hour.toString();
+        _time.hour < 10 ? '0${_time.hour}' : _time.hour.toString();
     String min = _time.minute < 10
-        ? '0' + _time.minute.toString()
+        ? '0${_time.minute}'
         : _time.minute.toString();
 
-    return hour + ':' + min;
+    return '$hour:$min';
   }
 
   String getTimeFormatHMM00(DateTime? _time) {
@@ -63,10 +63,10 @@ class Funcs {
 
     String hour = _time.hour.toString();
     String min = _time.minute < 10
-        ? '0' + _time.minute.toString()
+        ? '0${_time.minute}'
         : _time.minute.toString();
 
-    return hour + ':' + min + ':00';
+    return '$hour:$min:00';
   }
 
   bool isNumeric(String string) {
@@ -78,39 +78,24 @@ class Funcs {
   String dateFormatJP1(String? dateString) {
     if (dateString == null) return '';
     DateTime _date = DateTime.parse(dateString);
-    return _date.year.toString() +
-        '年' +
-        _date.month.toString() +
-        '月' +
-        _date.day.toString() +
-        '日';
+    return '${_date.year}年${_date.month}月${_date.day}日';
   }
 
   String dateFormatHHMMJP(String? dateString) {
     if (dateString == null) return '';
     DateTime _date = DateTime.parse(dateString);
-    return _date.hour.toString() + '時' + _date.minute.toString() + '分';
+    return '${_date.hour}時${_date.minute}分';
   }
 
   String dateTimeFormatJP1(String? dateString) {
     if (dateString == null) return '';
     DateTime _date = DateTime.parse(dateString);
-    return _date.month.toString() +
-        '月' +
-        _date.day.toString() +
-        '日' +
-        _date.hour.toString() +
-        '時' +
-        _date.minute.toString() +
-        '分';
+    return '${_date.month}月${_date.day}日${_date.hour}時${_date.minute}分';
   }
 
   String dateTimeFormatJP2(String? dateString) {
     if (dateString == null) return '';
-    return int.parse(dateString.split(":")[0]).toString() +
-        '時間' +
-        int.parse(dateString.split(":")[1]).toString() +
-        '分';
+    return '${int.parse(dateString.split(":")[0])}時間${int.parse(dateString.split(":")[1])}分';
   }
 
   List<String> getYearSelectList(String min, String max) {
@@ -141,9 +126,9 @@ class Funcs {
         month = '01';
       } else {
         month = (int.parse(month) + 1).toString();
-        if (int.parse(month) < 10) month = '0' + month;
+        if (int.parse(month) < 10) month = '0$month';
       }
-      DateTime nextMonthFirstDate = DateTime.parse(year + '-' + month + '-01');
+      DateTime nextMonthFirstDate = DateTime.parse('$year-$month-01');
       DateTime monthLastDate = nextMonthFirstDate.subtract(Duration(days: 1));
       maxDay = monthLastDate.day;
     }
@@ -162,9 +147,9 @@ class Funcs {
         month = '01';
       } else {
         month = (int.parse(month) + 1).toString();
-        if (int.parse(month) < 10) month = '0' + month;
+        if (int.parse(month) < 10) month = '0$month';
       }
-      DateTime nextMonthFirstDate = DateTime.parse(year + '-' + month + '-01');
+      DateTime nextMonthFirstDate = DateTime.parse('$year-$month-01');
       DateTime monthLastDate = nextMonthFirstDate.subtract(Duration(days: 1));
       maxDay = monthLastDate.day;
     }
@@ -194,7 +179,7 @@ class Funcs {
     String result = '';
 
     int _length = param.length;
-    if (_length < 4) return isMinus ? ('-' + param) : param;
+    if (_length < 4) return isMinus ? ('-$param') : param;
 
     int commaCount = _length ~/ 3;
     int mod = _length % 3;
@@ -204,13 +189,14 @@ class Funcs {
       mod = 3;
     }
     for (var i = 0; i <= commaCount; i++) {
-      if (i == 0)
+      if (i == 0) {
         result = param.substring(0, mod);
-      else
-        result = result + ',' + param.substring((i - 1) * 3 + mod, i * 3 + mod);
+      } else {
+        result = '$result,${param.substring((i - 1) * 3 + mod, i * 3 + mod)}';
+      }
     }
 
     //print(isMinus);
-    return isMinus ? ('-' + result) : result;
+    return isMinus ? ('-$result') : result;
   }
 }

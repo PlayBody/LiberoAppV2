@@ -10,8 +10,7 @@ class MainForm extends StatelessWidget {
   final bgColor;
   final Widget render;
   const MainForm(
-      {required this.title, this.bgColor, required this.render, Key? key})
-      : super(key: key);
+      {required this.title, this.bgColor, required this.render, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class MainForm extends StatelessWidget {
     return SafeArea(child:Scaffold(
       appBar: MyConnetAppBar(),
       body: render,
-      backgroundColor: bgColor == null ? Colors.white : bgColor, //, //
+      backgroundColor: bgColor ?? Colors.white,
       drawer: ConnectDrawer(),
       bottomNavigationBar: ConnectBottomBar(),
     ));

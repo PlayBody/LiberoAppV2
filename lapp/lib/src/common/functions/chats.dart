@@ -12,21 +12,15 @@ class ChatsFunc {
       Dio dio = Dio();
 
       String savePath = (await ExternalPath.getExternalStoragePublicDirectory(
-          ExternalPath.DIRECTORY_DOWNLOADS));
-      String filePath = savePath + '/' + fileName;
+          ExternalPath.DIRECTORY_DOWNLOAD));
+      String filePath = '$savePath/$fileName';
 
       int i = 0;
       while (File(filePath).existsSync()) {
         i++;
-        filePath = savePath +
-            '/' +
-            fileName.substring(0, fileName.length - 4) +
-            '[' +
-            i.toString() +
-            ']' +
-            fileName.substring(fileName.length - 4);
+        filePath = '$savePath/${fileName.substring(0, fileName.length - 4)}[$i]${fileName.substring(fileName.length - 4)}';
       }
-      await dio.download(apiBase + '/assets/messages/' + fileUrl, filePath,
+      await dio.download('$apiBase/assets/messages/' + fileUrl, filePath,
           onReceiveProgress: (rec, total) {
         // setState(() {
         //   isDownLoading = true;

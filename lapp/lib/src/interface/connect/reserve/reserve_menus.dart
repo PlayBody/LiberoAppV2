@@ -16,11 +16,10 @@ import '../../../common/globals.dart' as globals;
 import 'connect_menu_view.dart';
 
 class ReserveMenus extends StatefulWidget {
-  final OrganModel organ;
+  final String organId;
   final String isNoReserveType;
   const ReserveMenus(
-      {required this.organ, required this.isNoReserveType, Key? key})
-      : super(key: key);
+      {required this.organId, required this.isNoReserveType, super.key});
 
   @override
   _ReserveMenus createState() => _ReserveMenus();
@@ -39,7 +38,7 @@ class _ReserveMenus extends State<ReserveMenus> {
 
   Future<List> loadInitData() async {
     menus = await ClMenu().loadMenuList(
-        context, {'organ_id': widget.organ.organId, 'is_user_menu': '1'});
+        context, {'organ_id': widget.organId, 'is_user_menu': '1'});
 
     setState(() {});
     return [];
@@ -76,9 +75,9 @@ class _ReserveMenus extends State<ReserveMenus> {
 
   @override
   Widget build(BuildContext context) {
-    globals.connectHeaerTitle = 'メニュー' + globals.menuSelectNumber.toString();
+    globals.connectHeaerTitle = 'メニュー${globals.menuSelectNumber}';
     return MainForm(
-      title: 'メニュー(' + globals.menuSelectNumber.toString() + ')',
+      title: 'メニュー(${globals.menuSelectNumber})',
       bgColor: Color(0xfff4f4ea),
       render: FutureBuilder<List>(
         future: loadData,
@@ -136,7 +135,7 @@ class _ReserveMenus extends State<ReserveMenus> {
               children: [
                 Text(
                   menu.menuTitle.length > 23
-                      ? (menu.menuTitle.substring(0, 21) + '...')
+                      ? ('${menu.menuTitle.substring(0, 21)}...')
                       : menu.menuTitle,
                   style: TextStyle(
                       fontSize: 14,
@@ -149,7 +148,7 @@ class _ReserveMenus extends State<ReserveMenus> {
                 padding: EdgeInsets.only(right: 16),
                 alignment: Alignment.centerRight,
                 width: 100,
-                child: Text(Funcs().currencyFormat(menu.menuPrice) + '円',
+                child: Text('${Funcs().currencyFormat(menu.menuPrice)}円',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -219,12 +218,12 @@ class _ReserveMenus extends State<ReserveMenus> {
           Container(
             alignment: Alignment.center,
             width: 12,
+            decoration: BoxDecoration(
+              color: Colors.red,
+            ),
             child: Text(
               e.multiNumber,
               style: TextStyle(color: Colors.white),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.red,
             ),
           ),
           SizedBox(width: 4),
@@ -267,7 +266,7 @@ class _ReserveMenus extends State<ReserveMenus> {
       if (_menuNumber > globals.reserveMultiUsers.length) {
         Navigator.push(context, MaterialPageRoute(builder: (_) {
           return ReserveStaff(
-            organId: widget.organ.organId,
+            organId: widget.organId,
             isNoReserveType: widget.isNoReserveType,
           );
         }));
@@ -275,7 +274,7 @@ class _ReserveMenus extends State<ReserveMenus> {
         globals.menuSelectNumber = _menuNumber + 1;
         Navigator.push(context, MaterialPageRoute(builder: (_) {
           return ReserveMenus(
-            organ: widget.organ,
+            organId: widget.organId,
             isNoReserveType: widget.isNoReserveType,
           );
         }));
@@ -283,7 +282,7 @@ class _ReserveMenus extends State<ReserveMenus> {
     } else {
       globals.selStaffType = 0;
       Navigator.push(context, MaterialPageRoute(builder: (_) {
-        return ReserveDateFrame(organ: widget.organ);
+        return ReserveDateFrame(organId: widget.organId);
       }));
     }
   }

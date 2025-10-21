@@ -29,7 +29,7 @@ import 'layout/connect_drawer.dart';
 import 'sale/connect_sale.dart';
 
 class ConnectHome extends StatefulWidget {
-  const ConnectHome({Key? key}) : super(key: key);
+  const ConnectHome({super.key});
 
   @override
   _ConnectHome createState() => _ConnectHome();
@@ -136,7 +136,7 @@ class _ConnectHome extends State<ConnectHome> {
     if (globals.userId != '') {
       UserModel user = await ClUser().getUserFromId(context, globals.userId);
       userQrCode = user.qrCode;
-      userName = user.userFirstName + ' ' + user.userLastName;
+      userName = '${user.userFirstName} ${user.userLastName}';
       userNo = user.userNo;
       userGrade = user.grade;
 
@@ -267,6 +267,9 @@ class _ConnectHome extends State<ConnectHome> {
 
   Widget _getTopContent() {
     return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('images/logo_back.jpg'), fit: BoxFit.fill)),
       child: Column(children: [
         _getHeader(),
         Container(
@@ -284,9 +287,6 @@ class _ConnectHome extends State<ConnectHome> {
         if (globals.userId != '') _getMemberCard(),
         _getMenuTitle(),
       ]),
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('images/logo_back.jpg'), fit: BoxFit.fill)),
     );
   }
 
@@ -318,18 +318,18 @@ class _ConnectHome extends State<ConnectHome> {
           ),
           ElevatedButton(
             onPressed: () => _scaffoldKey.currentState!
-                .openDrawer(), //Scaffold.of(context).openDrawer(),
+                .openDrawer(),
+            style: ElevatedButton.styleFrom(
+              visualDensity: VisualDensity(horizontal: -2),
+              padding: EdgeInsets.all(0),
+              elevation: 0,
+              foregroundColor: Colors.white,
+            ), //Scaffold.of(context).openDrawer(),
             child: Container(
               width: 70,
               height: 70,
               color: primaryColor,
               child: Icon(Icons.menu, color: Colors.white, size: 32),
-            ),
-            style: ElevatedButton.styleFrom(
-              visualDensity: VisualDensity(horizontal: -2),
-              padding: EdgeInsets.all(0),
-              elevation: 0,
-              onPrimary: Colors.white,
             ),
           ),
         ],
@@ -341,6 +341,10 @@ class _ConnectHome extends State<ConnectHome> {
   Widget _getMemberCard() {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          image: DecorationImage(
+              image: AssetImage('images/cart_back.png'), fit: BoxFit.fill)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -355,10 +359,6 @@ class _ConnectHome extends State<ConnectHome> {
           // Positioned(top: 145, left: 40, child: _getMemberInfo())
         ],
       ),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          image: DecorationImage(
-              image: AssetImage('images/cart_back.png'), fit: BoxFit.fill)),
     );
   }
 
@@ -368,7 +368,7 @@ class _ConnectHome extends State<ConnectHome> {
       margin: EdgeInsets.only(bottom: 12),
       alignment: Alignment.topRight,
       height: 100,
-      child: QrImage(
+      child: QrImageView(
         padding: EdgeInsets.all(16),
         data: userQrCode,
         embeddedImage: AssetImage('images/icon/qr_logo.png'),
@@ -426,7 +426,7 @@ class _ConnectHome extends State<ConnectHome> {
                       fontSize: 12,
                       letterSpacing: 1,
                       color: cardFontColor)),
-              Text('No.' + userNo,
+              Text('No.$userNo',
                   style: TextStyle(
                       fontFamily: 'Hiragino',
                       letterSpacing: 1,
@@ -571,7 +571,7 @@ class _ConnectHome extends State<ConnectHome> {
 
   Widget _getMenuIconContainer(String iconPath) {
     return Container(
-        width: 30, child: Image.asset('images/icon/' + iconPath, height: 60));
+        width: 30, child: Image.asset('images/icon/$iconPath', height: 60));
   }
 
   Widget _getMenuArrowContainer() {

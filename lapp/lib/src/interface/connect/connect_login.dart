@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../common/globals.dart' as globals;
 
 class ConnectLogin extends StatefulWidget {
-  const ConnectLogin({Key? key}) : super(key: key);
+  const ConnectLogin({super.key});
 
   @override
   _ConnectLogin createState() => _ConnectLogin();
@@ -83,6 +83,11 @@ class _ConnectLogin extends State<ConnectLogin> {
     return WillPopScope(
         onWillPop: () async => true,
         child: Container(
+          decoration: BoxDecoration(
+              image: DecorationImage(
+            image: AssetImage('images/shop_login_back.jpg'),
+            fit: BoxFit.cover,
+          )),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: FutureBuilder<List>(
@@ -145,11 +150,6 @@ class _ConnectLogin extends State<ConnectLogin> {
               },
             ),
           ),
-          decoration: BoxDecoration(
-              image: DecorationImage(
-            image: AssetImage('images/shop_login_back.jpg'),
-            fit: BoxFit.cover,
-          )),
         ));
   }
 

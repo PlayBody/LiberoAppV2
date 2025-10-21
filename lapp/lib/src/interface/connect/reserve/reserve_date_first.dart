@@ -20,8 +20,7 @@ class ReserveDateFirst extends StatefulWidget {
       {required this.organId,
       required this.isNoReserveType,
       this.staffId,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   _ReserveDateFirst createState() => _ReserveDateFirst();

@@ -5,7 +5,7 @@ import '../../../common/globals.dart' as globals;
 
 class ConnectBottomBar extends StatelessWidget {
   final bool? isHome;
-  const ConnectBottomBar({this.isHome, Key? key}) : super(key: key);
+  const ConnectBottomBar({this.isHome, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +13,12 @@ class ConnectBottomBar extends StatelessWidget {
       height: 80,
       margin: EdgeInsets.only(top: 20),
       padding: EdgeInsets.only(top: 20),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('images/footer_back.jpg'),
+          fit: BoxFit.fill,
+        ),
+      ),
       child: Row(
         children: [
           Container(width: 20),
@@ -68,12 +74,6 @@ class ConnectBottomBar extends StatelessWidget {
           Container(width: 20),
         ],
       ),
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('images/footer_back.jpg'),
-          fit: BoxFit.fill,
-        ),
-      ),
     );
   }
 }
@@ -83,8 +83,7 @@ class ConnectBottomItem extends StatelessWidget {
   final icon;
   final tap;
   const ConnectBottomItem(
-      {required this.label, required this.icon, required this.tap, Key? key})
-      : super(key: key);
+      {required this.label, required this.icon, required this.tap, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -93,10 +92,11 @@ class ConnectBottomItem extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
             padding: EdgeInsets.only(top: 5),
-            primary: Colors.transparent,
-            onPrimary: Colors.white,
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.white,
             elevation: 0,
             shadowColor: Colors.transparent),
+        onPressed: tap,
         child: Column(children: [
           icon,
           Container(height: 10),
@@ -105,7 +105,6 @@ class ConnectBottomItem extends StatelessWidget {
             style: TextStyle(fontSize: 12),
           )
         ]),
-        onPressed: tap,
       ),
     ));
   }

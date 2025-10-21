@@ -17,8 +17,7 @@ import 'connect_menu_view.dart';
 class ConnectReserveMenus extends StatefulWidget {
   final String organId;
   final String isNoReserveType;
-  const ConnectReserveMenus({required this.organId, required this.isNoReserveType, Key? key})
-      : super(key: key);
+  const ConnectReserveMenus({required this.organId, required this.isNoReserveType, super.key});
 
   @override
   _ConnectReserveMenus createState() => _ConnectReserveMenus();
@@ -79,9 +78,9 @@ class _ConnectReserveMenus extends State<ConnectReserveMenus> {
 
   @override
   Widget build(BuildContext context) {
-    globals.connectHeaerTitle = 'メニュー' + globals.menuSelectNumber.toString();
+    globals.connectHeaerTitle = 'メニュー${globals.menuSelectNumber}';
     return MainForm(
-      title: 'メニュー(' + globals.menuSelectNumber.toString() + ')',
+      title: 'メニュー(${globals.menuSelectNumber})',
       bgColor: Color(0xfff4f4ea),
       render: FutureBuilder<List>(
         future: loadData,
@@ -140,7 +139,7 @@ class _ConnectReserveMenus extends State<ConnectReserveMenus> {
               children: [
                 Text(
                   menu.menuTitle.length > 23
-                      ? (menu.menuTitle.substring(0, 21) + '...')
+                      ? ('${menu.menuTitle.substring(0, 21)}...')
                       : menu.menuTitle,
                   style: TextStyle(
                       fontSize: 14,
@@ -153,7 +152,7 @@ class _ConnectReserveMenus extends State<ConnectReserveMenus> {
                 padding: EdgeInsets.only(right: 16),
                 alignment: Alignment.centerRight,
                 width: 100,
-                child: Text(Funcs().currencyFormat(menu.menuPrice) + '円',
+                child: Text('${Funcs().currencyFormat(menu.menuPrice)}円',
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -223,12 +222,12 @@ class _ConnectReserveMenus extends State<ConnectReserveMenus> {
           Container(
             alignment: Alignment.center,
             width: 12,
+            decoration: BoxDecoration(
+              color: Colors.red,
+            ),
             child: Text(
               e.multiNumber,
               style: TextStyle(color: Colors.white),
-            ),
-            decoration: BoxDecoration(
-              color: Colors.red,
             ),
           ),
           SizedBox(width: 4),

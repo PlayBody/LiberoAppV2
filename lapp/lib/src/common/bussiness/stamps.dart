@@ -14,17 +14,17 @@ class ClCoupon {
   Future<bool> isHaveCouponOrStamp(context) async {
     List<StampModel> stamps =
         await loadStamps(context, {'user_id': globals.userId, 'use_flag': '1'});
-    if (stamps.length > 0) return true;
+    if (stamps.isNotEmpty) return true;
 
     List<CouponModel> coupons = await loadCoupons(
         context, {'user_id': globals.userId, 'use_flag': '1'});
-    if (coupons.length > 0) return true;
+    if (coupons.isNotEmpty) return true;
 
     return false;
   }
 
   Future<List<StampModel>> loadStamps(context, param) async {
-    String apiUrl = apiBase + '/apicoupons/loadStampList';
+    String apiUrl = '$apiBase/apicoupons/loadStampList';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl,
@@ -40,7 +40,7 @@ class ClCoupon {
   }
 
   Future<List<CouponModel>> loadCoupons(context, param) async {
-    String apiUrl = apiBase + '/apicoupons/loadCoupons';
+    String apiUrl = '$apiBase/apicoupons/loadCoupons';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl,
@@ -56,7 +56,7 @@ class ClCoupon {
   }
 
   Future<List<UserCouponModel>> loadUserCoupons(context, param) async {
-    String apiUrl = apiBase + '/apicoupons/loadCoupons';
+    String apiUrl = '$apiBase/apicoupons/loadCoupons';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl,
@@ -72,7 +72,7 @@ class ClCoupon {
   }
 
   Future<List<RankModel>> loadRanks(context, userGrade) async {
-    String apiUrl = apiBase + '/apicoupons/loadRanks';
+    String apiUrl = '$apiBase/apicoupons/loadRanks';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -88,7 +88,7 @@ class ClCoupon {
   }
 
   Future<RankModel> loadRankData(context, userId) async {
-    String apiUrl = apiBase + '/apicoupons/loadUserRank';
+    String apiUrl = '$apiBase/apicoupons/loadUserRank';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {

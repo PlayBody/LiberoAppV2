@@ -14,8 +14,7 @@ class DropDownModelSelect extends StatelessWidget {
       this.contentPadding,
       required this.tapFunc,
       this.hint,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +37,9 @@ class DropDownModelSelect extends StatelessWidget {
             color: Color(0xffbebebe),
           ),
         ),
-        contentPadding: contentPadding == null
-            ? EdgeInsets.fromLTRB(8, 12, 0, 12)
-            : contentPadding,
+        contentPadding: contentPadding ?? EdgeInsets.fromLTRB(8, 12, 0, 12),
       ),
-      value: value,
+      initialValue: value ?? '',
       items: items,
       onChanged: tapFunc,
     );

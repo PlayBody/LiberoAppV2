@@ -17,7 +17,7 @@ import '../../common/globals.dart' as globals;
 
 class ConnectRegister extends StatefulWidget {
   final bool? isProfile;
-  const ConnectRegister({this.isProfile, Key? key}) : super(key: key);
+  const ConnectRegister({this.isProfile, super.key});
 
   @override
   _ConnectRegister createState() => _ConnectRegister();
@@ -90,7 +90,7 @@ class _ConnectRegister extends State<ConnectRegister> {
 
   Future<void> saveUserInfo() async {
     String strSex = _groupValue.toString();
-    String strBirthDay = selectYear + "-" + selectMonth + "-" + selectDay;
+    String strBirthDay = "$selectYear-$selectMonth-$selectDay";
 
     if (!isFormCheck()) return;
 
@@ -137,7 +137,7 @@ class _ConnectRegister extends State<ConnectRegister> {
 
   Future<void> updateUserInfo() async {
     String strSex = _groupValue.toString();
-    String strBirthDay = selectYear + "-" + selectMonth + "-" + selectDay;
+    String strBirthDay = "$selectYear-$selectMonth-$selectDay";
 
     if (!isFormCheck()) return;
 
@@ -158,7 +158,7 @@ class _ConnectRegister extends State<ConnectRegister> {
     Navigator.pop(context);
 
     globals.userName =
-        txtFirstNameController.text + ' ' + txtLastNameController.text;
+        '${txtFirstNameController.text} ${txtLastNameController.text}';
     Navigator.pushNamed(context, '/Home');
   }
 
@@ -215,6 +215,11 @@ class _ConnectRegister extends State<ConnectRegister> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage('images/shop_login_back.jpg'),
+        fit: BoxFit.cover,
+      )),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: FutureBuilder<List>(
@@ -236,11 +241,6 @@ class _ConnectRegister extends State<ConnectRegister> {
           },
         ),
       ),
-      decoration: BoxDecoration(
-          image: DecorationImage(
-        image: AssetImage('images/shop_login_back.jpg'),
-        fit: BoxFit.cover,
-      )),
     );
   }
 
@@ -252,9 +252,9 @@ class _ConnectRegister extends State<ConnectRegister> {
     return [
       Container(
           padding: EdgeInsets.only(top: 10, right: 10),
+          alignment: Alignment.topRight,
           child:
-              Text('', style: TextStyle(fontSize: 10, color: Colors.black45)),
-          alignment: Alignment.topRight),
+              Text('', style: TextStyle(fontSize: 10, color: Colors.black45))),
       _getShopTitle(),
       _getContentTitle('氏名'),
       _getNameInput(),

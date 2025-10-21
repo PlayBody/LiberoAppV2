@@ -52,7 +52,7 @@ class OrganModel {
         isNoReserveType: json['is_no_reserve_type'] == null
             ? constCheckinReserveRiRa
             : json['is_no_reserve_type'].toString(),
-        organAddress: json['address'] == null ? '' : json['address'],
+        organAddress: json['address'] ?? '',
         organPhone: json['phone'],
         organComment: json['comment'] ?? '',
         organImage: json['image'],

@@ -5,7 +5,7 @@ import '../apiendpoint.dart';
 
 class ClTicket {
   Future<List<TicketModel>> loadTickets(context, companyId) async {
-    String apiUrl = apiBase + '/apitickets/loadTicketList';
+    String apiUrl = '$apiBase/apitickets/loadTicketList';
 
     List<TicketModel> tickets = [];
     Map<dynamic, dynamic> results = {};
@@ -22,7 +22,7 @@ class ClTicket {
 
   Future<TicketModel?> loadTicket(context, id) async {
     Map<dynamic, dynamic> results = {};
-    String apiUrl = apiBase + '/apitickets/loadTicket';
+    String apiUrl = '$apiBase/apitickets/loadTicket';
     await Webservice()
         .loadHttp(context, apiUrl, {'id': id}).then((v) => results = v);
     if (results['isLoad']) {

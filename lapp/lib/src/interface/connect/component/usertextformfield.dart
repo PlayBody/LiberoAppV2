@@ -8,8 +8,8 @@ class UserTextInputDefualt extends StatelessWidget {
     required this.controller,
     required this.hintText,
     this.errorText,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

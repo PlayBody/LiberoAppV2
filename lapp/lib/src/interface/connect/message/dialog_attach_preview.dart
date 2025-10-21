@@ -8,10 +8,10 @@ class DialogAttachPreview extends StatefulWidget {
   final String attachUrl;
 
   const DialogAttachPreview({
-    Key? key,
+    super.key,
     required this.previewType,
     required this.attachUrl,
-  }) : super(key: key);
+  });
 
   @override
   _DialogAttachPreview createState() => _DialogAttachPreview();
@@ -53,7 +53,8 @@ class _DialogAttachPreview extends State<DialogAttachPreview> {
       backgroundColor: Colors.transparent,
       child: isLoading
           ? Container(
-              child: Center(child: CircularProgressIndicator()), height: 120)
+              height: 120,
+              child: Center(child: CircularProgressIndicator()))
           : contentBox(context),
     );
   }

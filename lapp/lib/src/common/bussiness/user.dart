@@ -12,7 +12,7 @@ class ClUser {
   Future<UserModel?> getUserModel(context, dynamic condition) async {
     Map<dynamic, dynamic> results = {};
 
-    String apiUrl = apiBase + '/apiusers/getUserData';
+    String apiUrl = '$apiBase/apiusers/getUserData';
     await Webservice().loadHttp(context, apiUrl,
         {'condition': jsonEncode(condition)}).then((v) => {results = v});
 
@@ -23,7 +23,7 @@ class ClUser {
   }
 
   Future<UserModel> getUserFromId(context, userId) async {
-    String apiUrl = apiBase + '/apiusers/loadUserInfo';
+    String apiUrl = '$apiBase/apiusers/loadUserInfo';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -34,7 +34,7 @@ class ClUser {
   }
 
   Future<bool> updateUserTicket(context, updateTicket) async {
-    String apiUrl = apiBase + '/apiusers/updateUserTicket';
+    String apiUrl = '$apiBase/apiusers/updateUserTicket';
 
     await Webservice().loadHttp(context, apiUrl, {
       'user_id': globals.userId,
@@ -45,7 +45,7 @@ class ClUser {
   }
 
   Future<bool> userLoginCheck(context, email, password) async {
-    String apiUrl = apiBase + '/apiusers/loginCheck';
+    String apiUrl = '$apiBase/apiusers/loginCheck';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -58,7 +58,7 @@ class ClUser {
   }
 
   Future<List<TicketModel>> loadUserTickets(context) async {
-    String apiUrl = apiBase + '/apiusers/getOwnerTickets';
+    String apiUrl = '$apiBase/apiusers/getOwnerTickets';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -78,7 +78,7 @@ class ClUser {
   }
 
   Future<void> usingTicketWithCheckin(context, id, count) async {
-    String apiUrl = apiBase + '/apiusers/usingTicketWithCheckIn';
+    String apiUrl = '$apiBase/apiusers/usingTicketWithCheckIn';
 
     await Webservice()
         .loadHttp(context, apiUrl, {'id': id, 'use_count': count});
@@ -86,7 +86,7 @@ class ClUser {
 
   Future<bool> updatePushStatus(
       context, String userId, String pushKey, bool isEnable) async {
-    String apiUrl = apiBase + '/apiusers/updateUserPush';
+    String apiUrl = '$apiBase/apiusers/updateUserPush';
 
     await Webservice().loadHttp(context, apiUrl, {
       'user_id': userId,
@@ -98,7 +98,7 @@ class ClUser {
   }
 
   Future<bool> updateDeviceToken(context, String userId, String token) async {
-    String apiUrl = apiBase + '/apiusers/updateDeviceToken';
+    String apiUrl = '$apiBase/apiusers/updateDeviceToken';
 
     await Webservice()
         .loadHttp(context, apiUrl, {'user_id': userId, 'device_token': token});
@@ -107,7 +107,7 @@ class ClUser {
   }
 
   Future<bool> sendResetEmail(context, String email) async {
-    String apiUrl = apiBase + '/apiusers/sendResetEmail';
+    String apiUrl = '$apiBase/apiusers/sendResetEmail';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -119,7 +119,7 @@ class ClUser {
   }
 
   Future<bool> regVerifyCode(context, String email) async {
-    String apiUrl = apiBase + '/apiusers/registerVerifyCode';
+    String apiUrl = '$apiBase/apiusers/registerVerifyCode';
 
     Map<dynamic, dynamic> results = {};
     await Webservice().loadHttp(context, apiUrl, {
@@ -131,7 +131,7 @@ class ClUser {
   }
 
   Future<bool> userRegister(context, param) async {
-    String apiUrl = apiBase + '/apiusers/userVerifyAndRegister';
+    String apiUrl = '$apiBase/apiusers/userVerifyAndRegister';
 
     Map<dynamic, dynamic> results = {};
     await Webservice()
@@ -146,7 +146,7 @@ class ClUser {
   }
 
   Future<bool> updateUserProfile(context, param) async {
-    String apiUrl = apiBase + '/apiusers/updateUserProfile';
+    String apiUrl = '$apiBase/apiusers/updateUserProfile';
 
     await Webservice().loadHttp(context, apiUrl, param);
 
