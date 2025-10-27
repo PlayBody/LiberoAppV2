@@ -15,6 +15,8 @@ class UserModel {
   final String userTicket;
   final String? deviceToken;
   final String? groupId;
+  final String? groupName;
+  final String? resetCount;
   final String password;
   final bool isPushMesseage;
   final bool isPushReserveRequest;
@@ -38,6 +40,8 @@ class UserModel {
     required this.isPushReserveRequest,
     required this.isPushReserveApply,
     this.groupId,
+    this.groupName,
+    this.resetCount,
     this.deviceToken,
   });
 
@@ -59,6 +63,8 @@ class UserModel {
       userTicket: json['user_ticket'] ?? '',
       password: json['user_password'] ?? '',
       groupId: json['group_id'],
+      groupName: json['group_name'],
+      resetCount: json['reset_count'],
       deviceToken: json['user_device_token'],
       isPushMesseage: (json['is_message_push'] == null ||
           json['is_message_push'].toString() == '1'),

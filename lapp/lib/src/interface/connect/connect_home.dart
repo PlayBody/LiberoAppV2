@@ -47,6 +47,8 @@ class _ConnectHome extends State<ConnectHome> {
   String userName = '';
   String userNo = '';
   String userGrade = '';
+  String userGroupName = '';
+  String userResetCount = '0';
   int unreadMessageCount = 0;
 
   List<HomeMenuModel> homeMenus = [];
@@ -147,6 +149,8 @@ class _ConnectHome extends State<ConnectHome> {
       userName = '${user.userFirstName} ${user.userLastName}';
       userNo = user.userNo;
       userGrade = user.grade;
+      userGroupName = user.groupName ?? '';
+      userResetCount = user.resetCount ?? '0';
 
       globals.userRank = await ClCoupon().loadRankData(context, globals.userId);
       if (userGrade == '1') userGrade = 'Advanced';
@@ -449,6 +453,18 @@ class _ConnectHome extends State<ConnectHome> {
     );
   }
 
+  // Helper method to compute course value from reset_count
+  String _getCourseValue(String resetCount) {
+    int count = int.tryParse(resetCount) ?? 0;
+    if (count == 99) {
+      return '受け放題';
+    } else if (count > 0) {
+      return '${count}コース';
+    } else {
+      return 'なし';
+    }
+  }
+
   var cardFontColor = Colors.white;
   Widget _getMemberName() {
     return Container(
@@ -496,7 +512,7 @@ class _ConnectHome extends State<ConnectHome> {
               ),
               SizedBox(width: 6),
               Text(
-                '会員番号 ',
+                '所属クラス ',
                 style: TextStyle(
                   fontFamily: 'Hiragino',
                   fontSize: 12,
@@ -504,13 +520,16 @@ class _ConnectHome extends State<ConnectHome> {
                   color: cardFontColor,
                 ),
               ),
-              Text(
-                'No.$userNo',
-                style: TextStyle(
-                  fontFamily: 'Hiragino',
-                  letterSpacing: 1,
-                  fontSize: 12,
-                  color: cardFontColor,
+              Flexible(
+                child: Text(
+                  userGroupName.isNotEmpty ? userGroupName : 'なし',
+                  style: TextStyle(
+                    fontFamily: 'Hiragino',
+                    letterSpacing: 1,
+                    fontSize: 12,
+                    color: cardFontColor,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
@@ -525,7 +544,7 @@ class _ConnectHome extends State<ConnectHome> {
               ),
               SizedBox(width: 6),
               Text(
-                'RANK : ',
+                'コース : ',
                 style: TextStyle(
                   fontFamily: 'Hiragino',
                   letterSpacing: 1,
@@ -534,7 +553,7 @@ class _ConnectHome extends State<ConnectHome> {
                 ),
               ),
               Text(
-                globals.userRank!.rankName,
+                _getCourseValue(userResetCount),
                 style: TextStyle(
                   fontFamily: 'Hiragino',
                   letterSpacing: 1,
